@@ -1,0 +1,2145 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>根號冒險譚：勇者算術試煉</title>
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-light: #818cf8;
+      --accent: #f59e0b;
+      --danger: #ef4444;
+      --success: #10b981;
+      --bg-dark: #0f172a;
+      --card-bg: rgba(30, 41, 59, 0.94);
+      --card-border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: radial-gradient(circle at 50% 20%, #1e1b4b, #0f172a 75%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* 頁面切換控制 */
+    .screen {
+      display: none;
+      flex: 1;
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 14px;
+      flex-direction: column;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    /* =========================================================
+       畫面 1：角色創建與選擇畫面
+       ========================================================= */
+    .char-select-container {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 720px;
+      margin: auto;
+      width: 100%;
+      padding: 10px 0;
+    }
+
+    .game-logo {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #fbbf24;
+      text-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .char-input-group {
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    .name-input-box {
+      width: 100%;
+      max-width: 360px;
+      background: #0f172a;
+      border: 2px solid #6366f1;
+      color: #ffffff;
+      font-size: 1.25rem;
+      font-weight: bold;
+      text-align: center;
+      padding: 10px 16px;
+      border-radius: 12px;
+      outline: none;
+      margin-top: 8px;
+    }
+
+    .gender-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 8px 0;
+    }
+
+    .gender-tab-btn {
+      background: #334155;
+      color: #cbd5e1;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .gender-tab-btn.active {
+      background: #6366f1;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.6);
+    }
+
+    .char-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 10px;
+      max-height: 48vh;
+      overflow-y: auto;
+      padding: 6px;
+    }
+
+    .char-card {
+      background: #1e293b;
+      border: 2px solid #475569;
+      border-radius: 14px;
+      padding: 12px 8px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .char-card:active {
+      transform: scale(0.95);
+    }
+
+    .char-card.selected {
+      border-color: #f59e0b;
+      background: rgba(245, 158, 11, 0.15);
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+    }
+
+    .char-avatar-icon {
+      font-size: 3.2rem;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
+    }
+
+    .char-title {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #f8fafc;
+    }
+
+    .char-tag {
+      font-size: 0.7rem;
+      color: #94a3b8;
+    }
+
+    .start-adventure-btn {
+      background: linear-gradient(180deg, #ea580c, #c2410c);
+      color: #ffffff;
+      font-size: 1.3rem;
+      font-weight: bold;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(234, 88, 12, 0.4);
+      transition: all 0.15s ease;
+    }
+
+    .start-adventure-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 8px rgba(234, 88, 12, 0.4);
+    }
+
+    /* =========================================================
+       畫面 2：關卡選擇大廳 (Stage Select)
+       ========================================================= */
+    .lobby-header {
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 16px;
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .player-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .player-avatar-badge {
+      font-size: 2.6rem;
+      background: #0f172a;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #6366f1;
+    }
+
+    .player-name-text {
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: #fde047;
+    }
+
+    .btn-edit-char {
+      background: #334155;
+      color: #94a3b8;
+      border: 1px solid #475569;
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 3px;
+    }
+
+    .btn-save-transfer {
+      background: linear-gradient(135deg, #059669, #047857);
+      color: #ffffff;
+      border: 1px solid #10b981;
+      padding: 5px 12px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 6px rgba(5, 150, 105, 0.3);
+      transition: all 0.15s ease;
+    }
+
+    .btn-save-transfer:active {
+      transform: scale(0.96);
+    }
+
+    .stage-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .stage-item-card {
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 18px;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.3);
+    }
+
+    .stage-item-card:hover {
+      border-color: #6366f1;
+      transform: translateY(-2px);
+    }
+
+    .stage-info-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 1;
+    }
+
+    .stage-icon-big {
+      font-size: 3rem;
+      background: #0f172a;
+      width: 68px;
+      height: 68px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #475569;
+      flex-shrink: 0;
+    }
+
+    .stage-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .stage-title-text {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #f8fafc;
+    }
+
+    .stage-desc-text {
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+
+    .stage-progress-bar-bg {
+      width: 100%;
+      max-width: 220px;
+      height: 10px;
+      background: #0f172a;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 6px;
+      border: 1px solid #475569;
+    }
+
+    .stage-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #34d399);
+      transition: width 0.3s ease;
+    }
+
+    .stage-action-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      margin-left: 14px;
+    }
+
+    .btn-enter-stage {
+      background: linear-gradient(180deg, #4f46e5, #4338ca);
+      color: #ffffff;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(79, 70, 229, 0.4);
+      white-space: nowrap;
+    }
+
+    .badge-cleared {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      border: 1px solid #10b981;
+      padding: 2px 8px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+
+    /* =========================================================
+       畫面 3：戰鬥競技場 (Battle Arena)
+       ========================================================= */
+    .battle-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--card-border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-radius: 12px;
+      margin-bottom: 8px;
+    }
+
+    .btn-back-lobby {
+      background: #334155;
+      color: #cbd5e1;
+      border: 1px solid #475569;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .battle-arena {
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 16px;
+      padding: 14px 16px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .arena-characters {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      min-height: 135px;
+      position: relative;
+    }
+
+    .fighter {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 44%;
+      position: relative;
+      transition: transform 0.2s ease;
+    }
+
+    .fighter-sprite {
+      font-size: 3.8rem;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.4));
+      display: inline-block;
+      transition: all 0.2s ease;
+    }
+
+    .hero-sprite { animation: heroFloat 3s ease-in-out infinite; }
+    .monster-sprite { animation: monsterIdle 2.5s ease-in-out infinite alternate; }
+
+    @keyframes heroFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    @keyframes monsterIdle {
+      0% { transform: scale(1) translateY(0); }
+      100% { transform: scale(1.05) translateY(-4px); }
+    }
+
+    .hit-shake {
+      animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both !important;
+      filter: brightness(2) contrast(1.5) drop-shadow(0 0 12px rgba(239, 68, 68, 0.8)) !important;
+    }
+
+    .hero-attack-anim { animation: heroSlash 0.3s ease-out forwards; }
+
+    @keyframes shake {
+      10%, 90% { transform: translate3d(-4px, 0, 0); }
+      20%, 80% { transform: translate3d(6px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+      40%, 60% { transform: translate3d(6px, 0, 0); }
+    }
+
+    @keyframes heroSlash {
+      0% { transform: scale(1) translateX(0); }
+      50% { transform: scale(1.2) translateX(25px); }
+      100% { transform: scale(1) translateX(0); }
+    }
+
+    .fighter-info { width: 100%; margin-top: 6px; }
+
+    .name-level {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .hp-bar-bg {
+      background: #334155;
+      height: 14px;
+      border-radius: 7px;
+      overflow: hidden;
+      border: 1px solid #475569;
+      position: relative;
+    }
+
+    .hp-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #34d399);
+      width: 100%;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .monster-hp-fill { background: linear-gradient(90deg, #ef4444, #f87171); }
+
+    .hp-text {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      font-size: 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    }
+
+    .floating-damage {
+      position: absolute;
+      top: 20%; right: 20%;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: #fbbf24;
+      text-shadow: 0 0 10px rgba(245, 158, 11, 0.8), 2px 2px 0 #000;
+      pointer-events: none;
+      animation: floatUpFade 0.9s ease-out forwards;
+      z-index: 20;
+    }
+
+    .floating-damage.critical {
+      color: #ef4444;
+      font-size: 2.2rem;
+      text-shadow: 0 0 15px rgba(239, 68, 68, 1), 2px 2px 0 #000;
+    }
+
+    @keyframes floatUpFade {
+      0% { opacity: 0; transform: translateY(10px) scale(0.6); }
+      30% { opacity: 1; transform: translateY(-15px) scale(1.2); }
+      100% { opacity: 0; transform: translateY(-40px) scale(1); }
+    }
+
+    /* 題目卡片 */
+    .question-card {
+      background: rgba(30, 41, 59, 0.95);
+      border: 2px solid #6366f1;
+      border-radius: 14px;
+      padding: 10px 14px;
+      text-align: center;
+      position: relative;
+    }
+
+    .question-prompt {
+      font-size: 0.9rem;
+      color: #a5b4fc;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .question-math {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px rgba(99, 102, 241, 0.5);
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .radical-block { display: inline-flex; align-items: center; }
+
+    .radical-symbol {
+      font-size: 2.3rem;
+      line-height: 1;
+      vertical-align: middle;
+      margin-right: 1px;
+      color: #fcd34d;
+    }
+
+    .radicand-val {
+      border-top: 3px solid #fcd34d;
+      padding-top: 1px;
+      padding-left: 2px;
+      padding-right: 4px;
+      vertical-align: middle;
+      display: inline-block;
+      font-size: 1.9rem;
+    }
+
+    .timer-container {
+      margin-top: 6px;
+      height: 7px;
+      background: #1e293b;
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .timer-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #38bdf8, #818cf8);
+      width: 100%;
+      transition: width 0.1s linear;
+    }
+
+    .speed-bonus-hint {
+      font-size: 0.75rem;
+      color: #fbbf24;
+      margin-top: 3px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .answer-display-box {
+      background: #0f172a;
+      border: 2px solid #475569;
+      border-radius: 12px;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #38bdf8;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .answer-placeholder { color: #64748b; font-size: 1rem; font-weight: normal; }
+    .formatted-answer { display: flex; align-items: center; justify-content: center; }
+
+    /* 4x4 觸控鍵盤 */
+    .touch-keypad {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 7px;
+      margin-top: 4px;
+    }
+
+    .key-btn {
+      background: linear-gradient(180deg, #334155, #1e293b);
+      color: #ffffff;
+      border: 1px solid #475569;
+      border-radius: 12px;
+      font-size: 1.45rem;
+      font-weight: bold;
+      padding: 13px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      transition: all 0.08s ease;
+      touch-action: manipulation;
+    }
+
+    .key-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+      background: #475569;
+    }
+
+    .key-sqrt {
+      background: linear-gradient(180deg, #4338ca, #3730a3);
+      border-color: #6366f1;
+      color: #fde047;
+      font-size: 1.55rem;
+    }
+
+    .key-sqrt:active { background: #4f46e5; }
+    .key-neg { background: linear-gradient(180deg, #475569, #334155); color: #fca5a5; font-size: 1.45rem; }
+    .key-action { background: linear-gradient(180deg, #475569, #334155); color: #cbd5e1; font-size: 1.05rem; }
+
+    .key-attack {
+      background: linear-gradient(180deg, #ea580c, #c2410c);
+      border-color: #f97316;
+      color: #ffffff;
+      font-size: 1.15rem;
+      letter-spacing: 1px;
+    }
+
+    .key-attack:active { background: #f97316; }
+
+    /* 底部 EXP 條 */
+    .exp-container {
+      background: rgba(15, 23, 42, 0.9);
+      border-top: 1px solid var(--card-border);
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-radius: 10px;
+      margin-top: 4px;
+    }
+
+    .exp-label { font-size: 0.8rem; color: #a5b4fc; white-space: nowrap; }
+    .exp-bar-bg { flex: 1; height: 10px; background: #334155; border-radius: 5px; overflow: hidden; }
+    .exp-fill { height: 100%; background: linear-gradient(90deg, #f59e0b, #fbbf24); width: 0%; transition: width 0.3s ease; }
+
+    /* 彈出視窗 */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0, 0, 0, 0.82);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+    .modal-card {
+      background: #1e293b;
+      border: 2px solid #6366f1;
+      border-radius: 18px;
+      padding: 22px;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 30px rgba(0, 0, 0, 0.6);
+      transform: scale(0.9);
+      transition: transform 0.2s ease;
+    }
+
+    .modal-overlay.active .modal-card { transform: scale(1); }
+    .modal-title { font-size: 1.4rem; font-weight: bold; margin-bottom: 12px; color: #fbbf24; }
+
+    .modal-content {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #e2e8f0;
+      margin-bottom: 18px;
+      text-align: left;
+      background: #0f172a;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .modal-btn-group { display: flex; gap: 10px; }
+
+    .modal-btn {
+      background: linear-gradient(180deg, #4f46e5, #4338ca);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 1.05rem;
+      font-weight: bold;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .modal-btn-alt { background: linear-gradient(180deg, #475569, #334155); color: #cbd5e1; }
+    .step-box { margin-top: 8px; padding-top: 8px; border-top: 1px dashed #475569; font-size: 0.9rem; }
+
+    @media (min-width: 600px) {
+      .fighter-sprite { font-size: 4.8rem; }
+      .key-btn { padding: 16px 0; font-size: 1.65rem; }
+      .question-math { font-size: 2.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =========================================================
+       畫面 1：角色創建 / 選擇畫面
+       ========================================================= -->
+  <section class="screen active" id="screen-character-select">
+    <div class="char-select-container">
+      <div class="game-logo">
+        <span>⚔️</span> 根號冒險譚 <span>🛡️</span>
+      </div>
+      <p style="color:#94a3b8; font-size:0.95rem;">國中二年級數學：根號試煉之路</p>
+
+      <!-- 角色暱稱輸入 -->
+      <div class="char-input-group">
+        <label for="player-name-input" style="font-weight:bold; color:#fde047; font-size:1.05rem;">請輸入你的勇者名稱：</label>
+        <div>
+          <input type="text" id="player-name-input" class="name-input-box" maxlength="8" placeholder="輸入暱稱 (如: 算術小神童)">
+        </div>
+      </div>
+
+      <!-- 性別分類標籤 -->
+      <div>
+        <div style="font-size:0.95rem; color:#cbd5e1; margin-bottom:6px; font-weight:bold;">選擇你的冒險角色（10位風格角色）：</div>
+        <div class="gender-tabs">
+          <button class="gender-tab-btn active" onclick="CharacterSystem.filterGender('all')">全部角色</button>
+          <button class="gender-tab-btn" onclick="CharacterSystem.filterGender('male')">👦 男生角色 (5位)</button>
+          <button class="gender-tab-btn" onclick="CharacterSystem.filterGender('female')">👧 女生角色 (5位)</button>
+        </div>
+      </div>
+
+      <!-- 角色卡片列表 -->
+      <div class="char-grid" id="char-grid-container">
+        <!-- JS 動態生成 10 個角色 -->
+      </div>
+
+      <div>
+        <button class="start-adventure-btn" onclick="CharacterSystem.confirmCharacter()">踏上冒險！進入關卡 ➔</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       畫面 2：關卡選擇大廳 (Stage Select)
+       ========================================================= -->
+  <section class="screen" id="screen-stage-select">
+    <!-- 玩家頂部狀態欄 -->
+    <div class="lobby-header">
+      <div class="player-profile">
+        <div class="player-avatar-badge" id="lobby-avatar">🧙‍♂️</div>
+        <div>
+          <div class="player-name-text" id="lobby-player-name">勇者小算</div>
+          <button class="btn-edit-char" onclick="CharacterSystem.openEditCharacter()">✏️ 更換角色名稱</button>
+        </div>
+      </div>
+      <div style="text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:0.8rem; color:#94a3b8;">總進度:</span>
+          <span style="font-size:1.05rem; font-weight:bold; color:#34d399;" id="lobby-total-progress">0% 完成</span>
+        </div>
+        <button class="btn-save-transfer" onclick="SaveSystem.openModal()">💾 存檔備份 / 引繼碼</button>
+      </div>
+    </div>
+
+    <!-- 關卡列表 -->
+    <div class="stage-list">
+      <!-- 第1關：根號化簡 -->
+      <div class="stage-item-card" onclick="Game.startStage(1)">
+        <div class="stage-info-left">
+          <div class="stage-icon-big">🌲</div>
+          <div class="stage-details">
+            <div class="stage-title-text">第 1 關：根號化簡</div>
+            <div class="stage-desc-text">提出平方因數化為最簡根式 (如 √18 = 3√2)</div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div class="stage-progress-bar-bg">
+                <div class="stage-progress-fill" id="stage1-progress-fill" style="width: 20%;"></div>
+              </div>
+              <span style="font-size:0.8rem; color:#fbbf24;" id="stage1-level-text">Lv.1 / 5</span>
+            </div>
+          </div>
+        </div>
+        <div class="stage-action-right">
+          <span class="badge-cleared" id="stage1-cleared-badge" style="display:none;">★ 通關</span>
+          <button class="btn-enter-stage">進入挑戰 ➔</button>
+        </div>
+      </div>
+
+      <!-- 第2關：根號加減 -->
+      <div class="stage-item-card" onclick="Game.startStage(2)">
+        <div class="stage-info-left">
+          <div class="stage-icon-big">🌋</div>
+          <div class="stage-details">
+            <div class="stage-title-text">第 2 關：根號加減</div>
+            <div class="stage-desc-text">化簡後合併同類方根 (如 √12 + √27 = 5√3)</div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div class="stage-progress-bar-bg">
+                <div class="stage-progress-fill" id="stage2-progress-fill" style="width: 20%;"></div>
+              </div>
+              <span style="font-size:0.8rem; color:#fbbf24;" id="stage2-level-text">Lv.1 / 5</span>
+            </div>
+          </div>
+        </div>
+        <div class="stage-action-right">
+          <span class="badge-cleared" id="stage2-cleared-badge" style="display:none;">★ 通關</span>
+          <button class="btn-enter-stage">進入挑戰 ➔</button>
+        </div>
+      </div>
+
+      <!-- 第3關：根號乘法 -->
+      <div class="stage-item-card" onclick="Game.startStage(3)">
+        <div class="stage-info-left">
+          <div class="stage-icon-big">⚡</div>
+          <div class="stage-details">
+            <div class="stage-title-text">第 3 關：根號乘法</div>
+            <div class="stage-desc-text">利用 √a × √b = √ab 乘法運算與化簡 (如 2√3 × 3√2 = 6√6)</div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div class="stage-progress-bar-bg">
+                <div class="stage-progress-fill" id="stage3-progress-fill" style="width: 20%;"></div>
+              </div>
+              <span style="font-size:0.8rem; color:#fbbf24;" id="stage3-level-text">Lv.1 / 5</span>
+            </div>
+          </div>
+        </div>
+        <div class="stage-action-right">
+          <span class="badge-cleared" id="stage3-cleared-badge" style="display:none;">★ 通關</span>
+          <button class="btn-enter-stage">進入挑戰 ➔</button>
+        </div>
+      </div>
+
+      <!-- 第4關：根號除法 (敬請期待) -->
+      <div class="stage-item-card" style="opacity: 0.6; cursor: not-allowed;" onclick="alert('第 4 關【根號除法】即將推出！請先鍛鍊前三關的能力！')">
+        <div class="stage-info-left">
+          <div class="stage-icon-big">❄️</div>
+          <div class="stage-details">
+            <div class="stage-title-text" style="color:#94a3b8;">第 4 關：根號除法 (鎖定中)</div>
+            <div class="stage-desc-text">即將登場，敬請期待！</div>
+          </div>
+        </div>
+        <div class="stage-action-right">
+          <span style="font-size:0.85rem; color:#64748b;">🔒 尚未開放</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =========================================================
+       畫面 3：戰鬥競技場 (Battle Arena)
+       ========================================================= -->
+  <section class="screen" id="screen-battle">
+    <!-- 頂部資訊與返回按鈕 -->
+    <header class="battle-header">
+      <button class="btn-back-lobby" onclick="Game.returnToStageSelect()">
+        <span>🏠</span> 返回關卡選單
+      </button>
+      <div style="font-weight:bold; color:#fbbf24; font-size:1.05rem;" id="battle-stage-title">第1關：根號化簡</div>
+      <div style="display:flex; gap:8px; font-size:0.85rem;">
+        <span style="background:#334155; padding:4px 8px; border-radius:8px;">等級: <strong id="battle-player-level" style="color:#fbbf24;">Lv.1/5</strong></span>
+        <span style="background:#334155; padding:4px 8px; border-radius:8px;">攻擊力: <strong id="battle-player-atk" style="color:#f87171;">20</strong></span>
+      </div>
+    </header>
+
+    <!-- 戰鬥舞台 -->
+    <div class="battle-arena">
+      <div class="arena-characters">
+        <!-- 勇者 -->
+        <div class="fighter" id="hero-box">
+          <div class="fighter-sprite hero-sprite" id="battle-hero-avatar">🧙‍♂️</div>
+          <div class="fighter-info">
+            <div class="name-level">
+              <span id="battle-hero-name" style="color:#a5b4fc;">勇者小算</span>
+              <span id="hero-hp-text-badge" style="color:#34d399;">HP 100</span>
+            </div>
+            <div class="hp-bar-bg">
+              <div class="hp-fill" id="hero-hp-bar" style="width: 100%;"></div>
+              <div class="hp-text" id="hero-hp-text">100 / 100</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size: 1.4rem; font-weight: bold; color: #64748b;">VS</div>
+
+        <!-- 怪獸 -->
+        <div class="fighter" id="monster-box">
+          <div class="fighter-sprite monster-sprite" id="monster-avatar">🟢</div>
+          <div class="fighter-info">
+            <div class="name-level">
+              <span id="monster-name" style="color:#fca5a5;">史萊姆</span>
+              <span id="monster-type-badge" style="color:#94a3b8; font-size:0.8rem;">階段 1</span>
+            </div>
+            <div class="hp-bar-bg">
+              <div class="hp-fill monster-hp-fill" id="monster-hp-bar" style="width: 100%;"></div>
+              <div class="hp-text" id="monster-hp-text">40 / 40</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="damage-container"></div>
+      </div>
+    </div>
+
+    <!-- 題目區域 -->
+    <div class="question-card">
+      <div class="question-prompt" id="question-prompt">
+        <span>⚡ 請化簡下列題目並算出最簡結果：</span>
+      </div>
+      <div class="question-math" id="question-text"></div>
+      <div class="timer-container">
+        <div class="timer-bar" id="timer-bar"></div>
+      </div>
+      <div class="speed-bonus-hint">
+        <span>⏱️ 答題時間</span>
+        <span id="crit-status" style="color:#fbbf24;">⚡ 5秒內答對觸發【神速暴擊 1.5x】！</span>
+      </div>
+    </div>
+
+    <!-- 學生作答顯示框 -->
+    <div class="answer-display-box" id="answer-preview-box">
+      <span class="answer-placeholder" id="answer-placeholder">點擊下方鍵盤輸入計算結果</span>
+      <div class="formatted-answer" id="formatted-answer" style="display: none;"></div>
+    </div>
+
+    <!-- 平板專屬 4x4 大型觸控鍵盤 -->
+    <div class="touch-keypad">
+      <button class="key-btn" onclick="Game.appendKey('7')">7</button>
+      <button class="key-btn" onclick="Game.appendKey('8')">8</button>
+      <button class="key-btn" onclick="Game.appendKey('9')">9</button>
+      <button class="key-btn key-action" onclick="Game.backspace()">⌫ 刪除</button>
+
+      <button class="key-btn" onclick="Game.appendKey('4')">4</button>
+      <button class="key-btn" onclick="Game.appendKey('5')">5</button>
+      <button class="key-btn" onclick="Game.appendKey('6')">6</button>
+      <button class="key-btn key-action" onclick="Game.clearInput()">C 清除</button>
+
+      <button class="key-btn" onclick="Game.appendKey('1')">1</button>
+      <button class="key-btn" onclick="Game.appendKey('2')">2</button>
+      <button class="key-btn" onclick="Game.appendKey('3')">3</button>
+      <button class="key-btn key-sqrt" onclick="Game.appendKey('√')">√ 根號</button>
+
+      <button class="key-btn key-neg" onclick="Game.appendKey('-')">- 負號</button>
+      <button class="key-btn" onclick="Game.appendKey('0')">0</button>
+      <button class="key-btn key-action" onclick="Game.showHint()">💡 提示</button>
+      <button class="key-btn key-attack" onclick="Game.submitAttack()">⚔️ 攻擊</button>
+    </div>
+
+    <!-- 底部經驗值條 -->
+    <footer class="exp-container">
+      <div class="exp-label">關卡進度</div>
+      <div class="exp-bar-bg">
+        <div class="exp-fill" id="exp-bar"></div>
+      </div>
+      <div class="exp-label" id="exp-text">0 / 60 EXP</div>
+    </footer>
+  </section>
+
+  <!-- 通用彈出視窗 -->
+  <div class="modal-overlay" id="game-modal">
+    <div class="modal-card">
+      <div class="modal-title" id="modal-title">提示</div>
+      <div class="modal-content" id="modal-body"></div>
+      <div class="modal-btn-group" id="modal-btn-group">
+        <button class="modal-btn" id="modal-confirm-btn" onclick="Game.closeModal()">確認</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 存檔備份 / 引繼碼專屬彈出視窗 -->
+  <div class="modal-overlay" id="save-modal">
+    <div class="modal-card" style="max-width: 520px;">
+      <div class="modal-title">💾 存檔備份與跨裝置引繼</div>
+      
+      <!-- 分頁標籤 -->
+      <div class="gender-tabs" style="margin-bottom: 12px;">
+        <button class="gender-tab-btn active" id="tab-btn-export" onclick="SaveSystem.switchTab('export')">📤 產生引繼碼 (備份存檔)</button>
+        <button class="gender-tab-btn" id="tab-btn-import" onclick="SaveSystem.switchTab('import')">📥 輸入引繼碼 (還原存檔)</button>
+      </div>
+
+      <!-- 匯出面板 -->
+      <div id="save-panel-export">
+        <div style="font-size:0.85rem; color:#94a3b8; text-align:left; margin-bottom:8px; line-height:1.5;">
+          這是您目前的等級與冒險進度代碼。複製後可傳至 LINE 備忘或抄下，在其他平板或家裡電腦貼上即可繼承！
+        </div>
+        <textarea id="export-code-display" readonly onclick="this.select()" style="width:100%; height:75px; background:#0f172a; color:#38bdf8; border:1px solid #475569; border-radius:10px; padding:10px; font-size:0.85rem; font-family:monospace; resize:none;"></textarea>
+        <div style="margin-top:10px;">
+          <button class="modal-btn" id="btn-copy-code" onclick="SaveSystem.copyCode()" style="background:linear-gradient(180deg,#059669,#047857);">📋 一鍵複製引繼碼</button>
+        </div>
+      </div>
+
+      <!-- 匯入面板 -->
+      <div id="save-panel-import" style="display:none;">
+        <div style="font-size:0.85rem; color:#94a3b8; text-align:left; margin-bottom:8px; line-height:1.5;">
+          若您在學校平板或其他裝置有練過等級，請在此貼上引繼碼以還原您的角色與關卡進度：
+        </div>
+        <textarea id="import-code-input" placeholder="請在此長按貼上以 RADICAL- 開頭的引繼碼..." style="width:100%; height:75px; background:#0f172a; color:#fde047; border:1px solid #6366f1; border-radius:10px; padding:10px; font-size:0.85rem; font-family:monospace; resize:none;"></textarea>
+        <div style="margin-top:10px;">
+          <button class="modal-btn" onclick="SaveSystem.applyImport()" style="background:linear-gradient(180deg,#4f46e5,#4338ca);">🚀 立即讀取並載入進度</button>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;">
+        <button class="modal-btn modal-btn-alt" onclick="SaveSystem.closeModal()" style="width:100%;">關閉</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================
+       1. 音效引擎 (Web Audio API 合成)
+       ========================================================= */
+    const SoundEngine = {
+      ctx: null,
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) this.ctx = new AudioContext();
+        }
+      },
+      playTone(freq, type, duration, gainStart = 0.2) {
+        this.init();
+        if (!this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          gain.gain.setValueAtTime(gainStart, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch(e) {}
+      },
+      playClick() { this.playTone(600, 'sine', 0.05, 0.1); },
+      playSlash() {
+        this.playTone(400, 'sawtooth', 0.15, 0.3);
+        setTimeout(() => this.playTone(200, 'square', 0.12, 0.2), 60);
+      },
+      playCrit() {
+        this.playTone(550, 'triangle', 0.1, 0.4);
+        setTimeout(() => this.playTone(880, 'sine', 0.25, 0.4), 80);
+      },
+      playHit() { this.playTone(150, 'square', 0.2, 0.35); },
+      playLevelUp() {
+        const notes = [440, 554, 659, 880];
+        notes.forEach((freq, idx) => setTimeout(() => this.playTone(freq, 'triangle', 0.25, 0.3), idx * 100));
+      },
+      playVictoryFanfare() {
+        const notes = [523, 659, 784, 1046];
+        notes.forEach((freq, idx) => setTimeout(() => this.playTone(freq, 'triangle', 0.3, 0.35), idx * 120));
+      },
+      playError() { this.playTone(180, 'sawtooth', 0.25, 0.3); }
+    };
+
+    /* =========================================================
+       2. 10位風格角色資料庫 (5男、5女)
+       ========================================================= */
+    const CHARACTERS_DB = [
+      // 男生角色 (5位)
+      { id: "m1", gender: "male", name: "雷歐", title: "疾風劍士", avatar: "⚔️", desc: "熱血勇敢的見習劍士，出劍如風" },
+      { id: "m2", gender: "male", name: "艾爾", title: "奧術法師", avatar: "🧙‍♂️", desc: "掌握自然奧秘，擅長邏輯心算" },
+      { id: "m3", gender: "male", name: "羅賓", title: "精準遊俠", avatar: "🏹", desc: "百步穿楊神射手，目標精準無比" },
+      { id: "m4", gender: "male", name: "蘭斯", title: "聖盾騎士", avatar: "🛡️", desc: "堅毅沉穩，守護隊友的可靠防線" },
+      { id: "m5", gender: "male", name: "疾風", title: "影忍行者", avatar: "🥷", desc: "動作疾如閃電，思路清晰敏捷" },
+
+      // 女生角色 (5位)
+      { id: "f1", gender: "female", name: "艾莉亞", title: "冰霜魔導", avatar: "🧙‍♀️", desc: "冷靜沉著的心算天才少女" },
+      { id: "f2", gender: "female", name: "莉莉", title: "精靈射手", avatar: "🧝‍♀️", desc: "來自森林的精靈，直覺敏銳靈巧" },
+      { id: "f3", gender: "female", name: "小楓", title: "旋風拳師", avatar: "🥋", desc: "充滿活力的武術家，剛柔並濟" },
+      { id: "f4", gender: "female", name: "露娜", title: "聖光祭司", avatar: "🧕", desc: "溫柔治癒者，細心解答每道難題" },
+      { id: "f5", gender: "female", name: "希爾德", title: "女武神", avatar: "🗡️", desc: "勇敢無畏的女戰神，氣勢非凡" }
+    ];
+
+    /* =========================================================
+       3. 角色管理系統 (創角、選擇、暱稱)
+       ========================================================= */
+    const CharacterSystem = {
+      selectedCharId: "m2",
+      playerName: "勇者小算",
+      currentFilter: "all",
+
+      init() {
+        this.renderCharacterGrid();
+      },
+
+      filterGender(gender) {
+        this.currentFilter = gender;
+        const btns = document.querySelectorAll('.gender-tab-btn');
+        btns.forEach(b => b.classList.remove('active'));
+        if (gender === 'all') btns[0].classList.add('active');
+        else if (gender === 'male') btns[1].classList.add('active');
+        else if (gender === 'female') btns[2].classList.add('active');
+        this.renderCharacterGrid();
+      },
+
+      renderCharacterGrid() {
+        const container = document.getElementById('char-grid-container');
+        container.innerHTML = '';
+
+        const list = CHARACTERS_DB.filter(c => this.currentFilter === 'all' || c.gender === this.currentFilter);
+
+        list.forEach(c => {
+          const card = document.createElement('div');
+          card.className = `char-card ${c.id === this.selectedCharId ? 'selected' : ''}`;
+          card.onclick = () => this.selectChar(c.id);
+
+          card.innerHTML = `
+            <div class="char-avatar-icon">${c.avatar}</div>
+            <div class="char-title">${c.title}</div>
+            <div style="font-size:0.75rem; color:#fde047;">${c.name}</div>
+            <div class="char-tag">${c.gender === 'male' ? '男生' : '女生'}</div>
+          `;
+          container.appendChild(card);
+        });
+      },
+
+      selectChar(id) {
+        SoundEngine.playClick();
+        this.selectedCharId = id;
+        this.renderCharacterGrid();
+      },
+
+      confirmCharacter() {
+        SoundEngine.playClick();
+        const inputName = document.getElementById('player-name-input').value.trim();
+        if (inputName) {
+          this.playerName = inputName;
+        } else {
+          const char = CHARACTERS_DB.find(c => c.id === this.selectedCharId);
+          this.playerName = char.name;
+        }
+
+        Game.saveCharacter(this.selectedCharId, this.playerName);
+        Game.showScreen('stage-select');
+      },
+
+      openEditCharacter() {
+        SoundEngine.playClick();
+        document.getElementById('player-name-input').value = this.playerName;
+        Game.showScreen('character-select');
+      }
+    };
+
+    /* =========================================================
+       4. 關卡與怪物設定庫 (等級上限均為 5 級)
+       ========================================================= */
+    const STAGES_CONFIG = {
+      1: {
+        id: 1,
+        title: "第 1 關：根號化簡",
+        icon: "🌲",
+        prompt: "⚡ 請將下列根號化為最簡根式：",
+        maxLevel: 5,
+        monsters: [
+          { name: "森林綠史萊姆", avatar: "🟢", hp: 40, exp: 40, tier: 1 },
+          { name: "洞穴蝙蝠怪", avatar: "🦇", hp: 60, exp: 50, tier: 2 },
+          { name: "哥布林戰士", avatar: "👺", hp: 80, exp: 65, tier: 3 },
+          { name: "千年古樹精", avatar: "🌳", hp: 110, exp: 80, tier: 4 },
+          { name: "遠古石像魔王 (BOSS)", avatar: "🗿", hp: 150, exp: 120, tier: 5 }
+        ]
+      },
+      2: {
+        id: 2,
+        title: "第 2 關：根號加減",
+        icon: "🌋",
+        prompt: "⚡ 請計算下列根號加減的最簡結果：",
+        maxLevel: 5,
+        monsters: [
+          { name: "熔岩火史萊姆", avatar: "🔴", hp: 45, exp: 40, tier: 1 },
+          { name: "骷髏劍士", avatar: "💀", hp: 65, exp: 50, tier: 2 },
+          { name: "暗黑魔狼", avatar: "🐺", hp: 90, exp: 65, tier: 3 },
+          { name: "寒冰法師", avatar: "🧙‍♂️", hp: 120, exp: 80, tier: 4 },
+          { name: "冥火魔龍 (BOSS)", avatar: "🐉", hp: 170, exp: 120, tier: 5 }
+        ]
+      },
+      3: {
+        id: 3,
+        title: "第 3 關：根號乘法",
+        icon: "⚡",
+        prompt: "⚡ 請計算下列根號乘法的最簡結果：",
+        maxLevel: 5,
+        monsters: [
+          { name: "雷電小精靈", avatar: "⚡", hp: 50, exp: 40, tier: 1 },
+          { name: "鋼鐵傀儡", avatar: "🤖", hp: 70, exp: 50, tier: 2 },
+          { name: "狂暴雙足飛龍", avatar: "🦅", hp: 95, exp: 65, tier: 3 },
+          { name: "雷霆巨魔像", avatar: "🦾", hp: 130, exp: 80, tier: 4 },
+          { name: "滅世雷神龍 (BOSS)", avatar: "🐲", hp: 180, exp: 120, tier: 5 }
+        ]
+      }
+    };
+
+    /* =========================================================
+       5. 數學核心引擎 (化簡、加減、乘法題庫生成)
+       ========================================================= */
+    const MathEngine = {
+      simplifyRadical(n) {
+        let coef = 1;
+        let radicand = n;
+        for (let d = 2; d * d <= radicand; d++) {
+          while (radicand % (d * d) === 0) {
+            coef *= d;
+            radicand /= (d * d);
+          }
+        }
+        return { coef, radicand };
+      },
+
+      renderRadicalHTML(coef, radicand) {
+        if (radicand === 1) return `<span>${coef}</span>`;
+        const coefStr = (coef === 1) ? "" : (coef === -1 ? "-" : `${coef}`);
+        return `
+          <span class="radical-block">
+            <span>${coefStr}</span>
+            <span class="radical-symbol">√</span><span class="radicand-val">${radicand}</span>
+          </span>
+        `;
+      },
+
+      /* --------- 第 1 關：根號化簡 --------- */
+      generateStage1(tier) {
+        let a, b;
+        const isPerfectSquare = Math.random() < 0.2;
+
+        if (isPerfectSquare) {
+          const squareBases = tier <= 2 ? [4, 5, 6] : [7, 8, 9, 10];
+          a = squareBases[Math.floor(Math.random() * squareBases.length)];
+          b = 1;
+        } else {
+          const bPool = (tier <= 2) ? [2, 3] : (tier <= 4) ? [2, 3, 5, 6] : [2, 3, 5, 6, 7];
+          const aMin = tier === 1 ? 2 : tier === 2 ? 2 : 3;
+          const aMax = tier === 1 ? 3 : tier === 2 ? 4 : tier === 3 ? 5 : 7;
+          b = bPool[Math.floor(Math.random() * bPool.length)];
+          a = Math.floor(Math.random() * (aMax - aMin + 1)) + aMin;
+        }
+
+        const originalN = a * a * b;
+        const standardStr = b === 1 ? `${a}` : (a === 1 ? `√${b}` : `${a}√${b}`);
+
+        return {
+          originalN,
+          correctA: a,
+          correctB: b,
+          standardStr,
+          htmlText: `
+            <span>化簡：</span>
+            <span class="radical-block">
+              <span class="radical-symbol">√</span><span class="radicand-val">${originalN}</span>
+            </span>
+          `,
+          explanation: `
+            <strong>化簡步驟：</strong><br>
+            ${b === 1 
+              ? `√${originalN} 為完全平方數，因為 ${a}² = ${originalN}，所以 <strong>√${originalN} = ${a}</strong>。`
+              : `1. 分解平方因數：${originalN} = ${a * a} × ${b} = (${a}²) × ${b}<br>2. 開出根號：<strong>√${originalN} = ${a}√${b}</strong>`
+            }
+          `
+        };
+      },
+
+      /* --------- 第 2 關：根號加減 --------- */
+      generateStage2(tier) {
+        const bPool = [2, 3, 5];
+        const b = bPool[Math.floor(Math.random() * bPool.length)];
+        let c1, c2, op, htmlText, explanation, finalCoef;
+
+        if (tier === 1) {
+          c1 = Math.floor(Math.random() * 4) + 1;
+          c2 = Math.floor(Math.random() * 4) + 2;
+          finalCoef = c1 + c2;
+          htmlText = `${this.renderRadicalHTML(c1, b)} <span style="color:#fbbf24; margin:0 6px;">+</span> ${this.renderRadicalHTML(c2, b)}`;
+          explanation = `同類方根合併：(${c1} + ${c2})√${b} = <strong>${finalCoef}√${b}</strong>`;
+        } else if (tier === 2) {
+          c1 = Math.floor(Math.random() * 4) + 3;
+          c2 = Math.floor(Math.random() * (c1 - 1)) + 1;
+          finalCoef = c1 - c2;
+          htmlText = `${this.renderRadicalHTML(c1, b)} <span style="color:#fbbf24; margin:0 6px;">-</span> ${this.renderRadicalHTML(c2, b)}`;
+          explanation = `同類方根相減：(${c1} - ${c2})√${b} = <strong>${finalCoef === 1 ? `√${b}` : `${finalCoef}√${b}`}</strong>`;
+        } else if (tier === 3) {
+          const a1 = Math.floor(Math.random() * 3) + 2;
+          const n1 = a1 * a1 * b;
+          const a2 = Math.floor(Math.random() * 3) + 1;
+          finalCoef = a1 + a2;
+          const t1 = `<span class="radical-block"><span class="radical-symbol">√</span><span class="radicand-val">${n1}</span></span>`;
+          htmlText = `${t1} <span style="color:#fbbf24; margin:0 6px;">+</span> ${this.renderRadicalHTML(a2, b)}`;
+          explanation = `先化簡 √${n1} = ${a1}√${b}，再合併：${a1}√${b} + ${a2}√${b} = <strong>${finalCoef}√${b}</strong>`;
+        } else if (tier === 4) {
+          const a1 = Math.floor(Math.random() * 2) + 2;
+          const a2 = Math.floor(Math.random() * 2) + 2;
+          const n1 = a1 * a1 * b;
+          const n2 = a2 * a2 * b;
+          finalCoef = a1 + a2;
+          htmlText = `
+            <span class="radical-block"><span class="radical-symbol">√</span><span class="radicand-val">${n1}</span></span>
+            <span style="color:#fbbf24; margin:0 6px;">+</span>
+            <span class="radical-block"><span class="radical-symbol">√</span><span class="radicand-val">${n2}</span></span>
+          `;
+          explanation = `分別化簡：√${n1} = ${a1}√${b}，√${n2} = ${a2}√${b}<br>相加得：<strong>${finalCoef}√${b}</strong>`;
+        } else {
+          // tier 5 BOSS
+          const k1 = 2, a1 = 2, a2 = 3;
+          finalCoef = (k1 * a1) + a2;
+          const n1 = a1 * a1 * b, n2 = a2 * a2 * b;
+          htmlText = `
+            <span>${k1}</span><span class="radical-block"><span class="radical-symbol">√</span><span class="radicand-val">${n1}</span></span>
+            <span style="color:#fbbf24; margin:0 6px;">+</span>
+            <span class="radical-block"><span class="radical-symbol">√</span><span class="radicand-val">${n2}</span></span>
+          `;
+          explanation = `分別化簡：${k1}√${n1} = ${k1 * a1}√${b}，√${n2} = ${a2}√${b}<br>合併：<strong>${finalCoef}√${b}</strong>`;
+        }
+
+        const standardStr = finalCoef === 1 ? `√${b}` : (finalCoef === 0 ? "0" : `${finalCoef}√${b}`);
+        return {
+          correctA: finalCoef,
+          correctB: finalCoef === 0 ? 1 : b,
+          standardStr,
+          htmlText,
+          explanation
+        };
+      },
+
+      /* --------- 第 3 關：根號乘法 --------- */
+      generateStage3(tier) {
+        // tier 1: 直接相乘無平方因數 (√2 × √3 = √6, √3 × √5 = √15)
+        // tier 2: 相乘後為完全平方數整數 (√3 × √3 = 3, √2 × √8 = 4)
+        // tier 3: 相乘後需提出平方因數化簡 (√2 × √6 = 2√3, √6 × √10 = 2√15)
+        // tier 4: 係數與根號相乘 (2√3 × 3√2 = 6√6)
+        // tier 5: 係數乘法且需化簡 (2√6 × 3√10 = 12√15, 3√8 × 2√3 = 12√6)
+
+        let k1 = 1, k2 = 1, r1 = 2, r2 = 3;
+        let finalCoef = 1, finalRadicand = 1;
+        let explanation = "";
+
+        if (tier === 1) {
+          // Tier 1: 基礎乘法 (√a × √b = √ab)
+          const pairs = [[2, 3], [3, 5], [2, 5], [2, 7], [3, 7]];
+          const pick = pairs[Math.floor(Math.random() * pairs.length)];
+          r1 = pick[0];
+          r2 = pick[1];
+          finalCoef = 1;
+          finalRadicand = r1 * r2;
+          explanation = `
+            <strong>根號乘法基本法則：</strong><br>
+            √a × √b = √(a × b)<br>
+            √${r1} × √${r2} = √(${r1} × ${r2}) = <strong>√${finalRadicand}</strong>
+          `;
+        } else if (tier === 2) {
+          // Tier 2: 相乘後為完全平方數
+          const isSame = Math.random() < 0.5;
+          if (isSame) {
+            const primes = [2, 3, 5, 7];
+            r1 = primes[Math.floor(Math.random() * primes.length)];
+            r2 = r1;
+            finalCoef = r1;
+            finalRadicand = 1;
+            explanation = `
+              <strong>根式平方性質：</strong><br>
+              √${r1} × √${r1} = (√${r1})² = <strong>${r1}</strong>
+            `;
+          } else {
+            const pairs = [[2, 8, 4], [3, 12, 6], [5, 20, 10]];
+            const pick = pairs[Math.floor(Math.random() * pairs.length)];
+            r1 = pick[0];
+            r2 = pick[1];
+            finalCoef = pick[2];
+            finalRadicand = 1;
+            explanation = `
+              <strong>相乘後開方：</strong><br>
+              √${r1} × √${r2} = √(${r1 * r2}) = <strong>${finalCoef}</strong>
+            `;
+          }
+        } else if (tier === 3) {
+          // Tier 3: 相乘後化簡
+          const pairs = [
+            [2, 6, 2, 3],   // √2 × √6 = √12 = 2√3
+            [3, 6, 3, 2],   // √3 × √6 = √18 = 3√2
+            [6, 10, 2, 15], // √6 × √10 = √60 = 2√15
+            [3, 15, 3, 5],  // √3 × √15 = √45 = 3√5
+            [2, 10, 2, 5]   // √2 × √10 = √20 = 2√5
+          ];
+          const pick = pairs[Math.floor(Math.random() * pairs.length)];
+          r1 = pick[0];
+          r2 = pick[1];
+          finalCoef = pick[2];
+          finalRadicand = pick[3];
+          explanation = `
+            <strong>解題步驟：</strong><br>
+            1. 根號內先相乘：√${r1} × √${r2} = √${r1 * r2}<br>
+            2. 將 ${r1 * r2} 化為最簡根式：√${r1 * r2} = <strong>${finalCoef}√${finalRadicand}</strong>
+          `;
+        } else if (tier === 4) {
+          // Tier 4: 含係數相乘
+          k1 = Math.floor(Math.random() * 2) + 2; // 2, 3
+          k2 = Math.floor(Math.random() * 2) + 2; // 2, 3
+          const pairs = [[2, 3], [3, 5], [2, 5]];
+          const pick = pairs[Math.floor(Math.random() * pairs.length)];
+          r1 = pick[0];
+          r2 = pick[1];
+          finalCoef = k1 * k2;
+          finalRadicand = r1 * r2;
+          explanation = `
+            <strong>係數相乘與根號相乘：</strong><br>
+            (${k1} × ${k2}) × √( ${r1} × ${r2} ) = <strong>${finalCoef}√${finalRadicand}</strong>
+          `;
+        } else {
+          // Tier 5: 魔王題 (含係數且需進一步化簡)
+          k1 = 2;
+          k2 = 3;
+          const pick = [[6, 10, 2, 15], [8, 3, 2, 6], [15, 6, 3, 10]][Math.floor(Math.random() * 3)];
+          r1 = pick[0];
+          r2 = pick[1];
+          const extraCoef = pick[2];
+          finalRadicand = pick[3];
+          finalCoef = (k1 * k2) * extraCoef;
+          explanation = `
+            <strong>魔王挑戰步驟：</strong><br>
+            1. 係數先相乘：${k1} × ${k2} = ${k1 * k2}<br>
+            2. 根式相乘：√${r1} × √${r2} = √${r1 * r2} = ${extraCoef}√${finalRadicand}<br>
+            3. 總結：${k1 * k2} × (${extraCoef}√${finalRadicand}) = <strong>${finalCoef}√${finalRadicand}</strong>
+          `;
+        }
+
+        const t1 = this.renderRadicalHTML(k1, r1);
+        const t2 = this.renderRadicalHTML(k2, r2);
+        const htmlText = `${t1} <span style="color:#fbbf24; margin:0 6px;">×</span> ${t2}`;
+        const standardStr = finalRadicand === 1 ? `${finalCoef}` : (finalCoef === 1 ? `√${finalRadicand}` : `${finalCoef}√${finalRadicand}`);
+
+        return {
+          correctA: finalCoef,
+          correctB: finalRadicand,
+          standardStr,
+          htmlText,
+          explanation
+        };
+      }
+    };
+
+    /* =========================================================
+       6. 遊戲主控制器 (State & Actions)
+       ========================================================= */
+    const Game = {
+      currentStageId: 1,
+
+      stagesData: {
+        1: { level: 1, exp: 0, monsterIndex: 0, cleared: false },
+        2: { level: 1, exp: 0, monsterIndex: 0, cleared: false },
+        3: { level: 1, exp: 0, monsterIndex: 0, cleared: false }
+      },
+
+      playerHp: 100,
+      playerMaxHp: 100,
+      baseAtk: 20,
+
+      currentMonster: null,
+      currentProblem: null,
+      userInput: "",
+
+      questionStartTime: 0,
+      timerInterval: null,
+      maxTimerSeconds: 15,
+
+      init() {
+        this.loadSave();
+        CharacterSystem.init();
+
+        // 檢查是否已有建立角色，若有則直接進入關卡大廳
+        const savedChar = localStorage.getItem('radical_rpg_character');
+        if (savedChar) {
+          try {
+            const cObj = JSON.parse(savedChar);
+            CharacterSystem.selectedCharId = cObj.id || "m2";
+            CharacterSystem.playerName = cObj.name || "勇者小算";
+            this.showScreen('stage-select');
+          } catch(e) {
+            this.showScreen('character-select');
+          }
+        } else {
+          this.showScreen('character-select');
+        }
+
+        // 鍵盤監聽
+        window.addEventListener('keydown', (e) => {
+          if (e.key >= '0' && e.key <= '9') this.appendKey(e.key);
+          else if (e.key === 'r' || e.key === 'v' || e.key === 's') this.appendKey('√');
+          else if (e.key === '-') this.appendKey('-');
+          else if (e.key === 'Backspace') this.backspace();
+          else if (e.key === 'Enter') this.submitAttack();
+        });
+      },
+
+      showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        if (screenId === 'character-select') {
+          document.getElementById('screen-character-select').classList.add('active');
+        } else if (screenId === 'stage-select') {
+          this.updateLobbyUI();
+          document.getElementById('screen-stage-select').classList.add('active');
+        } else if (screenId === 'battle') {
+          document.getElementById('screen-battle').classList.add('active');
+        }
+      },
+
+      saveCharacter(charId, name) {
+        try {
+          localStorage.setItem('radical_rpg_character', JSON.stringify({ id: charId, name: name }));
+        } catch(e) {}
+      },
+
+      updateLobbyUI() {
+        const char = CHARACTERS_DB.find(c => c.id === CharacterSystem.selectedCharId) || CHARACTERS_DB[0];
+        document.getElementById('lobby-avatar').innerText = char.avatar;
+        document.getElementById('lobby-player-name').innerText = `${CharacterSystem.playerName} (${char.title})`;
+
+        // 各關進度
+        let totalLevels = 0;
+        for (let sId = 1; sId <= 3; sId++) {
+          const sData = this.stagesData[sId];
+          totalLevels += sData.level;
+
+          const progressPercent = Math.min(100, Math.round((sData.level / 5) * 100));
+          const fillEl = document.getElementById(`stage${sId}-progress-fill`);
+          const textEl = document.getElementById(`stage${sId}-level-text`);
+          const badgeEl = document.getElementById(`stage${sId}-cleared-badge`);
+
+          if (fillEl) fillEl.style.width = progressPercent + '%';
+          if (textEl) textEl.innerText = `Lv.${sData.level} / 5 (${progressPercent}%)`;
+          if (badgeEl) badgeEl.style.display = (sData.level >= 5 || sData.cleared) ? 'inline-block' : 'none';
+        }
+
+        const totalPercent = Math.round((totalLevels / 15) * 100);
+        document.getElementById('lobby-total-progress').innerText = `${totalPercent}% 完成`;
+      },
+
+      startStage(stageId) {
+        SoundEngine.playClick();
+        this.currentStageId = stageId;
+        const cfg = STAGES_CONFIG[stageId];
+        const pData = this.stagesData[stageId];
+
+        // 綁定戰鬥介面基本資訊
+        const char = CHARACTERS_DB.find(c => c.id === CharacterSystem.selectedCharId) || CHARACTERS_DB[0];
+        document.getElementById('battle-hero-avatar').innerText = char.avatar;
+        document.getElementById('battle-hero-name').innerText = CharacterSystem.playerName;
+        document.getElementById('battle-stage-title').innerText = cfg.title;
+        document.getElementById('question-prompt').innerHTML = `<span>${cfg.prompt}</span>`;
+
+        this.spawnMonster(pData.monsterIndex);
+        this.nextQuestion();
+        this.updateBattleUI();
+        this.showScreen('battle');
+      },
+
+      returnToStageSelect() {
+        SoundEngine.playClick();
+        clearInterval(this.timerInterval);
+        this.saveData();
+        this.showScreen('stage-select');
+      },
+
+      getCurrentPlayerData() {
+        return this.stagesData[this.currentStageId];
+      },
+
+      getPlayerAtk() {
+        const pData = this.getCurrentPlayerData();
+        return this.baseAtk + (pData.level - 1) * 10;
+      },
+
+      spawnMonster(index) {
+        const cfg = STAGES_CONFIG[this.currentStageId];
+        const monsters = cfg.monsters;
+        const template = monsters[index % monsters.length];
+
+        this.currentMonster = {
+          name: template.name,
+          avatar: template.avatar,
+          hp: template.hp,
+          maxHp: template.hp,
+          exp: template.exp,
+          tier: template.tier
+        };
+        this.updateMonsterUI();
+      },
+
+      nextQuestion() {
+        this.userInput = "";
+        this.renderInput();
+
+        const tier = this.currentMonster.tier;
+        if (this.currentStageId === 1) {
+          this.currentProblem = MathEngine.generateStage1(tier);
+        } else if (this.currentStageId === 2) {
+          this.currentProblem = MathEngine.generateStage2(tier);
+        } else {
+          this.currentProblem = MathEngine.generateStage3(tier);
+        }
+
+        document.getElementById('question-text').innerHTML = this.currentProblem.htmlText;
+        this.startTimer();
+      },
+
+      startTimer() {
+        clearInterval(this.timerInterval);
+        this.questionStartTime = Date.now();
+        const timerBar = document.getElementById('timer-bar');
+        const critStatus = document.getElementById('crit-status');
+
+        this.timerInterval = setInterval(() => {
+          const elapsed = (Date.now() - this.questionStartTime) / 1000;
+          const remainPercent = Math.max(0, 100 - (elapsed / this.maxTimerSeconds) * 100);
+          timerBar.style.width = remainPercent + '%';
+
+          if (elapsed <= 5) {
+            critStatus.innerHTML = `⚡ 剩餘 ${Math.ceil(5 - elapsed)} 秒可觸發【神速暴擊 1.5x】！`;
+            critStatus.style.color = '#fbbf24';
+          } else {
+            critStatus.innerHTML = `⏱️ 一般命中狀態`;
+            critStatus.style.color = '#94a3b8';
+          }
+        }, 100);
+      },
+
+      /* 輸入與驗證 */
+      appendKey(char) {
+        SoundEngine.playClick();
+        if (char === '√' && this.userInput.includes('√')) return;
+        if (char === '-' && this.userInput.length > 0) return;
+        if (this.userInput.length >= 10) return;
+        this.userInput += char;
+        this.renderInput();
+      },
+
+      backspace() {
+        SoundEngine.playClick();
+        if (this.userInput.length > 0) {
+          this.userInput = this.userInput.slice(0, -1);
+          this.renderInput();
+        }
+      },
+
+      clearInput() {
+        SoundEngine.playClick();
+        this.userInput = "";
+        this.renderInput();
+      },
+
+      renderInput() {
+        const placeholder = document.getElementById('answer-placeholder');
+        const formatted = document.getElementById('formatted-answer');
+
+        if (!this.userInput) {
+          placeholder.style.display = 'block';
+          formatted.style.display = 'none';
+          formatted.innerHTML = '';
+          return;
+        }
+
+        placeholder.style.display = 'none';
+        formatted.style.display = 'flex';
+
+        if (this.userInput.includes('√')) {
+          const parts = this.userInput.split('√');
+          const coef = parts[0] || "";
+          const radicand = parts[1] || "";
+          formatted.innerHTML = `
+            <span>${coef}</span>
+            <span class="radical-symbol" style="font-size:2rem; margin:0 2px;">√</span>
+            <span class="radicand-val" style="font-size:1.6rem;">${radicand || "<small style='color:#64748b'>?</small>"}</span>
+          `;
+        } else {
+          formatted.innerHTML = `<span>${this.userInput}</span>`;
+        }
+      },
+
+      parseUserInput(str) {
+        if (!str) return null;
+        if (!str.includes('√')) {
+          const val = parseInt(str, 10);
+          return isNaN(val) ? null : { a: val, b: 1 };
+        } else {
+          const parts = str.split('√');
+          let a = 1;
+          if (parts[0] === "-") a = -1;
+          else if (parts[0] !== "") a = parseInt(parts[0], 10);
+
+          const b = parts[1] === "" ? null : parseInt(parts[1], 10);
+          if (isNaN(a) || b === null || isNaN(b)) return null;
+          return { a, b };
+        }
+      },
+
+      submitAttack() {
+        if (!this.userInput) {
+          this.showModal("提示", "請先輸入您的計算結果再發動攻擊喔！");
+          return;
+        }
+
+        const parsed = this.parseUserInput(this.userInput);
+        if (!parsed) {
+          this.showModal("輸入格式提醒", "答案格式不完整，請輸入完整的數字或根式（如：3√2 或 5）。");
+          return;
+        }
+
+        const elapsed = (Date.now() - this.questionStartTime) / 1000;
+        const isCritical = elapsed <= 5;
+        const isCorrect = (parsed.a === this.currentProblem.correctA && parsed.b === this.currentProblem.correctB);
+
+        if (isCorrect) {
+          this.handleCorrectAttack(isCritical);
+        } else {
+          // 第一關化簡未完全之提醒
+          if (this.currentStageId === 1 && parsed.a * parsed.a * parsed.b === this.currentProblem.originalN) {
+            SoundEngine.playError();
+            this.showModal("差一點點！", `
+              你的數值算對了 (${this.userInput} 等於 √${this.currentProblem.originalN})，<br>
+              <strong>但還沒有化簡到最簡根式喔！</strong><br>
+              根號內的 ${parsed.b} 還可以繼續提出平方數！<br>
+              <div class="step-box">${this.currentProblem.explanation}</div>
+            `);
+          } else {
+            this.handleWrongAnswer();
+          }
+        }
+      },
+
+      handleCorrectAttack(isCritical) {
+        clearInterval(this.timerInterval);
+        
+        let damage = this.getPlayerAtk();
+        if (isCritical) {
+          damage = Math.round(damage * 1.5);
+          SoundEngine.playCrit();
+        } else {
+          SoundEngine.playSlash();
+        }
+
+        const heroAvatar = document.getElementById('battle-hero-avatar');
+        heroAvatar.classList.add('hero-attack-anim');
+        setTimeout(() => heroAvatar.classList.remove('hero-attack-anim'), 300);
+
+        const monsterAvatar = document.getElementById('monster-avatar');
+        monsterAvatar.classList.add('hit-shake');
+        setTimeout(() => monsterAvatar.classList.remove('hit-shake'), 400);
+
+        this.showFloatingDamage(damage, isCritical);
+        this.currentMonster.hp = Math.max(0, this.currentMonster.hp - damage);
+        this.updateMonsterUI();
+
+        if (this.currentMonster.hp <= 0) {
+          setTimeout(() => this.handleMonsterDefeated(), 500);
+        } else {
+          setTimeout(() => this.nextQuestion(), 600);
+        }
+      },
+
+      handleWrongAnswer() {
+        SoundEngine.playError();
+        const monsterDmg = 15;
+        this.playerHp = Math.max(0, this.playerHp - monsterDmg);
+        this.updateBattleUI();
+
+        const heroAvatar = document.getElementById('battle-hero-avatar');
+        heroAvatar.classList.add('hit-shake');
+        setTimeout(() => heroAvatar.classList.remove('hit-shake'), 400);
+
+        this.showModal("攻擊失誤！怪獸反擊！", `
+          <div style="color:#ef4444; font-weight:bold; margin-bottom:8px;">受到 ${monsterDmg} 點反擊傷害！</div>
+          你的答案是：<span style="color:#fbbf24;">${this.userInput}</span><br>
+          正確最簡結果：<span style="color:#34d399; font-size:1.2rem; font-weight:bold;">${this.currentProblem.standardStr}</span><br>
+          <div class="step-box">${this.currentProblem.explanation}</div>
+        `, () => {
+          if (this.playerHp <= 0) {
+            this.playerHp = this.playerMaxHp;
+            this.showModal("體力耗盡！", "回到關卡大廳休養，重新挑戰！", () => {
+              this.returnToStageSelect();
+            });
+          } else {
+            this.nextQuestion();
+          }
+        });
+      },
+
+      handleMonsterDefeated() {
+        SoundEngine.playHit();
+        const pData = this.getCurrentPlayerData();
+        const earnedExp = this.currentMonster.exp;
+        this.gainExp(earnedExp);
+
+        const isBoss = (this.currentMonster.tier === 5);
+
+        if (isBoss) {
+          pData.cleared = true;
+          this.saveData();
+          SoundEngine.playVictoryFanfare();
+
+          this.showModal("👑 關卡通關大勝利！", `
+            恭喜擊敗 <strong>${this.currentMonster.name}</strong>！<br>
+            您已成功完成 <strong>${STAGES_CONFIG[this.currentStageId].title}</strong> 的試煉！<br><br>
+            獲得大量經驗與通關勳章！即將返回關卡大廳。
+          `, () => {
+            this.returnToStageSelect();
+          }, "返回關卡大廳 🏆");
+          return;
+        }
+
+        this.showModal("🎉 擊敗怪獸！", `
+          獲得 <strong>${earnedExp}</strong> 點經驗值！<br>
+          下一個更強的對手即將出現！
+        `, () => {
+          pData.monsterIndex++;
+          this.saveData();
+          this.spawnMonster(pData.monsterIndex);
+          this.nextQuestion();
+        });
+      },
+
+      gainExp(amount) {
+        const pData = this.getCurrentPlayerData();
+        const maxLevel = 5;
+
+        if (pData.level >= maxLevel) return;
+
+        pData.exp += amount;
+        const reqExp = pData.level * 60;
+
+        if (pData.exp >= reqExp) {
+          pData.exp -= reqExp;
+          pData.level++;
+          this.playerHp = this.playerMaxHp;
+          SoundEngine.playLevelUp();
+
+          this.showModal("⭐ 等級提升！LEVEL UP！", `
+            恭喜升至 <strong style="color:#fbbf24; font-size:1.3rem;">Lv.${pData.level} / ${maxLevel}</strong>！<br>
+            ⚔️ 基礎攻擊力提升至：<strong style="color:#f87171;">${this.getPlayerAtk()}</strong>！<br>
+            ❤️ 體力已完全恢復！
+          `);
+        }
+        this.saveData();
+        this.updateBattleUI();
+      },
+
+      showFloatingDamage(amount, isCrit) {
+        const container = document.getElementById('damage-container');
+        const dmgEl = document.createElement('div');
+        dmgEl.className = 'floating-damage' + (isCrit ? ' critical' : '');
+        dmgEl.innerHTML = isCrit ? `💥 CRITICAL -${amount}!` : `-${amount}`;
+        container.appendChild(dmgEl);
+        setTimeout(() => dmgEl.remove(), 900);
+      },
+
+      showHint() {
+        SoundEngine.playClick();
+        if (this.currentStageId === 1) {
+          this.showModal("💡 化簡小提示", "找出數字的平方因數（如 4, 9, 16, 25, 36...）提出根號外！");
+        } else if (this.currentStageId === 2) {
+          this.showModal("💡 加減小提示", "先分別化簡，再將根號內相同的同類方根進行係數相加減！");
+        } else {
+          this.showModal("💡 乘法小提示", "利用 √a × √b = √(a × b) 相乘，若有係數則係數相乘，最後記得化為最簡根式！");
+        }
+      },
+
+      updateBattleUI() {
+        const pData = this.getCurrentPlayerData();
+        document.getElementById('battle-player-level').innerText = `Lv.${pData.level} / 5`;
+        document.getElementById('battle-player-atk').innerText = `${this.getPlayerAtk()}`;
+
+        const hpPercent = (this.playerHp / this.playerMaxHp) * 100;
+        document.getElementById('hero-hp-bar').style.width = hpPercent + '%';
+        document.getElementById('hero-hp-text').innerText = `${this.playerHp} / ${this.playerMaxHp}`;
+        document.getElementById('hero-hp-text-badge').innerText = `HP ${this.playerHp}`;
+
+        const reqExp = pData.level * 60;
+        const expPercent = pData.level >= 5 ? 100 : (pData.exp / reqExp) * 100;
+        document.getElementById('exp-bar').style.width = expPercent + '%';
+        document.getElementById('exp-text').innerText = pData.level >= 5 ? "等級已達上限 Lv.5" : `${pData.exp} / ${reqExp} EXP`;
+      },
+
+      updateMonsterUI() {
+        if (!this.currentMonster) return;
+        document.getElementById('monster-name').innerText = this.currentMonster.name;
+        document.getElementById('monster-avatar').innerText = this.currentMonster.avatar;
+        document.getElementById('monster-type-badge').innerText = `階段 ${this.currentMonster.tier}`;
+
+        const hpPercent = (this.currentMonster.hp / this.currentMonster.maxHp) * 100;
+        document.getElementById('monster-hp-bar').style.width = hpPercent + '%';
+        document.getElementById('monster-hp-text').innerText = `${this.currentMonster.hp} / ${this.currentMonster.maxHp}`;
+      },
+
+      modalCallback: null,
+      showModal(title, content, callback = null, btnText = "確認") {
+        document.getElementById('modal-title').innerHTML = title;
+        document.getElementById('modal-body').innerHTML = content;
+        document.getElementById('modal-confirm-btn').innerText = btnText;
+        this.modalCallback = callback;
+        document.getElementById('game-modal').classList.add('active');
+      },
+
+      closeModal() {
+        SoundEngine.playClick();
+        document.getElementById('game-modal').classList.remove('active');
+        if (this.modalCallback) {
+          const cb = this.modalCallback;
+          this.modalCallback = null;
+          cb();
+        }
+      },
+
+      saveData() {
+        try {
+          localStorage.setItem('radical_rpg_multi_save_v2', JSON.stringify({
+            stagesData: this.stagesData
+          }));
+        } catch(e) {}
+      },
+
+      loadSave() {
+        try {
+          const data = JSON.parse(localStorage.getItem('radical_rpg_multi_save_v2'));
+          if (data && data.stagesData) {
+            for (let sId = 1; sId <= 3; sId++) {
+              if (data.stagesData[sId]) {
+                this.stagesData[sId] = {
+                  level: Math.min(5, data.stagesData[sId].level || 1),
+                  exp: data.stagesData[sId].exp || 0,
+                  monsterIndex: data.stagesData[sId].monsterIndex || 0,
+                  cleared: data.stagesData[sId].cleared || false
+                };
+              }
+            }
+          }
+        } catch(e) {}
+      }
+    };
+
+    /* =========================================================
+       7. 存檔備份與引繼碼系統 (跨裝置繼承)
+       ========================================================= */
+    const SaveSystem = {
+      openModal() {
+        SoundEngine.playClick();
+        this.switchTab('export');
+        this.refreshExportCode();
+        document.getElementById('save-modal').classList.add('active');
+      },
+
+      closeModal() {
+        SoundEngine.playClick();
+        document.getElementById('save-modal').classList.remove('active');
+      },
+
+      switchTab(tab) {
+        SoundEngine.playClick();
+        const exportTabBtn = document.getElementById('tab-btn-export');
+        const importTabBtn = document.getElementById('tab-btn-import');
+        const exportPanel = document.getElementById('save-panel-export');
+        const importPanel = document.getElementById('save-panel-import');
+
+        if (tab === 'export') {
+          exportTabBtn.classList.add('active');
+          importTabBtn.classList.remove('active');
+          exportPanel.style.display = 'block';
+          importPanel.style.display = 'none';
+          this.refreshExportCode();
+        } else {
+          importTabBtn.classList.add('active');
+          exportTabBtn.classList.remove('active');
+          importPanel.style.display = 'block';
+          exportPanel.style.display = 'none';
+          document.getElementById('import-code-input').value = '';
+        }
+      },
+
+      generateSaveCode() {
+        const payload = {
+          v: 1,
+          t: Date.now(),
+          c: CharacterSystem.selectedCharId,
+          n: CharacterSystem.playerName,
+          s: Game.stagesData
+        };
+        const jsonStr = JSON.stringify(payload);
+        const b64 = btoa(encodeURIComponent(jsonStr).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode('0x' + p1)));
+        return `RADICAL-${b64}`;
+      },
+
+      refreshExportCode() {
+        const code = this.generateSaveCode();
+        const display = document.getElementById('export-code-display');
+        if (display) display.value = code;
+        const copyBtn = document.getElementById('btn-copy-code');
+        if (copyBtn) copyBtn.innerText = '📋 一鍵複製引繼碼';
+      },
+
+      copyCode() {
+        SoundEngine.playClick();
+        const display = document.getElementById('export-code-display');
+        if (!display) return;
+        display.select();
+        display.setSelectionRange(0, 99999);
+
+        const onSuccess = () => {
+          const btn = document.getElementById('btn-copy-code');
+          if (btn) btn.innerText = '✅ 已成功複製代碼！可貼到 LINE 或記事本';
+          setTimeout(() => {
+            if (btn) btn.innerText = '📋 一鍵複製引繼碼';
+          }, 3000);
+        };
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(display.value).then(onSuccess).catch(() => {
+            document.execCommand('copy');
+            onSuccess();
+          });
+        } else {
+          document.execCommand('copy');
+          onSuccess();
+        }
+      },
+
+      applyImport() {
+        SoundEngine.playClick();
+        const input = document.getElementById('import-code-input');
+        if (!input) return;
+        const rawCode = input.value.trim();
+
+        if (!rawCode) {
+          alert("請先貼上引繼碼！");
+          return;
+        }
+
+        try {
+          if (!rawCode.startsWith('RADICAL-')) {
+            throw new Error("無效的代碼格式！引繼碼開頭應為 RADICAL-");
+          }
+          const b64 = rawCode.substring(8);
+          const jsonStr = decodeURIComponent(Array.prototype.map.call(atob(b64), (c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+          const payload = JSON.parse(jsonStr);
+
+          if (!payload.n || !payload.s) {
+            throw new Error("存檔內容損毀或不完整！");
+          }
+
+          // 還原角色
+          CharacterSystem.selectedCharId = payload.c || 'm2';
+          CharacterSystem.playerName = payload.n;
+          Game.saveCharacter(CharacterSystem.selectedCharId, CharacterSystem.playerName);
+
+          // 還原各關卡進度
+          for (let sId = 1; sId <= 3; sId++) {
+            if (payload.s[sId]) {
+              Game.stagesData[sId] = {
+                level: Math.min(5, Math.max(1, payload.s[sId].level || 1)),
+                exp: payload.s[sId].exp || 0,
+                monsterIndex: payload.s[sId].monsterIndex || 0,
+                cleared: !!payload.s[sId].cleared
+              };
+            }
+          }
+
+          Game.saveData();
+          Game.updateLobbyUI();
+          SoundEngine.playVictoryFanfare();
+          alert(`🎉 存檔繼承成功！\n歡迎回來，【${payload.n}】！\n所有關卡等級與經驗已完全還原！`);
+          this.closeModal();
+        } catch(err) {
+          SoundEngine.playError();
+          alert(`❌ 還原失敗：${err.message}\n請確認是否完整複製了代碼！`);
+        }
+      }
+    };
+
+    window.onload = () => Game.init();
+  </script>
+</body>
+</html>
