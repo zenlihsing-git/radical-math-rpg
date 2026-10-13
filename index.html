@@ -1087,10 +1087,235 @@
       .admin-table-container { border: 1px solid #333 !important; max-height: none !important; overflow: visible !important; }
       .admin-table { color: #000000 !important; font-size: 10pt !important; min-width: 100% !important; }
       .admin-table th, .admin-table td { border: 1px solid #666 !important; color: #000000 !important; padding: 4px !important; }
-      .passcode-pill { background: none !important; border: none !important; color: #000000 !important; font-weight: bold !important; }
-      .badge-stage-lv { background: none !important; color: #000000 !important; }
+    /* 雙人對戰 (PvP) & 排行榜樣式 */
+    .pvp-banner-card {
+      background: linear-gradient(135deg, rgba(147, 51, 234, 0.25), rgba(219, 39, 119, 0.25));
+      border: 2px solid #ec4899;
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(236, 72, 153, 0.2);
+      transition: all 0.2s ease;
     }
+    .pvp-banner-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(236, 72, 153, 0.35);
+    }
+    .btn-enter-pvp {
+      background: #334155;
+      color: white;
+      border: 1px solid #475569;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-enter-pvp:hover { filter: brightness(1.15); }
+
+    .pvp-container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 16px;
+      width: 100%;
+    }
+    .pvp-profile-card {
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 16px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .pvp-stat-pill {
+      background: #0f172a;
+      border: 1px solid #334155;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: bold;
+    }
+
+    .pvp-grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 680px) {
+      .pvp-grid-2col { grid-template-columns: 1fr; }
+    }
+
+    .pvp-box {
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .pvp-box-title {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: #fde047;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mode-option-card {
+      background: #0f172a;
+      border: 2px solid #334155;
+      border-radius: 12px;
+      padding: 10px 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      transition: all 0.15s ease;
+    }
+    .mode-option-card:hover {
+      border-color: #818cf8;
+    }
+    .mode-option-card.active {
+      border-color: #ec4899;
+      background: rgba(236, 72, 153, 0.12);
+    }
+    .mode-radio {
+      accent-color: #ec4899;
+      margin-top: 3px;
+    }
+
+    .room-code-input {
+      background: #0f172a;
+      border: 2px solid #6366f1;
+      color: #fde047;
+      font-size: 1.8rem;
+      font-weight: 900;
+      text-align: center;
+      letter-spacing: 6px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      width: 100%;
+      outline: none;
+      font-family: monospace;
+    }
+    .room-code-input::placeholder {
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      color: #64748b;
+    }
+
+    .waiting-card {
+      background: var(--card-bg);
+      border: 2px solid #6366f1;
+      border-radius: 18px;
+      padding: 24px 20px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .waiting-code-display {
+      font-size: 2.6rem;
+      font-weight: 900;
+      color: #34d399;
+      letter-spacing: 4px;
+      font-family: monospace;
+      margin: 8px 0;
+    }
+
+    .matchup-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .fighter-slot {
+      background: #0f172a;
+      border: 2px dashed #475569;
+      border-radius: 14px;
+      padding: 14px 10px;
+      text-align: center;
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .fighter-slot.filled {
+      border-style: solid;
+      border-color: #38bdf8;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: bold;
+      margin-top: 6px;
+    }
+    .status-ready { background: #059669; color: #fff; }
+    .status-waiting { background: #d97706; color: #fff; }
+
+    /* 對戰戰鬥畫面專用樣式 */
+    .pvp-battle-arena {
+      background: rgba(15, 23, 42, 0.7);
+      border: 2px solid var(--card-border);
+      border-radius: 18px;
+      padding: 14px 18px;
+      margin-bottom: 14px;
+    }
+    .pvp-fighters-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .pvp-player-box {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .pvp-player-box.right {
+      flex-direction: row-reverse;
+      text-align: right;
+    }
+    .pvp-hp-bar-bg {
+      background: #334155;
+      height: 14px;
+      border-radius: 7px;
+      overflow: hidden;
+      margin-top: 4px;
+      width: 100%;
+      max-width: 180px;
+    }
+    .pvp-hp-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ef4444, #10b981);
+      transition: width 0.3s ease;
+    }
+
+    /* 排行榜表格專用樣式 */
+    .leaderboard-rank-1 { color: #facc15; font-weight: 900; font-size: 1.25rem; }
+    .leaderboard-rank-2 { color: #e2e8f0; font-weight: 900; font-size: 1.15rem; }
+    .leaderboard-rank-3 { color: #d97706; font-weight: 900; font-size: 1.1rem; }
   </style>
+
+  <!-- Firebase Realtime Database SDK (相容模式，支援即時雙向連線) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body>
 
@@ -1144,7 +1369,27 @@
           <div class="choice-arrow">➔</div>
         </div>
 
-        <!-- 選項 4：教師最高權限後台 -->
+        <!-- 選項 4：雙人線上即時對戰 (201班專屬) -->
+        <div class="menu-choice-btn" onclick="PvPSystem.openLobby()" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(168, 85, 247, 0.2)); border: 2px solid #ec4899;">
+          <div class="choice-icon">⚔️</div>
+          <div class="choice-content">
+            <div class="choice-title" style="color:#f472b6;">雙人線上即時對戰（201班專屬）</div>
+            <div class="choice-sub">模式A搶答競速 / 模式B五題回合制 · 即時連線PK</div>
+          </div>
+          <div class="choice-arrow">➔</div>
+        </div>
+
+        <!-- 選項 5：全班榮譽排行榜 -->
+        <div class="menu-choice-btn" onclick="LeaderboardSystem.open()" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(234, 179, 8, 0.2)); border: 2px solid #f59e0b;">
+          <div class="choice-icon">🏆</div>
+          <div class="choice-content">
+            <div class="choice-title" style="color:#fbbf24;">全班榮譽排行榜</div>
+            <div class="choice-sub">即時查詢對戰獲勝次數、勝率與全班英雄排名</div>
+          </div>
+          <div class="choice-arrow">➔</div>
+        </div>
+
+        <!-- 選項 6：教師最高權限後台 -->
         <div style="margin-top:10px; border-top:1px dashed #475569; padding-top:12px; text-align:center;">
           <button class="btn-teacher-portal" onclick="AdminSystem.openLogin()">
             👨‍🏫 教師管理後台（查詢全班引繼碼與離線成績備份）
@@ -1234,8 +1479,10 @@
           <div id="lobby-student-badge" style="font-size:0.8rem; color:#38bdf8; font-weight:bold;"></div>
           <div class="player-name-text" id="lobby-player-name">勇者小算</div>
           <div style="font-size:0.75rem; color:#34d399; font-weight:bold; margin-top:2px;" id="lobby-passcode-badge">🔑 專屬引繼碼: RAD-000000</div>
-          <div style="display:flex; gap:6px; margin-top:4px;">
+          <div style="display:flex; gap:6px; margin-top:4px; flex-wrap:wrap;">
             <button class="btn-edit-char" onclick="CharacterSystem.openEditCharacter()">✏️ 更換角色</button>
+            <button class="btn-edit-char" onclick="PvPSystem.openLobby()" style="color:#f472b6; border-color:#ec4899; font-weight:bold;">⚔️ 雙人對戰</button>
+            <button class="btn-edit-char" onclick="LeaderboardSystem.open()" style="color:#fbbf24; border-color:#f59e0b; font-weight:bold;">🏆 排行榜</button>
             <button class="btn-edit-char" onclick="Game.showScreen('start')">🏠 回首頁</button>
             <button class="btn-teacher-sub" onclick="AdminSystem.openLogin()">👨‍🏫 教師後台</button>
           </div>
@@ -1247,6 +1494,26 @@
           <span style="font-size:1.05rem; font-weight:bold; color:#34d399;" id="lobby-total-progress">0% 完成</span>
         </div>
         <button class="btn-save-transfer" onclick="SaveSystem.openModal()">☁️ 雲端存檔 / 引繼碼</button>
+      </div>
+    </div>
+
+    <!-- 雙人線上對戰捷徑橫幅 -->
+    <div class="pvp-banner-card" onclick="PvPSystem.openLobby()">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div style="font-size:2.2rem;">⚔️</div>
+        <div>
+          <div style="font-size:1.1rem; font-weight:900; color:#f472b6; display:flex; align-items:center; gap:8px;">
+            雙人線上即時對戰 (201班專屬)
+            <span style="font-size:0.75rem; background:#ec4899; color:white; padding:2px 6px; border-radius:4px;">即時連線 PK</span>
+          </div>
+          <div style="font-size:0.82rem; color:#cbd5e1; margin-top:3px;">
+            模式A 搶答競速 · 模式B 5題回合制 | 關卡完成度越高攻擊力越強！
+          </div>
+        </div>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn-enter-pvp" onclick="event.stopPropagation(); LeaderboardSystem.open()">🏆 排行榜</button>
+        <button class="btn-enter-pvp" style="background:linear-gradient(180deg,#ec4899,#be185d);">進入擂台 ➔</button>
       </div>
     </div>
 
@@ -1619,6 +1886,370 @@
       <div style="display:flex; gap:10px;">
         <button class="modal-btn modal-btn-alt" onclick="AdminSystem.closeLogin()">取消</button>
         <button class="modal-btn" onclick="AdminSystem.verifyLogin()" style="background:linear-gradient(180deg, #0284c7, #0369a1);">登入後台</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       畫面 5：雙人線上即時對戰大廳 (PvP Lobby)
+       ========================================================= -->
+  <section class="screen" id="screen-pvp-lobby">
+    <div class="pvp-container">
+      <!-- 頂部操作與個人檔案卡片 -->
+      <div class="pvp-profile-card">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div class="player-avatar-badge" id="pvp-my-avatar" style="font-size:2rem; width:52px; height:52px;">🧙‍♂️</div>
+          <div>
+            <div id="pvp-my-student-badge" style="font-size:0.85rem; color:#38bdf8; font-weight:bold;">🏫 201班 05號 · 王小明</div>
+            <div id="pvp-my-char-name" style="font-size:1.15rem; font-weight:bold; color:#fde047;">勇者小算</div>
+            <div style="display:flex; gap:6px; margin-top:4px; flex-wrap:wrap;">
+              <span class="pvp-stat-pill" style="color:#fbbf24;" id="pvp-my-atk-pill">⚔️ 攻擊力: 25</span>
+              <span class="pvp-stat-pill" style="color:#34d399;" id="pvp-my-stages-pill">🌲 關卡完成度: 3/4 關 (75%)</span>
+              <span class="pvp-stat-pill" style="color:#a5b4fc;" id="pvp-my-record-pill">🏆 0 勝 / 0 場</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <button class="btn-enter-pvp" onclick="LeaderboardSystem.open()" style="color:#fbbf24; border-color:#f59e0b;">🏆 榮譽排行榜</button>
+          <button class="modal-btn modal-btn-alt" onclick="PvPSystem.exitLobby()" style="max-width:110px; padding:8px 14px; font-size:0.88rem;">🔙 返回</button>
+        </div>
+      </div>
+
+      <!-- 面板 A：選擇建立或加入房間 (預設顯示) -->
+      <div id="pvp-panel-hall">
+        <div class="pvp-grid-2col">
+          <!-- 卡片 1：建立對戰房間 (我是房主) -->
+          <div class="pvp-box">
+            <div class="pvp-box-title">
+              <span>🏠</span> 建立新對戰房間
+            </div>
+            <div style="font-size:0.85rem; color:#94a3b8; margin-top:-6px;">
+              由您決定對戰模式與出題範圍，並邀請同學加入
+            </div>
+
+            <!-- 對戰模式選擇 (模式A vs 模式B) -->
+            <div>
+              <label style="font-size:0.85rem; font-weight:bold; color:#cbd5e1; display:block; margin-bottom:6px;">選擇對戰模式：</label>
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                <label class="mode-option-card active" id="mode-card-A" onclick="PvPSystem.selectCreateMode('modeA')">
+                  <input type="radio" name="pvp-mode-radio" id="radio-mode-A" class="mode-radio" value="modeA" checked>
+                  <div>
+                    <div style="font-weight:bold; color:#f472b6; font-size:0.95rem;">⚡ 模式 A：搶答扣血競速戰</div>
+                    <div style="font-size:0.78rem; color:#94a3b8; line-height:1.4; margin-top:2px;">
+                      雙方同步出題！先算對者扣對手血量，答錯反噬扣血 10 HP，誰先將對手 HP 歸零即獲勝！
+                    </div>
+                  </div>
+                </label>
+
+                <label class="mode-option-card" id="mode-card-B" onclick="PvPSystem.selectCreateMode('modeB')">
+                  <input type="radio" name="pvp-mode-radio" id="radio-mode-B" class="mode-radio" value="modeB">
+                  <div>
+                    <div style="font-weight:bold; color:#60a5fa; font-size:0.95rem;">⏱️ 模式 B：5 題決勝回合制</div>
+                    <div style="font-size:0.78rem; color:#94a3b8; line-height:1.4; margin-top:2px;">
+                      共 5 道題目，每題 20 秒同時作答！皆答對時速度快者造成爆擊，5 題結束看誰剩餘血量高！
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- 出題範圍選擇 -->
+            <div>
+              <label style="font-size:0.85rem; font-weight:bold; color:#cbd5e1; display:block; margin-bottom:4px;">出題關卡範圍：</label>
+              <select id="pvp-create-scope" class="admin-select" style="width:100%;">
+                <option value="all">🌟 綜合全範圍 (第 1 ~ 4 關全題型)</option>
+                <option value="1">🌲 第 1 關：根號化簡</option>
+                <option value="2">🌋 第 2 關：根號加減</option>
+                <option value="3">⚡ 第 3 關：根號乘法</option>
+                <option value="4">❄️ 第 4 關：根號除法</option>
+              </select>
+            </div>
+
+            <div style="margin-top:auto; padding-top:6px;">
+              <button class="modal-btn" onclick="PvPSystem.createRoom()" style="background:linear-gradient(180deg,#ec4899,#be185d); font-size:1.05rem;">
+                🎲 產生 4 位數房號並開房 ➔
+              </button>
+            </div>
+          </div>
+
+          <!-- 卡片 2：輸入房號加入對戰 -->
+          <div class="pvp-box">
+            <div class="pvp-box-title">
+              <span>🚪</span> 加入同學的房間
+            </div>
+            <div style="font-size:0.85rem; color:#94a3b8; margin-top:-6px;">
+              請向開房的同學索取 4 位數房間代碼（如 2018）
+            </div>
+
+            <div style="margin:20px 0; text-align:center;">
+              <label style="font-size:0.85rem; color:#cbd5e1; font-weight:bold; display:block; margin-bottom:8px;">請輸入 4 位數房間代碼：</label>
+              <input type="text" id="pvp-join-code-input" class="room-code-input" maxlength="4" placeholder="----" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+            </div>
+
+            <button class="modal-btn" onclick="PvPSystem.joinRoomByInput()" style="background:linear-gradient(180deg,#3b82f6,#1d4ed8); font-size:1.05rem;">
+              🚀 立即加入房間 ➔
+            </button>
+
+            <!-- 說明提示 -->
+            <div style="background:#0f172a; border:1px solid #334155; border-radius:10px; padding:12px; margin-top:10px; font-size:0.8rem; color:#cbd5e1; line-height:1.5;">
+              📌 <strong>201 班對戰守則：</strong><br>
+              • 攻擊力公式：<strong style="color:#fbbf24;">10 + (完成關卡數 / 4) × 20</strong><br>
+              • 雙方若完成關卡數相同，則單次攻擊力完全相同！<br>
+              • 獲勝次數將即時登錄至【全班榮譽排行榜】。
+            </div>
+          </div>
+        </div>
+
+        <!-- 卡片 3：目前等待中的 201 班房間列表 -->
+        <div class="pvp-box">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="pvp-box-title">
+              <span>🔥</span> 201 班即時等待中房間列表
+            </div>
+            <button class="btn-table-action" onclick="PvPSystem.refreshPublicRooms()" style="background:#334155; color:#38bdf8;">🔄 重新整理</button>
+          </div>
+          <div id="pvp-public-rooms-list" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap:10px; margin-top:6px;">
+            <div style="text-align:center; padding:18px; color:#94a3b8; grid-column:1/-1;">⏳ 正在連線搜尋等待中的房間...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 面板 B：房間等待室 (進入房間後顯示) -->
+      <div id="pvp-panel-room" style="display:none;">
+        <div class="waiting-card">
+          <div style="display:inline-block; background:#0f172a; padding:4px 14px; border-radius:20px; border:1px solid #6366f1; font-size:0.85rem; color:#a5b4fc;" id="pvp-room-mode-badge">
+            ⚡ 模式 A：搶答扣血競速戰 · 綜合關卡
+          </div>
+          <div style="font-size:0.9rem; color:#94a3b8; margin-top:8px;">請將以下 4 位數房號告訴對手：</div>
+          <div class="waiting-code-display" id="pvp-room-code-display">2018</div>
+          <button class="btn-table-action" onclick="PvPSystem.copyRoomCode()" style="background:#334155; color:#34d399; font-size:0.85rem; padding:4px 12px;">📋 一鍵複製房號</button>
+
+          <!-- 雙方選手席 -->
+          <div class="matchup-grid">
+            <!-- 房主 (Player 1) -->
+            <div class="fighter-slot filled" id="pvp-slot-p1">
+              <div style="font-size:2.4rem;" id="pvp-p1-avatar">🧙‍♂️</div>
+              <div style="font-weight:bold; color:#fde047; font-size:1.05rem;" id="pvp-p1-name">勇者小算</div>
+              <div style="font-size:0.8rem; color:#38bdf8;" id="pvp-p1-student">201班 05號 · 王小明</div>
+              <div style="font-size:0.8rem; color:#fbbf24; margin-top:4px;" id="pvp-p1-atk">⚔️ ATK: 25 (3/4關)</div>
+              <div><span class="status-badge status-ready" id="pvp-p1-status">👑 房主 (已就緒)</span></div>
+            </div>
+
+            <!-- VS 標誌 -->
+            <div style="font-size:1.6rem; font-weight:900; color:#ef4444; text-shadow:0 0 10px rgba(239,68,68,0.5);">
+              VS
+            </div>
+
+            <!-- 挑戰者 (Player 2) -->
+            <div class="fighter-slot" id="pvp-slot-p2">
+              <div style="font-size:2.4rem;" id="pvp-p2-avatar">⏳</div>
+              <div style="font-weight:bold; color:#cbd5e1; font-size:1.05rem;" id="pvp-p2-name">等待對手加入...</div>
+              <div style="font-size:0.8rem; color:#94a3b8;" id="pvp-p2-student">請同學輸入此房號</div>
+              <div style="font-size:0.8rem; color:#64748b; margin-top:4px;" id="pvp-p2-atk">-</div>
+              <div><span class="status-badge status-waiting" id="pvp-p2-status">等待中</span></div>
+            </div>
+          </div>
+
+          <!-- 倒數或開始按鈕列 -->
+          <div id="pvp-room-action-bar" style="margin-top:14px; display:flex; gap:10px; justify-content:center;">
+            <button class="modal-btn modal-btn-alt" onclick="PvPSystem.leaveRoom()" style="max-width:140px;">🚪 離開房間</button>
+            <button class="modal-btn" id="btn-pvp-toggle-ready" onclick="PvPSystem.toggleGuestReady()" style="display:none; max-width:200px; background:linear-gradient(180deg,#10b981,#047857);">✅ 準備好了</button>
+            <button class="modal-btn" id="btn-pvp-start-match" onclick="PvPSystem.startMatch()" style="display:none; max-width:220px; background:linear-gradient(180deg,#ec4899,#be185d);">🚀 開始對戰！</button>
+          </div>
+
+          <div id="pvp-countdown-overlay" style="display:none; font-size:2.5rem; font-weight:900; color:#fbbf24; margin-top:12px;">
+            戰鬥倒數：3
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       畫面 6：雙人即時對戰競技場 (PvP Battle Arena)
+       ========================================================= -->
+  <section class="screen" id="screen-pvp-battle">
+    <header class="battle-header" style="justify-content:space-between;">
+      <button class="btn-back-lobby" onclick="PvPSystem.surrenderMatch()">
+        <span>🏳️</span> 退出對戰
+      </button>
+      <div style="font-weight:bold; color:#fbbf24; font-size:1rem;" id="pvp-battle-title">
+        ⚡ 雙人即時對戰
+      </div>
+      <div style="display:flex; gap:6px; font-size:0.85rem;">
+        <span style="background:#334155; padding:4px 8px; border-radius:8px;" id="pvp-battle-round-badge">搶答模式</span>
+      </div>
+    </header>
+
+    <!-- 對戰舞台：雙方血量與角色展示 -->
+    <div class="pvp-battle-arena">
+      <div class="pvp-fighters-row">
+        <!-- 玩家 1 (左方) -->
+        <div class="pvp-player-box" id="pvp-fighter-box-p1">
+          <div class="fighter-sprite hero-sprite" id="pvp-arena-p1-avatar" style="font-size:2.2rem;">🧙‍♂️</div>
+          <div style="flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span id="pvp-arena-p1-name" style="font-weight:bold; color:#fde047; font-size:0.95rem;">勇者小算</span>
+              <span style="font-size:0.75rem; color:#fbbf24; background:#334155; padding:1px 5px; border-radius:4px;" id="pvp-arena-p1-atk-badge">⚔️ 25</span>
+            </div>
+            <div class="pvp-hp-bar-bg">
+              <div class="pvp-hp-fill" id="pvp-arena-p1-hp-bar" style="width:100%;"></div>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#94a3b8; margin-top:2px;">
+              <span id="pvp-arena-p1-hp-text">100 / 100</span>
+              <span id="pvp-arena-p1-status-text" style="color:#34d399;">計算中...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 中間 VS -->
+        <div style="font-size:1.3rem; font-weight:900; color:#ef4444; padding:0 6px;">VS</div>
+
+        <!-- 玩家 2 (右方) -->
+        <div class="pvp-player-box right" id="pvp-fighter-box-p2">
+          <div class="fighter-sprite hero-sprite" id="pvp-arena-p2-avatar" style="font-size:2.2rem;">🧝‍♀️</div>
+          <div style="flex:1;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-direction:row-reverse;">
+              <span id="pvp-arena-p2-name" style="font-weight:bold; color:#60a5fa; font-size:0.95rem;">閃電法師</span>
+              <span style="font-size:0.75rem; color:#fbbf24; background:#334155; padding:1px 5px; border-radius:4px;" id="pvp-arena-p2-atk-badge">⚔️ 20</span>
+            </div>
+            <div class="pvp-hp-bar-bg" style="margin-left:auto;">
+              <div class="pvp-hp-fill" id="pvp-arena-p2-hp-bar" style="width:100%;"></div>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#94a3b8; margin-top:2px; flex-direction:row-reverse;">
+              <span id="pvp-arena-p2-hp-text">100 / 100</span>
+              <span id="pvp-arena-p2-status-text" style="color:#34d399;">計算中...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="pvp-damage-container" style="position:relative;"></div>
+    </div>
+
+    <!-- 題目區域 -->
+    <div class="question-card">
+      <div class="question-prompt" id="pvp-question-prompt">
+        <span>⚡ 模式 A 搶答戰：請計算最簡結果並搶先發動攻擊！</span>
+      </div>
+      <div class="question-math" id="pvp-question-text"></div>
+      <div class="timer-container" id="pvp-timer-container">
+        <div class="timer-bar" id="pvp-timer-bar"></div>
+      </div>
+      <div class="speed-bonus-hint" id="pvp-action-banner" style="color:#fde047;">
+        <span>⚡ 搶先算對者扣對手血量！答錯受到 10 HP 反噬！</span>
+      </div>
+    </div>
+
+    <!-- 學生作答顯示框 -->
+    <div class="answer-display-box" id="pvp-answer-preview-box">
+      <span class="answer-placeholder" id="pvp-answer-placeholder">點擊下方鍵盤輸入計算結果</span>
+      <div class="formatted-answer" id="pvp-formatted-answer" style="display: none;"></div>
+    </div>
+
+    <!-- 4x4 大型觸控鍵盤 -->
+    <div class="touch-keypad">
+      <button class="key-btn" onclick="PvPSystem.appendKey('7')">7</button>
+      <button class="key-btn" onclick="PvPSystem.appendKey('8')">8</button>
+      <button class="key-btn" onclick="PvPSystem.appendKey('9')">9</button>
+      <button class="key-btn key-btn-fn" onclick="PvPSystem.backspace()">⌫ 刪除</button>
+
+      <button class="key-btn" onclick="PvPSystem.appendKey('4')">4</button>
+      <button class="key-btn" onclick="PvPSystem.appendKey('5')">5</button>
+      <button class="key-btn" onclick="PvPSystem.appendKey('6')">6</button>
+      <button class="key-btn key-btn-clear" onclick="PvPSystem.clearInput()">C 清空</button>
+
+      <button class="key-btn" onclick="PvPSystem.appendKey('1')">1</button>
+      <button class="key-btn" onclick="PvPSystem.appendKey('2')">2</button>
+      <button class="key-btn" onclick="PvPSystem.appendKey('3')">3</button>
+      <button class="key-btn key-btn-radical" onclick="PvPSystem.appendKey('√')">√ 根號</button>
+
+      <button class="key-btn" onclick="PvPSystem.appendKey('-')">- 負號</button>
+      <button class="key-btn" onclick="PvPSystem.appendKey('0')">0</button>
+      <button class="key-btn key-btn-attack" style="grid-column: span 2;" onclick="PvPSystem.submitAttack()">⚔️ 發動攻擊！</button>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       畫面 7：全班榮譽排行榜 (Leaderboard)
+       ========================================================= -->
+  <section class="screen" id="screen-leaderboard">
+    <div class="admin-container">
+      <!-- 頂部操作欄 -->
+      <div class="admin-header-bar">
+        <div class="admin-title" style="color:#fbbf24;">
+          <span>🏆</span> 根號冒險譚 · 201 班榮譽排行榜
+        </div>
+        <div class="admin-actions">
+          <button class="admin-btn btn-refresh" onclick="LeaderboardSystem.refresh()">🔄 重新整理</button>
+          <button class="admin-btn btn-exit" onclick="LeaderboardSystem.exit()">🔙 返回遊戲</button>
+        </div>
+      </div>
+
+      <!-- 我的個人戰績摘要 -->
+      <div class="admin-stats-bar" style="margin-bottom:14px;">
+        <div class="stat-card">
+          <div class="stat-label">我的全班排名</div>
+          <div class="stat-val" id="lb-my-rank" style="color:#fbbf24;">-</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">我的勝場數</div>
+          <div class="stat-val" id="lb-my-wins" style="color:#34d399;">0 勝</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">總場次 / 勝率</div>
+          <div class="stat-val" id="lb-my-winrate" style="color:#38bdf8;">0%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">對戰攻擊力</div>
+          <div class="stat-val" id="lb-my-atk" style="color:#f87171;">⚔️ 10</div>
+        </div>
+      </div>
+
+      <!-- 搜尋與篩選列 -->
+      <div class="admin-filter-bar">
+        <div style="flex:1; max-width:400px;">
+          <input type="text" id="lb-search-input" class="admin-search-box" placeholder="🔍 搜尋學生姓名、座號或角色..." oninput="LeaderboardSystem.render()">
+        </div>
+        <div style="font-size:0.85rem; color:#94a3b8;">
+          ★ 排名以【角色獲勝次數】排序，勝場相同時以勝率決定
+        </div>
+      </div>
+
+      <!-- 排行榜表格 -->
+      <div class="admin-table-container">
+        <table class="admin-table" id="leaderboard-table">
+          <thead>
+            <tr>
+              <th style="width:70px;">名次</th>
+              <th>勇者角色</th>
+              <th>班級座號姓名</th>
+              <th style="color:#fbbf24; font-weight:bold;">🏆 累計勝場</th>
+              <th>總場次</th>
+              <th>勝率</th>
+              <th>單人關卡進度</th>
+              <th>對戰攻擊力</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboard-table-body">
+            <tr>
+              <td colspan="8" style="text-align:center; padding:30px; color:#94a3b8;">
+                ⏳ 正在讀取 201 班排行榜資料...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 對戰結算專用彈窗 -->
+  <div class="modal-overlay" id="pvp-result-modal">
+    <div class="modal-card" style="max-width: 460px; text-align: center;">
+      <div style="font-size:3.5rem; margin-bottom:6px;" id="pvp-result-icon">🏆</div>
+      <div class="modal-title" id="pvp-result-title" style="font-size:1.6rem; color:#fbbf24;">對戰大勝利！</div>
+      <div class="modal-content" id="pvp-result-body" style="font-size:0.95rem; line-height:1.6; margin:14px 0;"></div>
+      <div class="modal-btn-group">
+        <button class="modal-btn" onclick="PvPSystem.closeResultModal()" style="background:linear-gradient(180deg,#6366f1,#4338ca);">返回對戰大廳</button>
       </div>
     </div>
   </div>
@@ -2408,6 +3039,14 @@
 
         // 鍵盤監聽
         window.addEventListener('keydown', (e) => {
+          if (typeof PvPSystem !== 'undefined' && PvPSystem.isInBattle) {
+            if (e.key >= '0' && e.key <= '9') PvPSystem.appendKey(e.key);
+            else if (e.key === 'r' || e.key === 'v' || e.key === 's') PvPSystem.appendKey('√');
+            else if (e.key === '-') PvPSystem.appendKey('-');
+            else if (e.key === 'Backspace') PvPSystem.backspace();
+            else if (e.key === 'Enter') PvPSystem.submitAttack();
+            return;
+          }
           if (e.key >= '0' && e.key <= '9') this.appendKey(e.key);
           else if (e.key === 'r' || e.key === 'v' || e.key === 's') this.appendKey('√');
           else if (e.key === '-') this.appendKey('-');
@@ -3071,6 +3710,8 @@
           charName: CharacterSystem.playerName,
           name: CharacterSystem.playerName,
           stages: Game.stagesData,
+          pvpWins: parseInt(localStorage.getItem('radical_pvp_wins') || '0', 10),
+          pvpMatches: parseInt(localStorage.getItem('radical_pvp_matches') || '0', 10),
           updatedAt: new Date().toISOString()
         };
 
@@ -3154,7 +3795,9 @@
                 cleared: !!data.stages[sId].cleared
               };
             }
-          }
+          // 還原對戰成績
+          localStorage.setItem('radical_pvp_wins', data.pvpWins || 0);
+          localStorage.setItem('radical_pvp_matches', data.pvpMatches || 0);
 
           Game.saveData();
           Game.updateLobbyUI();
@@ -3512,6 +4155,1323 @@
         } catch(e) {
           alert("刪除失敗：" + e.message);
         }
+      }
+    };
+
+    /* =========================================================
+       9. 雙人線上即時對戰系統 (PvPSystem - 201班專屬擂台)
+       ========================================================= */
+    const PvPSystem = {
+      isInBattle: false,
+      currentRoomId: null,
+      isHost: false,
+      myRole: null, // 'player1' or 'player2'
+      roomData: null,
+      roomRef: null,
+      roomListener: null,
+      pollInterval: null,
+      userInput: "",
+      selectedCreateMode: "modeA", // "modeA" (搶答扣血) or "modeB" (5題回合)
+      roundTimerInterval: null,
+      roundStartTime: 0,
+      maxRoundSeconds: 20,
+
+      // 1. 驗證對戰資格：班級必須為 201，座號必須為 01 ~ 43
+      checkEligibility(showModal = true) {
+        const rawClass = (CharacterSystem.studentClass || "").trim();
+        const rawSeat = (CharacterSystem.studentSeat || "").trim();
+        const seatNum = parseInt(rawSeat, 10);
+        const classClean = rawClass.replace(/[^0-9]/g, '');
+
+        const isClass201 = (classClean === "201");
+        const isSeatValid = (!isNaN(seatNum) && seatNum >= 1 && seatNum <= 43);
+
+        if (!isClass201 || !isSeatValid) {
+          if (showModal) {
+            SoundEngine.playError();
+            const currentDesc = (rawClass || rawSeat) 
+              ? `您目前的登記資料為【${rawClass || '未填'}班 ${rawSeat || '未填'}號】` 
+              : '您目前尚未登記班級與座號';
+            Game.showModal(
+              "⚠️ 對戰資格限制",
+              `<div style="text-align:left; line-height:1.6;">
+                目前雙人線上即時對戰專屬<strong>【201 班】學生（座號 01 ~ 43 號）</strong>！<br><br>
+                ${currentDesc}，不符合本次對戰資格。<br><br>
+                請點擊下方按鈕前往修改您的班級（201）與正確座號（01-43）。
+              </div>`,
+              () => {
+                CharacterSystem.openEditCharacter();
+              },
+              "✏️ 前往修改班級座號"
+            );
+          }
+          return false;
+        }
+        return true;
+      },
+
+      // 2. 計算單人關卡完成度與攻擊力: 攻擊力 = 10 + 關卡數完成度 * 20
+      // 規則：如果兩人完成的關卡數一樣多，那雙方攻擊力就一樣
+      getPlayerStats() {
+        let completedStages = 0;
+        for (let sId = 1; sId <= 4; sId++) {
+          const s = Game.stagesData[sId];
+          if (s && (s.cleared || s.level >= 5)) {
+            completedStages++;
+          }
+        }
+        const completionRate = completedStages / 4; // 0, 0.25, 0.5, 0.75, 1.0
+        const atk = Math.round(10 + completionRate * 20); // 10, 15, 20, 25, 30
+        return { completedStages, completionRate, atk };
+      },
+
+      // 3. 取得 Firebase Realtime Database 實例
+      getDb() {
+        if (typeof firebase !== 'undefined' && firebase.database) {
+          try {
+            if (!firebase.apps.length) {
+              firebase.initializeApp({
+                databaseURL: "https://math-game-grade8-default-rtdb.firebaseio.com"
+              });
+            }
+            return firebase.database();
+          } catch(e) {
+            console.warn("Firebase 初始化警告:", e);
+          }
+        }
+        return null;
+      },
+
+      // 4. 打開對戰大廳
+      openLobby() {
+        SoundEngine.playClick();
+        if (!this.checkEligibility(true)) return;
+
+        this.isInBattle = false;
+        this.updateLobbyPlayerProfile();
+        this.showHallPanel();
+        Game.showScreen('pvp-lobby');
+        this.refreshPublicRooms();
+      },
+
+      exitLobby() {
+        SoundEngine.playClick();
+        this.cleanupRoomConnection();
+        Game.showScreen('stage-select');
+      },
+
+      updateLobbyPlayerProfile() {
+        const char = CHARACTERS_DB.find(c => c.id === CharacterSystem.selectedCharId) || CHARACTERS_DB[0];
+        const stats = this.getPlayerStats();
+        
+        const avatarEl = document.getElementById('pvp-my-avatar');
+        const badgeEl = document.getElementById('pvp-my-student-badge');
+        const nameEl = document.getElementById('pvp-my-char-name');
+        const atkEl = document.getElementById('pvp-my-atk-pill');
+        const stageEl = document.getElementById('pvp-my-stages-pill');
+        const recEl = document.getElementById('pvp-my-record-pill');
+
+        if (avatarEl) avatarEl.innerText = char.avatar;
+        if (badgeEl) badgeEl.innerText = `🏫 ${CharacterSystem.studentClass}班 ${CharacterSystem.studentSeat}號 · ${CharacterSystem.studentRealName}`;
+        if (nameEl) nameEl.innerText = `${CharacterSystem.playerName} (${char.title})`;
+        if (atkEl) atkEl.innerText = `⚔️ 對戰攻擊力: ${stats.atk}`;
+        if (stageEl) stageEl.innerText = `🌲 關卡完成度: ${stats.completedStages}/4 關 (${Math.round(stats.completionRate * 100)}%)`;
+
+        const pvpWins = parseInt(localStorage.getItem('radical_pvp_wins') || '0', 10);
+        const pvpMatches = parseInt(localStorage.getItem('radical_pvp_matches') || '0', 10);
+        const winRate = pvpMatches > 0 ? Math.round((pvpWins / pvpMatches) * 100) : 0;
+        if (recEl) recEl.innerText = `🏆 ${pvpWins} 勝 / ${pvpMatches} 場 (${winRate}%)`;
+      },
+
+      selectCreateMode(mode) {
+        SoundEngine.playClick();
+        this.selectedCreateMode = mode;
+        const cardA = document.getElementById('mode-card-A');
+        const cardB = document.getElementById('mode-card-B');
+        const radioA = document.getElementById('radio-mode-A');
+        const radioB = document.getElementById('radio-mode-B');
+
+        if (cardA) cardA.classList.toggle('active', mode === 'modeA');
+        if (cardB) cardB.classList.toggle('active', mode === 'modeB');
+        if (radioA) radioA.checked = (mode === 'modeA');
+        if (radioB) radioB.checked = (mode === 'modeB');
+      },
+
+      showHallPanel() {
+        const hall = document.getElementById('pvp-panel-hall');
+        const room = document.getElementById('pvp-panel-room');
+        if (hall) hall.style.display = 'block';
+        if (room) room.style.display = 'none';
+      },
+
+      showRoomPanel() {
+        const hall = document.getElementById('pvp-panel-hall');
+        const room = document.getElementById('pvp-panel-room');
+        if (hall) hall.style.display = 'none';
+        if (room) room.style.display = 'block';
+      },
+
+      // 5. 題庫隨機產生 (支援全範圍或單關)
+      generateProblem(scope) {
+        let sId = 1;
+        if (scope === 'all') {
+          sId = Math.floor(Math.random() * 4) + 1;
+        } else {
+          sId = parseInt(scope, 10) || 1;
+        }
+        const tier = Math.floor(Math.random() * 2) + 2; // tier 2 or 3
+        if (sId === 1) return MathEngine.generateStage1(tier);
+        if (sId === 2) return MathEngine.generateStage2(tier);
+        if (sId === 3) return MathEngine.generateStage3(tier);
+        return MathEngine.generateStage4(tier);
+      },
+
+      // 6. 建立對戰房間 (我是房主)
+      async createRoom() {
+        SoundEngine.playClick();
+        if (!this.checkEligibility(true)) return;
+
+        const mode = this.selectedCreateMode; // "modeA" or "modeB"
+        const scope = document.getElementById('pvp-create-scope')?.value || 'all';
+        const code = String(Math.floor(1000 + Math.random() * 9000));
+        const roomId = `ROOM-${code}`;
+        this.currentRoomId = roomId;
+        this.isHost = true;
+        this.myRole = 'player1';
+
+        const stats = this.getPlayerStats();
+        const char = CHARACTERS_DB.find(c => c.id === CharacterSystem.selectedCharId) || CHARACTERS_DB[0];
+
+        const p1 = {
+          passcode: SaveSystem.getPasscode(),
+          name: CharacterSystem.playerName,
+          realName: CharacterSystem.studentRealName,
+          class: CharacterSystem.studentClass,
+          seat: CharacterSystem.studentSeat,
+          avatar: char.avatar,
+          title: char.title,
+          atk: stats.atk,
+          completedStages: stats.completedStages,
+          hp: 100,
+          ready: true,
+          submitted: false,
+          currentAnswer: null,
+          timeUsed: 0
+        };
+
+        const initialProblem = this.generateProblem(scope);
+
+        const roomObj = {
+          id: roomId,
+          code: code,
+          mode: mode,
+          scope: scope,
+          status: "waiting", // waiting | countdown | playing | finished
+          createdAt: Date.now(),
+          player1: p1,
+          player2: null,
+          currentRound: 1,
+          maxRounds: 5,
+          currentProblem: initialProblem,
+          lastAction: null,
+          winner: null
+        };
+
+        try {
+          const db = this.getDb();
+          if (db) {
+            await db.ref('pvp_rooms/' + roomId).set(roomObj);
+          } else {
+            await fetch(`${FIREBASE_DB_URL}/pvp_rooms/${roomId}.json`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(roomObj)
+            });
+          }
+
+          this.subscribeRoom(roomId);
+          this.showRoomPanel();
+        } catch(e) {
+          alert("建立房間失敗，請確認網路連線：" + e.message);
+        }
+      },
+
+      // 7. 輸入代碼加入房間
+      async joinRoomByInput() {
+        SoundEngine.playClick();
+        const input = document.getElementById('pvp-join-code-input');
+        if (!input) return;
+        const code = input.value.trim();
+        await this.joinRoom(code);
+      },
+
+      async joinRoom(code) {
+        if (!this.checkEligibility(true)) return;
+        const cleanCode = code.trim();
+        if (!cleanCode || cleanCode.length !== 4) {
+          SoundEngine.playError();
+          alert("請輸入完整的 4 位數房間代碼（例如：2018）！");
+          return;
+        }
+
+        const roomId = `ROOM-${cleanCode}`;
+        let room = null;
+        try {
+          const db = this.getDb();
+          if (db) {
+            const snap = await db.ref('pvp_rooms/' + roomId).once('value');
+            room = snap.val();
+          } else {
+            const res = await fetch(`${FIREBASE_DB_URL}/pvp_rooms/${roomId}.json`);
+            room = await res.json();
+          }
+        } catch(e) {
+          alert("連線房間失敗：" + e.message);
+          return;
+        }
+
+        if (!room) {
+          SoundEngine.playError();
+          alert(`找不到房號【${cleanCode}】的房間！請確認號碼是否正確。`);
+          return;
+        }
+
+        if (room.status !== 'waiting' && room.status !== 'countdown') {
+          SoundEngine.playError();
+          alert("該房間的對戰已經開始或已結束！");
+          return;
+        }
+
+        const myPasscode = SaveSystem.getPasscode();
+        if (room.player1 && room.player1.passcode === myPasscode) {
+          // 房主重新回到自己開的房間
+          this.currentRoomId = roomId;
+          this.isHost = true;
+          this.myRole = 'player1';
+          this.subscribeRoom(roomId);
+          this.showRoomPanel();
+          return;
+        }
+
+        if (room.player2 && room.player2.passcode !== myPasscode) {
+          SoundEngine.playError();
+          alert("該房間已經有兩位玩家，房間已滿！");
+          return;
+        }
+
+        // 作為 Player 2 加入
+        this.currentRoomId = roomId;
+        this.isHost = false;
+        this.myRole = 'player2';
+
+        const stats = this.getPlayerStats();
+        const char = CHARACTERS_DB.find(c => c.id === CharacterSystem.selectedCharId) || CHARACTERS_DB[0];
+
+        const p2 = {
+          passcode: myPasscode,
+          name: CharacterSystem.playerName,
+          realName: CharacterSystem.studentRealName,
+          class: CharacterSystem.studentClass,
+          seat: CharacterSystem.studentSeat,
+          avatar: char.avatar,
+          title: char.title,
+          atk: stats.atk,
+          completedStages: stats.completedStages,
+          hp: 100,
+          ready: false,
+          submitted: false,
+          currentAnswer: null,
+          timeUsed: 0
+        };
+
+        await this.updateRoom({ player2: p2 });
+        this.subscribeRoom(roomId);
+        this.showRoomPanel();
+      },
+
+      // 8. 訂閱與監聽房間資料 (Firebase RTDB + Polling 雙重保障)
+      subscribeRoom(roomId) {
+        this.cleanupRoomConnection();
+        this.currentRoomId = roomId;
+
+        const db = this.getDb();
+        if (db) {
+          this.roomRef = db.ref('pvp_rooms/' + roomId);
+          this.roomListener = this.roomRef.on('value', (snap) => {
+            const data = snap.val();
+            this.onRoomUpdated(data);
+          });
+        }
+
+        // 輪詢作為雙重備援 (每 900ms 檢查一次)
+        this.pollInterval = setInterval(async () => {
+          try {
+            const res = await fetch(`${FIREBASE_DB_URL}/pvp_rooms/${roomId}.json`);
+            const data = await res.json();
+            if (data) this.onRoomUpdated(data);
+          } catch(e) {}
+        }, 900);
+      },
+
+      cleanupRoomConnection() {
+        if (this.roomRef && this.roomListener) {
+          try { this.roomRef.off('value', this.roomListener); } catch(e) {}
+          this.roomListener = null;
+          this.roomRef = null;
+        }
+        if (this.pollInterval) {
+          clearInterval(this.pollInterval);
+          this.pollInterval = null;
+        }
+        clearInterval(this.roundTimerInterval);
+        this.roundTimerInterval = null;
+      },
+
+      async updateRoom(patch) {
+        if (!this.currentRoomId) return;
+        const db = this.getDb();
+        if (db) {
+          try {
+            await db.ref('pvp_rooms/' + this.currentRoomId).update(patch);
+            return;
+          } catch(e) {}
+        }
+        try {
+          await fetch(`${FIREBASE_DB_URL}/pvp_rooms/${this.currentRoomId}.json`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(patch)
+          });
+        } catch(e) {}
+      },
+
+      // 9. 處理房間狀態變化
+      onRoomUpdated(room) {
+        if (!room) return;
+        this.roomData = room;
+
+        // 判定自己是 player1 還是 player2
+        const myPasscode = SaveSystem.getPasscode();
+        if (room.player1 && room.player1.passcode === myPasscode) {
+          this.myRole = 'player1';
+          this.isHost = true;
+        } else if (room.player2 && room.player2.passcode === myPasscode) {
+          this.myRole = 'player2';
+          this.isHost = false;
+        }
+
+        if (room.status === 'waiting') {
+          this.renderWaitingRoom(room);
+        } else if (room.status === 'countdown') {
+          this.renderCountdown(room);
+        } else if (room.status === 'playing') {
+          if (!this.isInBattle) {
+            this.startBattle(room);
+          } else {
+            this.updateBattleUI(room);
+          }
+        } else if (room.status === 'finished') {
+          this.handleMatchFinished(room);
+        }
+      },
+
+      renderWaitingRoom(room) {
+        this.showRoomPanel();
+        const codeDisplay = document.getElementById('pvp-room-code-display');
+        const modeBadge = document.getElementById('pvp-room-mode-badge');
+        if (codeDisplay) codeDisplay.innerText = room.code;
+        if (modeBadge) {
+          const modeName = room.mode === 'modeA' ? '⚡ 模式 A：搶答扣血競速戰' : '⏱️ 模式 B：5 題決勝回合制';
+          const scopeName = room.scope === 'all' ? '綜合全關卡' : `第 ${room.scope} 關`;
+          modeBadge.innerText = `${modeName} · ${scopeName}`;
+        }
+
+        // 房主資訊 (P1)
+        const p1 = room.player1;
+        if (p1) {
+          document.getElementById('pvp-p1-avatar').innerText = p1.avatar;
+          document.getElementById('pvp-p1-name').innerText = p1.name;
+          document.getElementById('pvp-p1-student').innerText = `201班 ${p1.seat}號 · ${p1.realName}`;
+          document.getElementById('pvp-p1-atk').innerText = `⚔️ ATK: ${p1.atk} (${p1.completedStages}/4關)`;
+          document.getElementById('pvp-p1-status').innerText = '👑 房主 (已就緒)';
+          document.getElementById('pvp-p1-status').className = 'status-badge status-ready';
+        }
+
+        // 對手資訊 (P2)
+        const p2 = room.player2;
+        const p2Slot = document.getElementById('pvp-slot-p2');
+        if (p2) {
+          if (p2Slot) p2Slot.classList.add('filled');
+          document.getElementById('pvp-p2-avatar').innerText = p2.avatar;
+          document.getElementById('pvp-p2-name').innerText = p2.name;
+          document.getElementById('pvp-p2-student').innerText = `201班 ${p2.seat}號 · ${p2.realName}`;
+          document.getElementById('pvp-p2-atk').innerText = `⚔️ ATK: ${p2.atk} (${p2.completedStages}/4關)`;
+          const p2StatusEl = document.getElementById('pvp-p2-status');
+          if (p2StatusEl) {
+            p2StatusEl.innerText = p2.ready ? '✅ 已準備就緒！' : '⏳ 思考準備中...';
+            p2StatusEl.className = 'status-badge ' + (p2.ready ? 'status-ready' : 'status-waiting');
+          }
+        } else {
+          if (p2Slot) p2Slot.classList.remove('filled');
+          document.getElementById('pvp-p2-avatar').innerText = '⏳';
+          document.getElementById('pvp-p2-name').innerText = '等待對手加入...';
+          document.getElementById('pvp-p2-student').innerText = '請同學輸入此 4 位數房號';
+          document.getElementById('pvp-p2-atk').innerText = '-';
+          const p2StatusEl = document.getElementById('pvp-p2-status');
+          if (p2StatusEl) {
+            p2StatusEl.innerText = '等待中';
+            p2StatusEl.className = 'status-badge status-waiting';
+          }
+        }
+
+        // 按鈕顯示邏輯
+        const startBtn = document.getElementById('btn-pvp-start-match');
+        const readyBtn = document.getElementById('btn-pvp-toggle-ready');
+        const countdownEl = document.getElementById('pvp-countdown-overlay');
+        if (countdownEl) countdownEl.style.display = 'none';
+
+        if (this.isHost) {
+          if (readyBtn) readyBtn.style.display = 'none';
+          if (startBtn) {
+            startBtn.style.display = (p2 && p2.ready) ? 'block' : 'none';
+          }
+        } else {
+          if (startBtn) startBtn.style.display = 'none';
+          if (readyBtn) {
+            readyBtn.style.display = 'block';
+            readyBtn.innerText = (p2 && p2.ready) ? '❌ 取消準備' : '✅ 準備好了';
+            readyBtn.style.background = (p2 && p2.ready) ? 'linear-gradient(180deg,#64748b,#475569)' : 'linear-gradient(180deg,#10b981,#047857)';
+          }
+        }
+      },
+
+      copyRoomCode() {
+        SoundEngine.playClick();
+        if (!this.roomData) return;
+        const code = this.roomData.code;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(code).then(() => {
+            alert(`✅ 已複製 4 位數房號【${code}】！\n請直接分享給 201 班同學輸入加入！`);
+          });
+        } else {
+          prompt("請複製此房間代碼：", code);
+        }
+      },
+
+      // 客人切換準備狀態
+      async toggleGuestReady() {
+        SoundEngine.playClick();
+        if (!this.roomData || !this.roomData.player2) return;
+        const currentReady = !!this.roomData.player2.ready;
+        await this.updateRoom({ 'player2/ready': !currentReady });
+      },
+
+      // 房主啟動倒數並開始對戰
+      async startMatch() {
+        SoundEngine.playClick();
+        if (!this.isHost || !this.roomData || !this.roomData.player2) return;
+        await this.updateRoom({
+          status: 'countdown',
+          countdownStart: Date.now()
+        });
+      },
+
+      renderCountdown(room) {
+        const countdownEl = document.getElementById('pvp-countdown-overlay');
+        if (countdownEl) countdownEl.style.display = 'block';
+        const startBtn = document.getElementById('btn-pvp-start-match');
+        const readyBtn = document.getElementById('btn-pvp-toggle-ready');
+        if (startBtn) startBtn.style.display = 'none';
+        if (readyBtn) readyBtn.style.display = 'none';
+
+        let count = 3;
+        if (countdownEl) countdownEl.innerText = `🔥 戰鬥倒數：${count} 🔥`;
+        SoundEngine.playTone(350, 'sine', 0.2, 0.3);
+
+        const iv = setInterval(() => {
+          count--;
+          if (count > 0) {
+            if (countdownEl) countdownEl.innerText = `🔥 戰鬥倒數：${count} 🔥`;
+            SoundEngine.playTone(350 + (3 - count) * 80, 'sine', 0.2, 0.3);
+          } else {
+            clearInterval(iv);
+            if (countdownEl) countdownEl.innerText = `⚔️ 戰鬥開始！⚔️`;
+            SoundEngine.playSlash();
+            if (this.isHost) {
+              this.updateRoom({ status: 'playing' });
+            }
+          }
+        }, 1000);
+      },
+
+      // 10. 戰鬥畫面初始化與進入
+      startBattle(room) {
+        this.isInBattle = true;
+        this.userInput = "";
+        this.renderInput();
+        Game.showScreen('pvp-battle');
+
+        // 設定戰鬥標題與模式
+        const titleEl = document.getElementById('pvp-battle-title');
+        const roundBadge = document.getElementById('pvp-battle-round-badge');
+        const promptEl = document.getElementById('pvp-question-prompt');
+        const actionBanner = document.getElementById('pvp-action-banner');
+
+        if (room.mode === 'modeA') {
+          if (titleEl) titleEl.innerText = '⚡ 雙人即時對戰：搶答扣血競速戰';
+          if (roundBadge) roundBadge.innerText = '⚡ 模式 A 競速搶答';
+          if (promptEl) promptEl.innerHTML = '<span>⚡ 模式 A 搶答戰：請計算最簡結果並搶先發動攻擊！</span>';
+          if (actionBanner) actionBanner.innerText = '⚡ 搶先算對者扣對手血量！答錯受到 10 HP 反噬！';
+        } else {
+          if (titleEl) titleEl.innerText = '⏱️ 雙人即時對戰：5 題決勝回合制';
+          if (roundBadge) roundBadge.innerText = `第 ${room.currentRound || 1} / 5 回合`;
+          if (promptEl) promptEl.innerHTML = '<span>⏱️ 模式 B 回合戰：請在 20 秒內計算作答，雙方皆答對比速度爆擊！</span>';
+          if (actionBanner) actionBanner.innerText = '⏱️ 每題 20 秒！雙方提交後同時結算傷害！';
+        }
+
+        // 綁定雙方頭像與名字
+        const p1 = room.player1;
+        const p2 = room.player2;
+        if (p1) {
+          document.getElementById('pvp-arena-p1-avatar').innerText = p1.avatar;
+          document.getElementById('pvp-arena-p1-name').innerText = `${p1.name} (${p1.seat}號)`;
+          document.getElementById('pvp-arena-p1-atk-badge').innerText = `⚔️ ${p1.atk}`;
+        }
+        if (p2) {
+          document.getElementById('pvp-arena-p2-avatar').innerText = p2.avatar;
+          document.getElementById('pvp-arena-p2-name').innerText = `${p2.name} (${p2.seat}號)`;
+          document.getElementById('pvp-arena-p2-atk-badge').innerText = `⚔️ ${p2.atk}`;
+        }
+
+        this.updateBattleUI(room);
+        this.renderProblem(room.currentProblem);
+
+        if (room.mode === 'modeB') {
+          this.startRoundTimer();
+        }
+      },
+
+      updateBattleUI(room) {
+        if (!room) return;
+        const p1 = room.player1;
+        const p2 = room.player2;
+
+        if (p1) {
+          const p1Hp = Math.max(0, p1.hp ?? 100);
+          const p1Bar = document.getElementById('pvp-arena-p1-hp-bar');
+          const p1Text = document.getElementById('pvp-arena-p1-hp-text');
+          if (p1Bar) p1Bar.style.width = p1Hp + '%';
+          if (p1Text) p1Text.innerText = `${p1Hp} / 100`;
+
+          const p1Status = document.getElementById('pvp-arena-p1-status-text');
+          if (p1Status) {
+            if (room.mode === 'modeB' && p1.submitted) {
+              p1Status.innerText = '✅ 已提交';
+              p1Status.style.color = '#34d399';
+            } else {
+              p1Status.innerText = '計算中...';
+              p1Status.style.color = '#94a3b8';
+            }
+          }
+        }
+
+        if (p2) {
+          const p2Hp = Math.max(0, p2.hp ?? 100);
+          const p2Bar = document.getElementById('pvp-arena-p2-hp-bar');
+          const p2Text = document.getElementById('pvp-arena-p2-hp-text');
+          if (p2Bar) p2Bar.style.width = p2Hp + '%';
+          if (p2Text) p2Text.innerText = `${p2Hp} / 100`;
+
+          const p2Status = document.getElementById('pvp-arena-p2-status-text');
+          if (p2Status) {
+            if (room.mode === 'modeB' && p2.submitted) {
+              p2Status.innerText = '✅ 已提交';
+              p2Status.style.color = '#34d399';
+            } else {
+              p2Status.innerText = '計算中...';
+              p2Status.style.color = '#94a3b8';
+            }
+          }
+        }
+
+        // 若題目變更，刷新顯示
+        if (room.currentProblem && (!this.currentProblemKey || this.currentProblemKey !== room.currentProblem.key)) {
+          this.currentProblemKey = room.currentProblem.key;
+          this.renderProblem(room.currentProblem);
+          if (room.mode === 'modeB') {
+            this.startRoundTimer();
+          }
+        }
+
+        // 模式 B 回合指示
+        if (room.mode === 'modeB') {
+          const roundBadge = document.getElementById('pvp-battle-round-badge');
+          if (roundBadge) roundBadge.innerText = `第 ${room.currentRound || 1} / 5 回合`;
+
+          // 若身為房主且雙方皆已提交，觸發結算
+          if (this.isHost && p1 && p2 && p1.submitted && p2.submitted && !this.isResolvingRound) {
+            this.resolveModeBRound(room);
+          }
+        }
+
+        // 動作提示通知
+        if (room.lastAction && room.lastAction.time !== this.lastActionTime) {
+          this.lastActionTime = room.lastAction.time;
+          const banner = document.getElementById('pvp-action-banner');
+          if (banner) {
+            banner.innerText = room.lastAction.text;
+            banner.style.color = room.lastAction.color || '#fde047';
+          }
+          if (room.lastAction.damage) {
+            this.showFloatingDamage(room.lastAction.damage, room.lastAction.target);
+          }
+        }
+      },
+
+      renderProblem(problem) {
+        if (!problem) return;
+        const qTextEl = document.getElementById('pvp-question-text');
+        if (qTextEl) qTextEl.innerHTML = problem.htmlText;
+        this.userInput = "";
+        this.renderInput();
+      },
+
+      startRoundTimer() {
+        clearInterval(this.roundTimerInterval);
+        this.roundStartTime = Date.now();
+        const timerBar = document.getElementById('pvp-timer-bar');
+
+        this.roundTimerInterval = setInterval(() => {
+          const elapsed = (Date.now() - this.roundStartTime) / 1000;
+          const remainPercent = Math.max(0, 100 - (elapsed / this.maxRoundSeconds) * 100);
+          if (timerBar) timerBar.style.width = remainPercent + '%';
+
+          if (elapsed >= this.maxRoundSeconds) {
+            clearInterval(this.roundTimerInterval);
+            if (this.isHost && this.roomData && this.roomData.mode === 'modeB' && !this.isResolvingRound) {
+              this.resolveModeBRound(this.roomData);
+            }
+          }
+        }, 100);
+      },
+
+      // 11. 鍵盤輸入處理
+      appendKey(char) {
+        SoundEngine.playClick();
+        if (char === '√' && this.userInput.includes('√')) return;
+        if (char === '-' && this.userInput.length > 0) return;
+        if (this.userInput.length >= 10) return;
+        this.userInput += char;
+        this.renderInput();
+      },
+
+      backspace() {
+        SoundEngine.playClick();
+        if (this.userInput.length > 0) {
+          this.userInput = this.userInput.slice(0, -1);
+          this.renderInput();
+        }
+      },
+
+      clearInput() {
+        SoundEngine.playClick();
+        this.userInput = "";
+        this.renderInput();
+      },
+
+      renderInput() {
+        const placeholder = document.getElementById('pvp-answer-placeholder');
+        const formatted = document.getElementById('pvp-formatted-answer');
+
+        if (!this.userInput) {
+          if (placeholder) placeholder.style.display = 'block';
+          if (formatted) {
+            formatted.style.display = 'none';
+            formatted.innerHTML = '';
+          }
+          return;
+        }
+
+        if (placeholder) placeholder.style.display = 'none';
+        if (formatted) {
+          formatted.style.display = 'flex';
+          if (this.userInput.includes('√')) {
+            const parts = this.userInput.split('√');
+            const coef = parts[0] || "";
+            const radicand = parts[1] || "";
+            formatted.innerHTML = `
+              <span>${coef}</span>
+              <span class="radical-symbol" style="font-size:2rem; margin:0 2px;">√</span>
+              <span class="radicand-val" style="font-size:1.6rem;">${radicand || "<small style='color:#64748b'>?</small>"}</span>
+            `;
+          } else {
+            formatted.innerHTML = `<span>${this.userInput}</span>`;
+          }
+        }
+      },
+
+      parseUserInput(str) {
+        if (!str) return null;
+        if (!str.includes('√')) {
+          const val = parseInt(str, 10);
+          return isNaN(val) ? null : { a: val, b: 1 };
+        } else {
+          const parts = str.split('√');
+          let a = 1;
+          if (parts[0] === "-") a = -1;
+          else if (parts[0] !== "") a = parseInt(parts[0], 10);
+
+          const b = parts[1] === "" ? null : parseInt(parts[1], 10);
+          if (isNaN(a) || b === null || isNaN(b)) return null;
+          return { a, b };
+        }
+      },
+
+      // 12. 送出作答 (攻擊)
+      async submitAttack() {
+        if (!this.userInput) {
+          alert("請先輸入您的計算結果再發動攻擊！");
+          return;
+        }
+
+        const parsed = this.parseUserInput(this.userInput);
+        if (!parsed) {
+          alert("答案格式不完整，請輸入數字或根式（如 3√2 或 5）！");
+          return;
+        }
+
+        const room = this.roomData;
+        if (!room || room.status !== 'playing') return;
+
+        const isCorrect = (parsed.a === room.currentProblem.correctA && parsed.b === room.currentProblem.correctB);
+        const myPlayer = (this.myRole === 'player1') ? room.player1 : room.player2;
+        const oppRole = (this.myRole === 'player1') ? 'player2' : 'player1';
+        const oppPlayer = (this.myRole === 'player1') ? room.player2 : room.player1;
+
+        if (room.mode === 'modeA') {
+          // ==================== 模式 A：搶答扣血競速戰 ====================
+          if (isCorrect) {
+            SoundEngine.playSlash();
+            const dmg = myPlayer.atk;
+            const newOppHp = Math.max(0, (oppPlayer.hp ?? 100) - dmg);
+
+            const patch = {};
+            patch[`${oppRole}/hp`] = newOppHp;
+            patch['lastAction'] = {
+              by: this.myRole,
+              target: oppRole,
+              damage: dmg,
+              text: `⚡【${myPlayer.name}】搶先算對！對對手造成 ${dmg} 點傷害！`,
+              color: '#34d399',
+              time: Date.now()
+            };
+
+            if (newOppHp <= 0) {
+              patch['status'] = 'finished';
+              patch['winner'] = this.myRole;
+            } else {
+              // 換下一題
+              patch['currentProblem'] = this.generateProblem(room.scope);
+            }
+
+            await this.updateRoom(patch);
+            this.clearInput();
+          } else {
+            // 答錯反噬自損 10 HP
+            SoundEngine.playError();
+            const newMyHp = Math.max(0, (myPlayer.hp ?? 100) - 10);
+
+            const patch = {};
+            patch[`${this.myRole}/hp`] = newMyHp;
+            patch['lastAction'] = {
+              by: this.myRole,
+              target: this.myRole,
+              damage: 10,
+              text: `❌【${myPlayer.name}】算錯了！受到反噬扣血 10 HP！`,
+              color: '#ef4444',
+              time: Date.now()
+            };
+
+            if (newMyHp <= 0) {
+              patch['status'] = 'finished';
+              patch['winner'] = oppRole;
+            }
+
+            await this.updateRoom(patch);
+          }
+        } else {
+          // ==================== 模式 B：5 題回合制 ====================
+          if (myPlayer.submitted) {
+            alert("本回合您已經提交答案，請等待對手提交！");
+            return;
+          }
+
+          SoundEngine.playClick();
+          const elapsed = (Date.now() - this.roundStartTime) / 1000;
+          const patch = {};
+          patch[`${this.myRole}/submitted`] = true;
+          patch[`${this.myRole}/currentAnswer`] = {
+            isCorrect: isCorrect,
+            timeUsed: elapsed,
+            val: this.userInput
+          };
+
+          await this.updateRoom(patch);
+          const statusText = document.getElementById(this.myRole === 'player1' ? 'pvp-arena-p1-status-text' : 'pvp-arena-p2-status-text');
+          if (statusText) {
+            statusText.innerText = '✅ 已提交';
+            statusText.style.color = '#34d399';
+          }
+        }
+      },
+
+      // 模式 B 回合結算 (由房主統一裁決)
+      async resolveModeBRound(room) {
+        if (this.isResolvingRound) return;
+        this.isResolvingRound = true;
+        clearInterval(this.roundTimerInterval);
+
+        const p1 = room.player1;
+        const p2 = room.player2;
+        const p1Ans = p1.currentAnswer || { isCorrect: false, timeUsed: 99 };
+        const p2Ans = p2.currentAnswer || { isCorrect: false, timeUsed: 99 };
+
+        let p1Dmg = 0;
+        let p2Dmg = 0;
+        let resultText = "";
+
+        if (p1Ans.isCorrect && p2Ans.isCorrect) {
+          if (p1Ans.timeUsed <= p2Ans.timeUsed) {
+            p1Dmg = Math.round(p1.atk * 1.2); // 暴擊 1.2x
+            p2Dmg = p2.atk;
+            resultText = `⚡ 雙方皆算對！【${p1.name}】速度較快觸發神速爆擊！`;
+          } else {
+            p1Dmg = p1.atk;
+            p2Dmg = Math.round(p2.atk * 1.2); // 暴擊 1.2x
+            resultText = `⚡ 雙方皆算對！【${p2.name}】速度較快觸發神速爆擊！`;
+          }
+        } else if (p1Ans.isCorrect && !p2Ans.isCorrect) {
+          p1Dmg = p1.atk;
+          resultText = `🎯【${p1.name}】答對！對【${p2.name}】造成 ${p1Dmg} 傷害！`;
+        } else if (!p1Ans.isCorrect && p2Ans.isCorrect) {
+          p2Dmg = p2.atk;
+          resultText = `🎯【${p2.name}】答對！對【${p1.name}】造成 ${p2Dmg} 傷害！`;
+        } else {
+          resultText = `💤 雙方皆未算對或超時！本回合平手無人受到傷害。`;
+        }
+
+        const newP1Hp = Math.max(0, (p1.hp ?? 100) - p2Dmg);
+        const newP2Hp = Math.max(0, (p2.hp ?? 100) - p1Dmg);
+
+        const patch = {
+          'player1/hp': newP1Hp,
+          'player2/hp': newP2Hp,
+          'player1/submitted': false,
+          'player2/submitted': false,
+          'player1/currentAnswer': null,
+          'player2/currentAnswer': null,
+          lastAction: {
+            text: resultText,
+            color: '#fbbf24',
+            time: Date.now()
+          }
+        };
+
+        const isGameOver = (newP1Hp <= 0 || newP2Hp <= 0 || room.currentRound >= 5);
+
+        if (isGameOver) {
+          patch['status'] = 'finished';
+          if (newP1Hp > newP2Hp) patch['winner'] = 'player1';
+          else if (newP2Hp > newP1Hp) patch['winner'] = 'player2';
+          else patch['winner'] = 'draw';
+        } else {
+          patch['currentRound'] = (room.currentRound || 1) + 1;
+          patch['currentProblem'] = this.generateProblem(room.scope);
+        }
+
+        await this.updateRoom(patch);
+        setTimeout(() => {
+          this.isResolvingRound = false;
+        }, 1200);
+      },
+
+      showFloatingDamage(amount, targetRole) {
+        const container = document.getElementById('pvp-damage-container');
+        if (!container) return;
+        const dmgEl = document.createElement('div');
+        dmgEl.className = 'floating-damage critical';
+        dmgEl.innerText = `-${amount}`;
+        dmgEl.style.position = 'absolute';
+        dmgEl.style.top = '10px';
+        if (targetRole === 'player1') {
+          dmgEl.style.left = '20%';
+        } else {
+          dmgEl.style.right = '20%';
+        }
+        container.appendChild(dmgEl);
+        setTimeout(() => dmgEl.remove(), 900);
+      },
+
+      // 13. 認輸放棄對戰
+      async surrenderMatch() {
+        SoundEngine.playClick();
+        if (!confirm("確定要退出對戰嗎？退出將直接判定為惜敗！")) return;
+        const oppRole = (this.myRole === 'player1') ? 'player2' : 'player1';
+        await this.updateRoom({
+          status: 'finished',
+          winner: oppRole,
+          lastAction: { text: `對手已退出對戰！`, time: Date.now() }
+        });
+      },
+
+      // 14. 對戰結算
+      async handleMatchFinished(room) {
+        if (!this.isInBattle) return;
+        this.isInBattle = false;
+        clearInterval(this.roundTimerInterval);
+
+        const isWinner = (room.winner === this.myRole);
+        const isDraw = (room.winner === 'draw');
+
+        const titleEl = document.getElementById('pvp-result-title');
+        const iconEl = document.getElementById('pvp-result-icon');
+        const bodyEl = document.getElementById('pvp-result-body');
+
+        if (isDraw) {
+          if (iconEl) iconEl.innerText = '🤝';
+          if (titleEl) {
+            titleEl.innerText = '實力相當 · 平手！';
+            titleEl.style.color = '#38bdf8';
+          }
+        } else if (isWinner) {
+          SoundEngine.playVictoryFanfare();
+          if (iconEl) iconEl.innerText = '🏆';
+          if (titleEl) {
+            titleEl.innerText = '恭喜獲得對戰大勝利！';
+            titleEl.style.color = '#fbbf24';
+          }
+        } else {
+          SoundEngine.playError();
+          if (iconEl) iconEl.innerText = '🛡️';
+          if (titleEl) {
+            titleEl.innerText = '惜敗！再接再厲！';
+            titleEl.style.color = '#cbd5e1';
+          }
+        }
+
+        const p1 = room.player1;
+        const p2 = room.player2;
+        const winnerObj = (room.winner === 'player1') ? p1 : (room.winner === 'player2') ? p2 : null;
+
+        if (bodyEl) {
+          bodyEl.innerHTML = `
+            ${winnerObj ? `<div style="font-size:1.1rem; color:#fde047; font-weight:bold; margin-bottom:8px;">獲勝者：${winnerObj.avatar} ${winnerObj.name} (${winnerObj.realName})</div>` : ''}
+            <div style="background:#0f172a; border:1px solid #334155; border-radius:10px; padding:12px; text-align:left; font-size:0.88rem; line-height:1.6;">
+              • <strong>對戰模式</strong>：${room.mode === 'modeA' ? '模式 A 搶答競速戰' : '模式 B 5題回合制'}<br>
+              • <strong>雙方剩餘 HP</strong>：【${p1?.name}】${p1?.hp} HP vs 【${p2?.name}】${p2?.hp} HP<br>
+              • <strong>勝場統計</strong>：成績已自動登錄至【全班榮譽排行榜】！
+            </div>
+          `;
+        }
+
+        // 記錄個人成績並更新 Firebase
+        await LeaderboardSystem.recordMatchResult(isWinner);
+
+        const modal = document.getElementById('pvp-result-modal');
+        if (modal) modal.classList.add('active');
+      },
+
+      closeResultModal() {
+        SoundEngine.playClick();
+        const modal = document.getElementById('pvp-result-modal');
+        if (modal) modal.classList.remove('active');
+        this.exitLobby();
+      },
+
+      leaveRoom() {
+        SoundEngine.playClick();
+        if (confirm("確定要離開此房間嗎？")) {
+          this.cleanupRoomConnection();
+          this.showHallPanel();
+        }
+      },
+
+      // 15. 即時刷新等待中房間列表
+      async refreshPublicRooms() {
+        const listEl = document.getElementById('pvp-public-rooms-list');
+        if (!listEl) return;
+        listEl.innerHTML = '<div style="text-align:center; padding:18px; color:#94a3b8; grid-column:1/-1;">⏳ 正在連線搜尋等待中的房間...</div>';
+
+        try {
+          const res = await fetch(`${FIREBASE_DB_URL}/pvp_rooms.json`);
+          const data = await res.json();
+          if (!data || Object.keys(data).length === 0) {
+            listEl.innerHTML = '<div style="text-align:center; padding:18px; color:#94a3b8; grid-column:1/-1;">目前尚無等待中的房間，您可以點擊上方【建立新房間】邀請同學！</div>';
+            return;
+          }
+
+          const waitingList = [];
+          for (const [id, r] of Object.entries(data)) {
+            if (r && r.status === 'waiting' && !r.player2) {
+              waitingList.push(r);
+            }
+          }
+
+          if (waitingList.length === 0) {
+            listEl.innerHTML = '<div style="text-align:center; padding:18px; color:#94a3b8; grid-column:1/-1;">目前尚無等待中的房間，您可以點擊上方【建立新房間】邀請同學！</div>';
+            return;
+          }
+
+          listEl.innerHTML = waitingList.map(r => `
+            <div style="background:#0f172a; border:1px solid #475569; border-radius:10px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-weight:bold; color:#fde047; font-size:0.95rem;">
+                  房號: <span style="font-family:monospace; color:#34d399; font-size:1.1rem;">${r.code}</span>
+                </div>
+                <div style="font-size:0.75rem; color:#94a3b8; margin-top:2px;">
+                  房主: ${r.player1?.avatar || '🧙‍♂️'} ${r.player1?.name || '勇者'} (201班 ${r.player1?.seat}號)
+                </div>
+                <div style="font-size:0.72rem; color:#a5b4fc;">
+                  ${r.mode === 'modeA' ? '⚡ 搶答競速' : '⏱️ 5題回合'} · ⚔️ ATK ${r.player1?.atk}
+                </div>
+              </div>
+              <button class="btn-table-action" onclick="PvPSystem.joinRoom('${r.code}')" style="background:#3b82f6; color:white; font-size:0.82rem; padding:6px 10px;">
+                加入 ➔
+              </button>
+            </div>
+          `).join('');
+        } catch(e) {
+          listEl.innerHTML = '<div style="text-align:center; padding:18px; color:#ef4444; grid-column:1/-1;">載入房間列表失敗。</div>';
+        }
+      }
+    };
+
+    /* =========================================================
+       10. 全班榮譽排行榜系統 (LeaderboardSystem)
+       ========================================================= */
+    const LeaderboardSystem = {
+      cachedLeaderboard: [],
+
+      open() {
+        SoundEngine.playClick();
+        Game.showScreen('leaderboard');
+        this.refresh();
+      },
+
+      exit() {
+        SoundEngine.playClick();
+        Game.showScreen('stage-select');
+      },
+
+      // 記錄比賽結果至本機與 Firebase
+      async recordMatchResult(isWinner) {
+        let wins = parseInt(localStorage.getItem('radical_pvp_wins') || '0', 10);
+        let matches = parseInt(localStorage.getItem('radical_pvp_matches') || '0', 10);
+
+        matches += 1;
+        if (isWinner) wins += 1;
+
+        localStorage.setItem('radical_pvp_wins', wins);
+        localStorage.setItem('radical_pvp_matches', matches);
+
+        const code = SaveSystem.getPasscode();
+        const char = CHARACTERS_DB.find(c => c.id === CharacterSystem.selectedCharId) || CHARACTERS_DB[0];
+        const stats = PvPSystem.getPlayerStats();
+        const winRate = Math.round((wins / matches) * 100);
+
+        const payload = {
+          passcode: code,
+          studentClass: CharacterSystem.studentClass || "201",
+          studentSeat: CharacterSystem.studentSeat || "01",
+          studentRealName: CharacterSystem.studentRealName || "勇者",
+          charName: CharacterSystem.playerName || "勇者",
+          charAvatar: char.avatar,
+          charTitle: char.title,
+          pvpWins: wins,
+          pvpMatches: matches,
+          winRate: winRate,
+          completedStages: stats.completedStages,
+          atk: stats.atk,
+          updatedAt: new Date().toISOString()
+        };
+
+        try {
+          await fetch(`${FIREBASE_DB_URL}/pvp_leaderboard/${code}.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          await fetch(`${FIREBASE_DB_URL}/saves/${code}/pvpWins.json`, {
+            method: 'PUT',
+            body: JSON.stringify(wins)
+          });
+          await fetch(`${FIREBASE_DB_URL}/saves/${code}/pvpMatches.json`, {
+            method: 'PUT',
+            body: JSON.stringify(matches)
+          });
+        } catch(e) {
+          console.warn('排行榜資料同步延遲:', e);
+        }
+      },
+
+      async refresh() {
+        const tbody = document.getElementById('leaderboard-table-body');
+        if (tbody) {
+          tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:#94a3b8;">⏳ 正在連線讀取 201 班排行榜資料...</td></tr>`;
+        }
+
+        try {
+          // 同時讀取 pvp_leaderboard 與 saves，進行最完整聚合
+          const [lbRes, savesRes] = await Promise.all([
+            fetch(`${FIREBASE_DB_URL}/pvp_leaderboard.json`).catch(() => null),
+            fetch(`${FIREBASE_DB_URL}/saves.json`).catch(() => null)
+          ]);
+
+          const lbData = lbRes && lbRes.ok ? await lbRes.json() : {};
+          const savesData = savesRes && savesRes.ok ? await savesRes.json() : {};
+
+          const combined = {};
+
+          if (savesData) {
+            for (const [code, item] of Object.entries(savesData)) {
+              if (!item) continue;
+              const charObj = CHARACTERS_DB.find(c => c.id === item.charId) || CHARACTERS_DB[0];
+              let completed = 0;
+              if (item.stages) {
+                for (let sId = 1; sId <= 4; sId++) {
+                  if (item.stages[sId]?.cleared || (item.stages[sId]?.level >= 5)) completed++;
+                }
+              }
+              const atk = Math.round(10 + (completed / 4) * 20);
+              const wins = item.pvpWins || 0;
+              const matches = item.pvpMatches || 0;
+              const winRate = matches > 0 ? Math.round((wins / matches) * 100) : 0;
+
+              combined[code] = {
+                passcode: code,
+                studentClass: item.studentClass || '',
+                studentSeat: item.studentSeat || '',
+                studentRealName: item.studentRealName || item.name || '未填姓名',
+                charName: item.charName || item.name || '勇者',
+                charAvatar: charObj.avatar,
+                charTitle: charObj.title,
+                pvpWins: wins,
+                pvpMatches: matches,
+                winRate: winRate,
+                completedStages: completed,
+                atk: atk
+              };
+            }
+          }
+
+          if (lbData) {
+            for (const [code, item] of Object.entries(lbData)) {
+              if (!item) continue;
+              if (combined[code]) {
+                combined[code].pvpWins = Math.max(combined[code].pvpWins, item.pvpWins || 0);
+                combined[code].pvpMatches = Math.max(combined[code].pvpMatches, item.pvpMatches || 0);
+                combined[code].winRate = combined[code].pvpMatches > 0 ? Math.round((combined[code].pvpWins / combined[code].pvpMatches) * 100) : 0;
+              } else {
+                combined[code] = item;
+              }
+            }
+          }
+
+          // 排序：以角色獲勝次數 (pvpWins) 由多到少排序，勝場相同時以勝率決定
+          const list = Object.values(combined);
+          list.sort((a, b) => {
+            const diffWins = (b.pvpWins || 0) - (a.pvpWins || 0);
+            if (diffWins !== 0) return diffWins;
+            return (b.winRate || 0) - (a.winRate || 0);
+          });
+
+          this.cachedLeaderboard = list;
+          this.render();
+          this.updateMyRankInfo();
+        } catch(e) {
+          if (tbody) {
+            tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:#ef4444;">讀取排行榜失敗：${e.message}</td></tr>`;
+          }
+        }
+      },
+
+      updateMyRankInfo() {
+        const myPasscode = SaveSystem.getPasscode();
+        const myIndex = this.cachedLeaderboard.findIndex(s => s.passcode === myPasscode);
+        const myRankEl = document.getElementById('lb-my-rank');
+        const myWinsEl = document.getElementById('lb-my-wins');
+        const myRateEl = document.getElementById('lb-my-winrate');
+        const myAtkEl = document.getElementById('lb-my-atk');
+
+        const localWins = parseInt(localStorage.getItem('radical_pvp_wins') || '0', 10);
+        const localMatches = parseInt(localStorage.getItem('radical_pvp_matches') || '0', 10);
+        const localRate = localMatches > 0 ? Math.round((localWins / localMatches) * 100) : 0;
+        const stats = PvPSystem.getPlayerStats();
+
+        if (myRankEl) myRankEl.innerText = (myIndex >= 0) ? `第 ${myIndex + 1} 名` : '-';
+        if (myWinsEl) myWinsEl.innerText = `${localWins} 勝`;
+        if (myRateEl) myRateEl.innerText = `${localMatches} 場 / ${localRate}%`;
+        if (myAtkEl) myAtkEl.innerText = `⚔️ ${stats.atk} (${stats.completedStages}/4關)`;
+      },
+
+      render() {
+        const tbody = document.getElementById('leaderboard-table-body');
+        if (!tbody) return;
+
+        const keyword = (document.getElementById('lb-search-input')?.value || '').trim().toLowerCase();
+        let list = [...this.cachedLeaderboard];
+
+        if (keyword) {
+          list = list.filter(s => 
+            (s.studentClass && s.studentClass.toLowerCase().includes(keyword)) ||
+            (s.studentSeat && s.studentSeat.toString().includes(keyword)) ||
+            (s.studentRealName && s.studentRealName.toLowerCase().includes(keyword)) ||
+            (s.charName && s.charName.toLowerCase().includes(keyword))
+          );
+        }
+
+        if (list.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:#94a3b8;">目前尚無符合條件的排行榜資料。</td></tr>`;
+          return;
+        }
+
+        const myPasscode = SaveSystem.getPasscode();
+
+        tbody.innerHTML = list.map((s, idx) => {
+          const rank = idx + 1;
+          let rankBadge = `${rank}`;
+          if (rank === 1) rankBadge = `<span class="leaderboard-rank-1">🥇 冠軍</span>`;
+          else if (rank === 2) rankBadge = `<span class="leaderboard-rank-2">🥈 亞軍</span>`;
+          else if (rank === 3) rankBadge = `<span class="leaderboard-rank-3">🥉 季軍</span>`;
+
+          const isMe = (s.passcode === myPasscode);
+          const rowStyle = isMe ? 'background: rgba(236, 72, 153, 0.15); border: 2px solid #ec4899;' : '';
+
+          return `
+            <tr style="${rowStyle}">
+              <td>${rankBadge}</td>
+              <td>
+                <span style="font-size:1.3rem;">${s.charAvatar || '🧙‍♂️'}</span>
+                <span style="font-weight:bold; color:#a5b4fc;">${s.charName}</span>
+                ${isMe ? '<span style="font-size:0.75rem; background:#ec4899; color:white; padding:1px 5px; border-radius:4px; margin-left:4px;">我</span>' : ''}
+              </td>
+              <td>
+                <strong>${s.studentClass ? `${s.studentClass}班` : '-'} ${s.studentSeat ? `${s.studentSeat}號` : '-'}</strong>
+                <span style="color:#fde047; font-weight:bold; margin-left:4px;">${s.studentRealName}</span>
+              </td>
+              <td><strong style="color:#34d399; font-size:1.15rem;">${s.pvpWins || 0}</strong> 勝</td>
+              <td>${s.pvpMatches || 0} 場</td>
+              <td>
+                <div style="font-weight:bold; color:#38bdf8;">${s.winRate || 0}%</div>
+                <div style="background:#334155; height:5px; border-radius:3px; overflow:hidden; width:50px; margin:2px auto;">
+                  <div style="background:#38bdf8; height:100%; width:${s.winRate || 0}%;"></div>
+                </div>
+              </td>
+              <td><span class="badge-stage-lv">${s.completedStages || 0}/4 關</span></td>
+              <td><span style="color:#f87171; font-weight:bold;">⚔️ ${s.atk || 10}</span></td>
+            </tr>
+          `;
+        }).join('');
       }
     };
 
