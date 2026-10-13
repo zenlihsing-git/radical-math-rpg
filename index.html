@@ -1638,6 +1638,223 @@
     .leaderboard-rank-1 { color: #facc15; font-weight: 900; font-size: 1.25rem; }
     .leaderboard-rank-2 { color: #e2e8f0; font-weight: 900; font-size: 1.15rem; }
     .leaderboard-rank-3 { color: #d97706; font-weight: 900; font-size: 1.1rem; }
+
+    /* =========================================================
+       個人勝負分析報告 (Personal Battle Analysis Modal)
+       ========================================================= */
+    .modal-card-analysis {
+      max-width: 840px !important;
+      width: 96% !important;
+      max-height: 88vh;
+      background: #0f172a;
+      border: 2px solid #818cf8;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 25px rgba(99, 102, 241, 0.35);
+      border-radius: 20px;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      text-align: left;
+    }
+
+    .analysis-header {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.98), rgba(15, 23, 42, 0.98));
+      border-bottom: 2px solid #334155;
+      padding: 16px 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .analysis-title-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .analysis-avatar-circle {
+      width: 52px;
+      height: 52px;
+      background: #1e293b;
+      border: 2px solid #ec4899;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      box-shadow: 0 0 12px rgba(236, 72, 153, 0.4);
+      flex-shrink: 0;
+    }
+
+    .analysis-tabs {
+      display: flex;
+      gap: 8px;
+      background: #1e293b;
+      padding: 8px 16px;
+      border-bottom: 1px solid #334155;
+    }
+
+    .analysis-tab-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .analysis-tab-btn:hover {
+      color: #f8fafc;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .analysis-tab-btn.active {
+      background: #6366f1;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.45);
+    }
+
+    .analysis-body {
+      padding: 18px 22px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* 總覽 4 格指標卡 */
+    .analysis-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .analysis-kpi-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .analysis-kpi-label {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      font-weight: bold;
+    }
+    .analysis-kpi-value {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #f8fafc;
+    }
+    .analysis-kpi-sub {
+      font-size: 0.76rem;
+      color: #64748b;
+    }
+
+    /* 角色統計卡片列 */
+    .matchup-card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .matchup-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      transition: all 0.2s ease;
+    }
+    .matchup-card:hover {
+      border-color: #6366f1;
+      background: #233149;
+    }
+
+    .matchup-char-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 150px;
+    }
+    .matchup-char-avatar {
+      font-size: 2.2rem;
+      line-height: 1;
+    }
+    .matchup-char-name {
+      font-weight: bold;
+      color: #fde047;
+      font-size: 0.95rem;
+    }
+    .matchup-char-sub {
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    .matchup-bar-mid {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .matchup-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #cbd5e1;
+    }
+    .matchup-bar-track {
+      height: 12px;
+      background: #090d16;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #334155;
+    }
+    .matchup-bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      transition: width 0.4s ease;
+    }
+
+    .matchup-badge-right {
+      min-width: 95px;
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    /* 歷史對戰清單紀錄卡 */
+    .history-card-item {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-left: 5px solid #6366f1;
+      border-radius: 10px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      transition: background 0.2s ease;
+    }
+    .history-card-item:hover {
+      background: #243247;
+    }
+    .history-card-item.win { border-left-color: #10b981; }
+    .history-card-item.lose { border-left-color: #ef4444; }
+    .history-card-item.draw { border-left-color: #38bdf8; }
   </style>
 
   <!-- Firebase Realtime Database SDK (相容模式，支援即時雙向連線) -->
@@ -2558,6 +2775,10 @@
           <div class="stat-label">對戰攻擊力</div>
           <div class="stat-val" id="lb-my-atk" style="color:#f87171;">⚔️ 10</div>
         </div>
+        <div class="stat-card" style="cursor:pointer; background:linear-gradient(135deg, rgba(236,72,153,0.3), rgba(99,102,241,0.3)); border:2px solid #ec4899; transition:all 0.2s ease; display:flex; flex-direction:column; justify-content:center; align-items:center;" onclick="LeaderboardSystem.openMyAnalysis()" title="點擊查看我的個人詳細勝負分析">
+          <div class="stat-label" style="color:#f472b6; font-weight:bold;">個人分析報告</div>
+          <div class="stat-val" style="color:#ffffff; font-size:1.05rem;">📊 我的勝負分析 ➔</div>
+        </div>
       </div>
 
       <!-- 搜尋與篩選列 -->
@@ -2605,6 +2826,105 @@
       <div class="modal-content" id="pvp-result-body" style="font-size:0.95rem; line-height:1.6; margin:14px 0;"></div>
       <div class="modal-btn-group">
         <button class="modal-btn" onclick="PvPSystem.closeResultModal()" style="background:linear-gradient(180deg,#6366f1,#4338ca);">返回對戰大廳</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 個人對戰勝負分析報告專用彈窗 (Personal Battle Analysis Modal) -->
+  <div class="modal-overlay" id="modal-pvp-analysis">
+    <div class="modal-card modal-card-analysis">
+      <!-- 頂部 Header -->
+      <div class="analysis-header">
+        <div class="analysis-title-group">
+          <div class="analysis-avatar-circle" id="analysis-header-avatar">🧙‍♂️</div>
+          <div>
+            <div style="font-size:1.25rem; font-weight:900; color:#fbbf24; display:flex; align-items:center; gap:8px;">
+              <span>📊 個人對戰勝負分析報告</span>
+            </div>
+            <div style="font-size:0.85rem; color:#cbd5e1; margin-top:2px;" id="analysis-header-name">勇者小算 (疾風劍士)</div>
+            <div style="font-size:0.75rem; color:#94a3b8;" id="analysis-header-sub">201班 05號 · 算術勇者 ｜ 密碼引繼碼</div>
+          </div>
+        </div>
+        <button class="btn-table-action" onclick="LeaderboardSystem.closeAnalysis()" style="background:#334155; color:#cbd5e1; font-size:1.1rem; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;">✕</button>
+      </div>
+
+      <!-- 分頁切換選單 -->
+      <div class="analysis-tabs">
+        <button class="analysis-tab-btn active" id="tab-btn-matchups" onclick="LeaderboardSystem.switchAnalysisTab('matchups')">
+          <span>⚔️</span> 對戰角色統計與勝率
+        </button>
+        <button class="analysis-tab-btn" id="tab-btn-history" onclick="LeaderboardSystem.switchAnalysisTab('history')">
+          <span>📜</span> 所有歷史對戰紀錄 (<span id="analysis-history-count">0</span>)
+        </button>
+      </div>
+
+      <!-- 主體內容容器 -->
+      <div class="analysis-body">
+        <!-- 分頁 1：角色克制分析與總體指標 -->
+        <div id="tab-content-matchups">
+          <!-- 4 格核心指標 -->
+          <div class="analysis-kpi-grid" style="margin-bottom:16px;">
+            <div class="analysis-kpi-card">
+              <div class="analysis-kpi-label">總戰績 (勝-敗-和)</div>
+              <div class="analysis-kpi-value" id="kpi-total-record" style="color:#34d399;">0勝 0敗</div>
+              <div class="analysis-kpi-sub" id="kpi-total-matches">共 0 場對決</div>
+            </div>
+            <div class="analysis-kpi-card">
+              <div class="analysis-kpi-label">總體勝率</div>
+              <div class="analysis-kpi-value" id="kpi-winrate" style="color:#38bdf8;">0%</div>
+              <div class="analysis-kpi-sub" id="kpi-winrate-bar">勝率表現良好</div>
+            </div>
+            <div class="analysis-kpi-card">
+              <div class="analysis-kpi-label">模式戰績 (A搶答 / B回合)</div>
+              <div class="analysis-kpi-value" id="kpi-mode-record" style="color:#fde047; font-size:1.05rem;">A: 0% ｜ B: 0%</div>
+              <div class="analysis-kpi-sub" id="kpi-mode-sub">模式偏好統計</div>
+            </div>
+            <div class="analysis-kpi-card">
+              <div class="analysis-kpi-label">連勝紀錄</div>
+              <div class="analysis-kpi-value" id="kpi-streak" style="color:#ec4899;">0 連勝</div>
+              <div class="analysis-kpi-sub" id="kpi-max-streak">歷史最高 0 連勝</div>
+            </div>
+          </div>
+
+          <!-- 對各角色勝負次數統計與勝率清單 -->
+          <div style="margin-bottom:16px;">
+            <div style="font-weight:bold; font-size:1.05rem; color:#fde047; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between;">
+              <span>⚔️ 對同一個角色的勝負次數統計與勝率</span>
+              <span style="font-size:0.75rem; color:#94a3b8; font-weight:normal;">依交手次數排序</span>
+            </div>
+            <div class="matchup-card-list" id="analysis-char-matchups-list">
+              <!-- 動態生成角色勝負列表 -->
+            </div>
+          </div>
+
+          <!-- 對戰同學紀錄統計 -->
+          <div>
+            <div style="font-weight:bold; font-size:1.05rem; color:#60a5fa; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between;">
+              <span>👥 201 班同學交手勝負紀錄</span>
+              <span style="font-size:0.75rem; color:#94a3b8; font-weight:normal;">依同學座號與姓名</span>
+            </div>
+            <div class="matchup-card-list" id="analysis-classmate-matchups-list">
+              <!-- 動態生成同學對戰列表 -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 分頁 2：所有對戰紀錄詳細列表 -->
+        <div id="tab-content-history" style="display:none;">
+          <div style="font-weight:bold; font-size:1.05rem; color:#fde047; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between;">
+            <span>📜 所有對戰詳細歷史日誌</span>
+            <span style="font-size:0.78rem; color:#94a3b8; font-weight:normal;">依對戰時間（最新在前）</span>
+          </div>
+          <div class="matchup-card-list" id="analysis-all-history-list">
+            <!-- 動態生成所有對戰逐場卡片 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部操作列 -->
+      <div style="background:#1e293b; border-top:1px solid #334155; padding:12px 20px; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size:0.8rem; color:#94a3b8;">💡 提示：在【榮譽排行榜】點擊自己的那一列也可以快速開啟本分析報告！</span>
+        <button class="modal-btn" onclick="LeaderboardSystem.closeAnalysis()" style="max-width:140px; padding:8px 18px; background:#475569; font-size:0.9rem;">關閉報告</button>
       </div>
     </div>
   </div>
@@ -5652,6 +5972,10 @@
           }
         }
 
+        const myRole = this.myRole;
+        const oppRole = (myRole === 'player1') ? 'player2' : 'player1';
+        const myPlayer = room[myRole];
+        const oppPlayer = room[oppRole];
         const p1 = room.player1;
         const p2 = room.player2;
         const winnerObj = (room.winner === 'player1') ? p1 : (room.winner === 'player2') ? p2 : null;
@@ -5667,8 +5991,30 @@
           `;
         }
 
+        const now = new Date();
+        const dateStr = `${now.getMonth() + 1}/${now.getDate()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+        const matchRecord = {
+          id: 'm_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+          time: Date.now(),
+          dateStr: dateStr,
+          mode: room.mode,
+          modeName: room.mode === 'modeA' ? '搶答競速' : '5題回合',
+          result: isWinner ? 'win' : (isDraw ? 'draw' : 'lose'),
+          myHp: myPlayer ? Math.max(0, myPlayer.hp ?? 0) : 0,
+          oppHp: oppPlayer ? Math.max(0, oppPlayer.hp ?? 0) : 0,
+          myAvatar: myPlayer?.avatar || '🧙‍♂️',
+          myTitle: myPlayer?.title || '冒險勇者',
+          oppName: oppPlayer?.name || '神祕對手',
+          oppRealName: oppPlayer?.realName || '',
+          oppSeat: oppPlayer?.seat || '',
+          oppClass: oppPlayer?.class || '201',
+          oppAvatar: oppPlayer?.avatar || '🧝‍♀️',
+          oppTitle: oppPlayer?.title || '冒險對手'
+        };
+
         // 記錄個人成績並更新 Firebase
-        await LeaderboardSystem.recordMatchResult(isWinner);
+        await LeaderboardSystem.recordMatchResult(isWinner, matchRecord);
 
         const modal = document.getElementById('pvp-result-modal');
         if (modal) modal.classList.add('active');
@@ -5758,7 +6104,7 @@
       },
 
       // 記錄比賽結果至本機與 Firebase
-      async recordMatchResult(isWinner) {
+      async recordMatchResult(isWinner, matchRecord = null) {
         let wins = parseInt(localStorage.getItem('radical_pvp_wins') || '0', 10);
         let matches = parseInt(localStorage.getItem('radical_pvp_matches') || '0', 10);
 
@@ -5767,6 +6113,18 @@
 
         localStorage.setItem('radical_pvp_wins', wins);
         localStorage.setItem('radical_pvp_matches', matches);
+
+        // 儲存詳細對戰歷史日誌
+        let history = [];
+        try {
+          history = JSON.parse(localStorage.getItem('radical_pvp_history') || '[]');
+        } catch(e) { history = []; }
+
+        if (matchRecord) {
+          history.unshift(matchRecord);
+          if (history.length > 100) history = history.slice(0, 100);
+          localStorage.setItem('radical_pvp_history', JSON.stringify(history));
+        }
 
         const code = SaveSystem.getPasscode();
         const char = CHARACTERS_DB.find(c => c.id === CharacterSystem.selectedCharId) || CHARACTERS_DB[0];
@@ -5803,6 +6161,13 @@
             method: 'PUT',
             body: JSON.stringify(matches)
           });
+          if (matchRecord) {
+            await fetch(`${FIREBASE_DB_URL}/pvp_history/${code}/${matchRecord.id}.json`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(matchRecord)
+            });
+          }
         } catch(e) {
           console.warn('排行榜資料同步延遲:', e);
         }
@@ -5815,7 +6180,6 @@
         }
 
         try {
-          // 同時讀取 pvp_leaderboard 與 saves，進行最完整聚合
           const [lbRes, savesRes] = await Promise.all([
             fetch(`${FIREBASE_DB_URL}/pvp_leaderboard.json`).catch(() => null),
             fetch(`${FIREBASE_DB_URL}/saves.json`).catch(() => null)
@@ -5871,7 +6235,6 @@
             }
           }
 
-          // 排序：以角色獲勝次數 (pvpWins) 由多到少排序，勝場相同時以勝率決定
           const list = Object.values(combined);
           list.sort((a, b) => {
             const diffWins = (b.pvpWins || 0) - (a.pvpWins || 0);
@@ -5939,15 +6302,16 @@
           else if (rank === 3) rankBadge = `<span class="leaderboard-rank-3">🥉 季軍</span>`;
 
           const isMe = (s.passcode === myPasscode);
-          const rowStyle = isMe ? 'background: rgba(236, 72, 153, 0.15); border: 2px solid #ec4899;' : '';
+          const rowClickAttr = isMe ? 'onclick="LeaderboardSystem.openMyAnalysis()" title="點擊查看我的個人勝負分析報告"' : '';
+          const rowStyle = isMe ? 'background: rgba(236, 72, 153, 0.18); border: 2px solid #ec4899; box-shadow: 0 0 12px rgba(236, 72, 153, 0.35); cursor:pointer;' : '';
 
           return `
-            <tr style="${rowStyle}">
+            <tr style="${rowStyle}" ${rowClickAttr}>
               <td>${rankBadge}</td>
               <td>
                 <span style="font-size:1.3rem;">${s.charAvatar || '🧙‍♂️'}</span>
                 <span style="font-weight:bold; color:#a5b4fc;">${s.charName}</span>
-                ${isMe ? '<span style="font-size:0.75rem; background:#ec4899; color:white; padding:1px 5px; border-radius:4px; margin-left:4px;">我</span>' : ''}
+                ${isMe ? '<button class="btn-table-action" onclick="event.stopPropagation(); LeaderboardSystem.openMyAnalysis()" style="background:#ec4899; color:white; font-size:0.75rem; padding:2px 8px; border-radius:6px; margin-left:6px; cursor:pointer;" title="查看我的勝負分析">📊 勝負分析</button>' : ''}
               </td>
               <td>
                 <strong>${s.studentClass ? `${s.studentClass}班` : '-'} ${s.studentSeat ? `${s.studentSeat}號` : '-'}</strong>
@@ -5964,6 +6328,349 @@
               <td><span class="badge-stage-lv">${s.completedStages || 0}/4 關</span></td>
               <td><span style="color:#f87171; font-weight:bold;">⚔️ ${s.atk || 10}</span></td>
             </tr>
+          `;
+        }).join('');
+      },
+
+      // =========================================================
+      // 個人對戰勝負分析報告 (Personal Match Analysis)
+      // =========================================================
+      currentHistoryData: [],
+      currentAnalysisTab: 'matchups',
+
+      async openMyAnalysis() {
+        SoundEngine.playClick();
+        const modal = document.getElementById('modal-pvp-analysis');
+        if (!modal) return;
+        modal.classList.add('active');
+
+        const code = SaveSystem.getPasscode();
+        const char = CHARACTERS_DB.find(c => c.id === CharacterSystem.selectedCharId) || CHARACTERS_DB[0];
+
+        // 綁定頂部基本資訊
+        const avatarEl = document.getElementById('analysis-header-avatar');
+        const nameEl = document.getElementById('analysis-header-name');
+        const subEl = document.getElementById('analysis-header-sub');
+        if (avatarEl) avatarEl.innerText = char.avatar;
+        if (nameEl) nameEl.innerText = `${CharacterSystem.playerName} (${char.title})`;
+        if (subEl) subEl.innerText = `${CharacterSystem.studentClass || '201'}班 ${CharacterSystem.studentSeat || '01'}號 · ${CharacterSystem.studentRealName || '勇者'} ｜ 專屬引繼碼: ${code}`;
+
+        // 讀取本機對戰紀錄
+        let history = [];
+        try {
+          history = JSON.parse(localStorage.getItem('radical_pvp_history') || '[]');
+        } catch(e) { history = []; }
+
+        // 背景非同步嘗試從 Firebase 同步最新歷史
+        try {
+          const res = await fetch(`${FIREBASE_DB_URL}/pvp_history/${code}.json`).catch(() => null);
+          if (res && res.ok) {
+            const cloudHistoryObj = await res.json();
+            if (cloudHistoryObj) {
+              const cloudList = Object.values(cloudHistoryObj);
+              const existingIds = new Set(history.map(h => h.id));
+              let added = false;
+              for (const item of cloudList) {
+                if (item && item.id && !existingIds.has(item.id)) {
+                  history.push(item);
+                  added = true;
+                }
+              }
+              if (added) {
+                history.sort((a, b) => (b.time || 0) - (a.time || 0));
+                localStorage.setItem('radical_pvp_history', JSON.stringify(history));
+              }
+            }
+          }
+        } catch(e) {
+          console.warn('雲端歷史同步稍候:', e);
+        }
+
+        this.currentHistoryData = history;
+        const countEl = document.getElementById('analysis-history-count');
+        if (countEl) countEl.innerText = history.length;
+
+        this.switchAnalysisTab(this.currentAnalysisTab || 'matchups');
+      },
+
+      closeAnalysis() {
+        SoundEngine.playClick();
+        const modal = document.getElementById('modal-pvp-analysis');
+        if (modal) modal.classList.remove('active');
+      },
+
+      switchAnalysisTab(tabName) {
+        this.currentAnalysisTab = tabName;
+        const btnMatchups = document.getElementById('tab-btn-matchups');
+        const btnHistory = document.getElementById('tab-btn-history');
+        const contentMatchups = document.getElementById('tab-content-matchups');
+        const contentHistory = document.getElementById('tab-content-history');
+
+        if (tabName === 'matchups') {
+          if (btnMatchups) btnMatchups.classList.add('active');
+          if (btnHistory) btnHistory.classList.remove('active');
+          if (contentMatchups) contentMatchups.style.display = 'block';
+          if (contentHistory) contentHistory.style.display = 'none';
+          this.renderMatchupsTab();
+        } else {
+          if (btnMatchups) btnMatchups.classList.remove('active');
+          if (btnHistory) btnHistory.classList.add('active');
+          if (contentMatchups) contentMatchups.style.display = 'none';
+          if (contentHistory) contentHistory.style.display = 'block';
+          this.renderHistoryTab();
+        }
+      },
+
+      renderMatchupsTab() {
+        const history = this.currentHistoryData || [];
+
+        // 1. KPI 綜合統計
+        const localWins = parseInt(localStorage.getItem('radical_pvp_wins') || '0', 10);
+        const localMatches = parseInt(localStorage.getItem('radical_pvp_matches') || '0', 10);
+
+        const histWins = history.filter(h => h.result === 'win').length;
+        const histLosses = history.filter(h => h.result === 'lose').length;
+        const histDraws = history.filter(h => h.result === 'draw').length;
+
+        const totalWins = Math.max(localWins, histWins);
+        const totalMatches = Math.max(localMatches, history.length);
+        const totalLosses = Math.max(0, totalMatches - totalWins - histDraws);
+        const winRate = totalMatches > 0 ? Math.round((totalWins / totalMatches) * 100) : 0;
+
+        // 計算模式 A 與模式 B
+        const modeAMatches = history.filter(h => h.mode === 'modeA');
+        const modeAWins = modeAMatches.filter(h => h.result === 'win').length;
+        const modeARate = modeAMatches.length > 0 ? Math.round((modeAWins / modeAMatches.length) * 100) : 0;
+
+        const modeBMatches = history.filter(h => h.mode === 'modeB');
+        const modeBWins = modeBMatches.filter(h => h.result === 'win').length;
+        const modeBRate = modeBMatches.length > 0 ? Math.round((modeBWins / modeBMatches.length) * 100) : 0;
+
+        // 計算連勝 (依時間正序：舊 -> 新)
+        const chrono = [...history].sort((a, b) => (a.time || 0) - (b.time || 0));
+        let currStreak = 0;
+        let maxStreak = 0;
+        let runningStreak = 0;
+        for (const m of chrono) {
+          if (m.result === 'win') {
+            runningStreak++;
+            if (runningStreak > maxStreak) maxStreak = runningStreak;
+          } else {
+            runningStreak = 0;
+          }
+        }
+        currStreak = runningStreak;
+
+        // 綁定 KPI 元素
+        const elRecord = document.getElementById('kpi-total-record');
+        const elMatches = document.getElementById('kpi-total-matches');
+        const elWinRate = document.getElementById('kpi-winrate');
+        const elWinBar = document.getElementById('kpi-winrate-bar');
+        const elMode = document.getElementById('kpi-mode-record');
+        const elModeSub = document.getElementById('kpi-mode-sub');
+        const elStreak = document.getElementById('kpi-streak');
+        const elMaxStreak = document.getElementById('kpi-max-streak');
+
+        if (elRecord) elRecord.innerText = `${totalWins}勝 ${totalLosses}敗${histDraws > 0 ? ` ${histDraws}和` : ''}`;
+        if (elMatches) elMatches.innerText = `累計對戰 ${totalMatches} 場`;
+        if (elWinRate) elWinRate.innerText = `${winRate}%`;
+        if (elWinBar) elWinBar.innerText = winRate >= 60 ? '🔥 狀態火熱·高勝率' : (winRate >= 40 ? '⚖️ 實力穩健·持續進步' : '🛡️ 逆境試煉·再接再厲');
+        if (elMode) elMode.innerText = `A: ${modeARate}% (${modeAWins}/${modeAMatches.length}) ｜ B: ${modeBRate}% (${modeBWins}/${modeBMatches.length})`;
+        if (elModeSub) elModeSub.innerText = `A搶答 ${modeAMatches.length}場 ｜ B回合 ${modeBMatches.length}場`;
+        if (elStreak) elStreak.innerText = `${currStreak} 連勝`;
+        if (elMaxStreak) elMaxStreak.innerText = `歷史最高 ${maxStreak} 連勝`;
+
+        // 2. 對同一個角色的勝負次數統計與勝率 (重點需求)
+        const charContainer = document.getElementById('analysis-char-matchups-list');
+        if (charContainer) {
+          const charMap = {};
+          for (const h of history) {
+            const key = h.oppTitle || h.oppAvatar || '未知勇者';
+            if (!charMap[key]) {
+              charMap[key] = {
+                avatar: h.oppAvatar || '🧙‍♂️',
+                title: h.oppTitle || key,
+                total: 0,
+                wins: 0,
+                losses: 0,
+                draws: 0
+              };
+            }
+            charMap[key].total++;
+            if (h.result === 'win') charMap[key].wins++;
+            else if (h.result === 'lose') charMap[key].losses++;
+            else charMap[key].draws++;
+          }
+
+          const charList = Object.values(charMap);
+          charList.sort((a, b) => b.total - a.total);
+
+          if (charList.length === 0) {
+            charContainer.innerHTML = `
+              <div style="background:#1e293b; border:1px dashed #475569; border-radius:10px; padding:22px; text-align:center; color:#94a3b8;">
+                <div style="font-size:2rem; margin-bottom:4px;">⚔️</div>
+                <div style="font-size:0.95rem; color:#cbd5e1; font-weight:bold;">尚無對戰角色紀錄</div>
+                <div style="font-size:0.78rem; color:#64748b; margin-top:2px;">進行雙人對戰後，此處將自動分類統計對各職業角色的勝負與勝率！</div>
+              </div>
+            `;
+          } else {
+            charContainer.innerHTML = charList.map(c => {
+              const rate = Math.round((c.wins / c.total) * 100);
+              let barGrad = 'linear-gradient(90deg, #10b981, #34d399)';
+              let tagHtml = '<span style="background:rgba(16,185,129,0.2); color:#34d399; border:1px solid #059669; padding:2px 8px; border-radius:6px; font-size:0.75rem; font-weight:bold;">🏆 擅長對付</span>';
+
+              if (rate <= 35) {
+                barGrad = 'linear-gradient(90deg, #dc2626, #ef4444)';
+                tagHtml = '<span style="background:rgba(239,68,68,0.2); color:#f87171; border:1px solid #dc2626; padding:2px 8px; border-radius:6px; font-size:0.75rem; font-weight:bold;">⚔️ 苦戰剋星</span>';
+              } else if (rate < 60) {
+                barGrad = 'linear-gradient(90deg, #d97706, #fbbf24)';
+                tagHtml = '<span style="background:rgba(56,189,248,0.2); color:#38bdf8; border:1px solid #0284c7; padding:2px 8px; border-radius:6px; font-size:0.75rem; font-weight:bold;">⚖️ 勢均力敵</span>';
+              }
+
+              return `
+                <div class="matchup-card">
+                  <div class="matchup-char-left">
+                    <div class="matchup-char-avatar">${c.avatar}</div>
+                    <div>
+                      <div class="matchup-char-name">${c.title}</div>
+                      <div class="matchup-char-sub">交手 ${c.total} 次 ｜ ${c.wins}勝 ${c.losses}敗${c.draws > 0 ? ` ${c.draws}和` : ''}</div>
+                    </div>
+                  </div>
+                  <div class="matchup-bar-mid">
+                    <div class="matchup-bar-label">
+                      <span>勝率 ${rate}%</span>
+                      <span style="color:#94a3b8;">${c.wins} / ${c.total} 勝場</span>
+                    </div>
+                    <div class="matchup-bar-track">
+                      <div class="matchup-bar-fill" style="width:${rate}%; background:${barGrad};"></div>
+                    </div>
+                  </div>
+                  <div class="matchup-badge-right">
+                    ${tagHtml}
+                  </div>
+                </div>
+              `;
+            }).join('');
+          }
+        }
+
+        // 3. 對戰同學統計列表
+        const classContainer = document.getElementById('analysis-classmate-matchups-list');
+        if (classContainer) {
+          const mateMap = {};
+          for (const h of history) {
+            const key = `${h.oppSeat || ''}_${h.oppRealName || h.oppName || ''}`;
+            if (!mateMap[key]) {
+              mateMap[key] = {
+                seat: h.oppSeat || '-',
+                name: h.oppRealName || h.oppName || '同學',
+                avatar: h.oppAvatar || '🧙‍♂️',
+                title: h.oppTitle || '冒險者',
+                total: 0,
+                wins: 0,
+                losses: 0,
+                draws: 0
+              };
+            }
+            mateMap[key].total++;
+            if (h.result === 'win') mateMap[key].wins++;
+            else if (h.result === 'lose') mateMap[key].losses++;
+            else mateMap[key].draws++;
+          }
+
+          const mateList = Object.values(mateMap);
+          mateList.sort((a, b) => b.total - a.total);
+
+          if (mateList.length === 0) {
+            classContainer.innerHTML = `
+              <div style="background:#1e293b; border:1px dashed #475569; border-radius:10px; padding:22px; text-align:center; color:#94a3b8;">
+                <div style="font-size:2rem; margin-bottom:4px;">👥</div>
+                <div style="font-size:0.95rem; color:#cbd5e1; font-weight:bold;">尚無同學交手紀錄</div>
+                <div style="font-size:0.78rem; color:#64748b; margin-top:2px;">向 201 班同學發起挑戰後，此處將記錄與每位同學的勝負關係！</div>
+              </div>
+            `;
+          } else {
+            classContainer.innerHTML = mateList.map(m => {
+              const rate = Math.round((m.wins / m.total) * 100);
+              return `
+                <div class="matchup-card" style="padding:10px 14px;">
+                  <div style="display:flex; align-items:center; gap:10px; min-width:180px;">
+                    <span style="font-size:1.8rem;">${m.avatar}</span>
+                    <div>
+                      <div style="font-weight:bold; color:#f8fafc; font-size:0.95rem;">${m.seat !== '-' ? `${m.seat}號 ` : ''}${m.name}</div>
+                      <div style="font-size:0.75rem; color:#a5b4fc;">${m.title}</div>
+                    </div>
+                  </div>
+                  <div style="flex:1; text-align:center;">
+                    <span style="font-weight:bold; color:#34d399;">${m.wins} 勝</span>
+                    <span style="color:#64748b; margin:0 4px;">/</span>
+                    <span style="font-weight:bold; color:#f87171;">${m.losses} 敗</span>
+                    ${m.draws > 0 ? `<span style="color:#64748b; margin:0 4px;">/</span><span style="color:#38bdf8;">${m.draws} 和</span>` : ''}
+                    <span style="font-size:0.78rem; color:#94a3b8; margin-left:8px;">(共 ${m.total} 場)</span>
+                  </div>
+                  <div style="min-width:70px; text-align:right;">
+                    <div style="font-weight:900; color:#38bdf8; font-size:1.05rem;">${rate}%</div>
+                    <div style="font-size:0.72rem; color:#94a3b8;">勝率</div>
+                  </div>
+                </div>
+              `;
+            }).join('');
+          }
+        }
+      },
+
+      renderHistoryTab() {
+        const listContainer = document.getElementById('analysis-all-history-list');
+        if (!listContainer) return;
+
+        const history = this.currentHistoryData || [];
+
+        if (history.length === 0) {
+          listContainer.innerHTML = `
+            <div style="background:#1e293b; border:1px dashed #475569; border-radius:12px; padding:35px 20px; text-align:center; color:#94a3b8;">
+              <div style="font-size:3rem; margin-bottom:8px;">📜</div>
+              <div style="font-size:1.1rem; color:#cbd5e1; font-weight:bold;">目前尚無完整對戰歷史紀錄</div>
+              <div style="font-size:0.85rem; color:#64748b; margin-top:4px;">在雙人對戰中完成對局後，每一次的對戰時間、對手、血量結算均會完整呈現在此！</div>
+            </div>
+          `;
+          return;
+        }
+
+        listContainer.innerHTML = history.map((item, index) => {
+          let badgeHtml = '<span style="background:#059669; color:white; padding:3px 9px; border-radius:6px; font-weight:bold; font-size:0.82rem;">🏆 勝利</span>';
+          let borderClass = 'win';
+          if (item.result === 'lose') {
+            badgeHtml = '<span style="background:#b91c1c; color:white; padding:3px 9px; border-radius:6px; font-weight:bold; font-size:0.82rem;">🛡️ 惜敗</span>';
+            borderClass = 'lose';
+          } else if (item.result === 'draw') {
+            badgeHtml = '<span style="background:#0284c7; color:white; padding:3px 9px; border-radius:6px; font-weight:bold; font-size:0.82rem;">🤝 平手</span>';
+            borderClass = 'draw';
+          }
+
+          const modeTag = item.mode === 'modeA' ? '⚡ 模式A 搶答戰' : '⏱️ 模式B 5題回合';
+
+          return `
+            <div class="history-card-item ${borderClass}">
+              <div style="display:flex; align-items:center; gap:10px;">
+                ${badgeHtml}
+                <div>
+                  <div style="font-size:0.75rem; color:#94a3b8;">${item.dateStr || '未知時間'} ｜ <span style="color:#a5b4fc;">${modeTag}</span></div>
+                  <div style="font-weight:bold; color:#f8fafc; font-size:0.95rem; margin-top:2px;">
+                    對手: ${item.oppAvatar || '🤺'} ${item.oppName || '未知勇者'}
+                    <span style="color:#cbd5e1; font-size:0.82rem;">(${item.oppTitle || '冒險者'})</span>
+                  </div>
+                  <div style="font-size:0.75rem; color:#94a3b8;">
+                    ${item.oppClass ? `${item.oppClass}班 ` : ''}${item.oppSeat ? `${item.oppSeat}號 ` : ''}${item.oppRealName ? `${item.oppRealName}` : ''}
+                  </div>
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:0.82rem; font-weight:bold; color:#cbd5e1;">
+                  終局 HP: <span style="color:#34d399;">${item.myHp}</span> vs <span style="color:#f87171;">${item.oppHp}</span>
+                </div>
+                <div style="font-size:0.72rem; color:#64748b; margin-top:2px;">#第 ${history.length - index} 場對決</div>
+              </div>
+            </div>
           `;
         }).join('');
       }
