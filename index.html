@@ -1961,17 +1961,18 @@
         <div style="display:grid; grid-template-columns: 1fr 1fr 1.5fr; gap:10px;">
           <div>
             <label style="font-size:0.85rem; color:#cbd5e1; font-weight:bold; display:block; margin-bottom:4px;">班級：</label>
-            <input type="text" id="student-class-input" class="student-info-box" maxlength="6" placeholder="如 801">
+            <input type="text" id="student-class-input" class="student-info-box" maxlength="6" placeholder="如 801" onblur="CharacterSystem.checkSeatAvailability()">
           </div>
           <div>
             <label style="font-size:0.85rem; color:#cbd5e1; font-weight:bold; display:block; margin-bottom:4px;">座號：</label>
-            <input type="number" id="student-seat-input" class="student-info-box" min="1" max="99" placeholder="如 05">
+            <input type="number" id="student-seat-input" class="student-info-box" min="1" max="99" placeholder="如 05" onblur="CharacterSystem.checkSeatAvailability()">
           </div>
           <div>
             <label style="font-size:0.85rem; color:#cbd5e1; font-weight:bold; display:block; margin-bottom:4px;">真實姓名：</label>
             <input type="text" id="student-realname-input" class="student-info-box" maxlength="8" placeholder="如 王小明">
           </div>
         </div>
+        <div id="student-seat-duplicate-notice" style="display:none; margin-top:8px; font-size:0.82rem; background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fca5a5; padding:8px 12px; border-radius:8px; line-height:1.5;"></div>
 
         <!-- 步驟 2：角色名稱輸入 (最多6字，限定同班級座號唯一，後續僅管理者可修改) -->
         <div style="border-top:1px dashed #475569; margin-top:14px; padding-top:12px;">
@@ -1989,7 +1990,7 @@
             <input type="text" id="player-name-input" class="name-input-box" maxlength="6" placeholder="輸入暱稱 (最多6字，如: 算術小神童)">
           </div>
           <div style="font-size:0.75rem; color:#94a3b8; margin-top:5px; line-height:1.4;">
-            📌 <strong>帳號暱稱規範：</strong>同一個班級座號只能設定一個角色暱稱；設定完成後僅限任課老師/管理者方可修改。
+            📌 <strong>帳號唯一規範：</strong>一個班級座號只能輸入「一個真實姓名」與設定「一個角色暱稱」；登記後僅限管理者修改。
           </div>
         </div>
       </div>
@@ -2442,16 +2443,20 @@
     </div>
   </div>
 
-  <!-- 教師管理者修改學生角色暱稱專用彈窗 -->
+  <!-- 教師管理者修改學生真實姓名與角色暱稱專用彈窗 -->
   <div class="modal-overlay" id="admin-edit-nickname-modal">
     <div class="modal-card" style="max-width: 440px; text-align: center;">
-      <div class="modal-title" style="color:#fde047;">✏️ 管理者修改學生角色暱稱</div>
+      <div class="modal-title" style="color:#fde047;">✏️ 管理者修改學生姓名與暱稱</div>
       <div id="admin-edit-nick-info" style="font-size:0.9rem; color:#cbd5e1; margin: 10px 0 16px 0; line-height: 1.6; background:#0f172a; padding:12px; border-radius:10px; border:1px solid #334155; text-align:left;">
       </div>
+      <div style="margin-bottom:12px; text-align:left;">
+        <label for="admin-new-realname-input" style="font-size:0.85rem; font-weight:bold; color:#38bdf8; display:block; margin-bottom:6px;">📝 學生真實姓名：</label>
+        <input type="text" id="admin-new-realname-input" maxlength="8" placeholder="請輸入真實姓名" class="name-input-box" style="text-align:center; font-size:1.05rem;" />
+      </div>
       <div style="margin-bottom:16px; text-align:left;">
-        <label for="admin-new-nick-input" style="font-size:0.85rem; font-weight:bold; color:#38bdf8; display:block; margin-bottom:6px;">請輸入新的角色暱稱：</label>
-        <input type="text" id="admin-new-nick-input" maxlength="6" placeholder="請輸入新暱稱 (最多6字)" class="name-input-box" style="text-align:center; font-size:1.15rem;" onkeydown="if(event.key==='Enter') AdminSystem.confirmEditNickname()" />
-        <div style="font-size:0.75rem; color:#94a3b8; margin-top:4px;">★ 限制最多 6 個字，修改後將同步更新雲端、排行榜與學生端。</div>
+        <label for="admin-new-nick-input" style="font-size:0.85rem; font-weight:bold; color:#fde047; display:block; margin-bottom:6px;">⚔️ 勇者角色暱稱：</label>
+        <input type="text" id="admin-new-nick-input" maxlength="6" placeholder="請輸入新暱稱 (最多6字)" class="name-input-box" style="text-align:center; font-size:1.05rem;" onkeydown="if(event.key==='Enter') AdminSystem.confirmEditNickname()" />
+        <div style="font-size:0.75rem; color:#94a3b8; margin-top:4px;">★ 暱稱最多 6 個字，修改後將即時同步雲端、排行榜與學生端。</div>
       </div>
       <div style="display:flex; gap:10px;">
         <button class="modal-btn modal-btn-alt" onclick="AdminSystem.closeEditNicknameModal()">取消</button>
@@ -3099,10 +3104,11 @@
 
       adminUnlockName() {
         SoundEngine.playClick();
-        const pass = prompt("請輸入教師管理密碼以解鎖修改角色暱稱：");
+        const pass = prompt("請輸入教師管理密碼以解鎖修改：");
         if (pass === AdminSystem.adminPassword) {
           this.isAdminUnlocked = true;
           const pEl = document.getElementById('player-name-input');
+          const rEl = document.getElementById('student-realname-input');
           const noticeEl = document.getElementById('player-name-locked-notice');
           const unlockBtn = document.getElementById('btn-admin-unlock-char-name');
           if (pEl) {
@@ -3112,6 +3118,11 @@
             pEl.focus();
             pEl.select();
           }
+          if (rEl) {
+            rEl.readOnly = false;
+            rEl.style.opacity = '1';
+            rEl.style.cursor = 'text';
+          }
           if (noticeEl) {
             noticeEl.innerText = "🔓 管理者已解鎖可修改";
             noticeEl.style.color = "#34d399";
@@ -3120,10 +3131,54 @@
           }
           if (unlockBtn) unlockBtn.style.display = 'none';
           SoundEngine.playSuccess();
-          alert("✅ 已解鎖！現在可以修改角色暱稱，修改完成後請點擊下方【踏上冒險！進入關卡】儲存。");
+          alert("✅ 已解鎖！現在可以修改真實姓名與角色暱稱，修改完成後請點擊下方【踏上冒險！進入關卡】儲存。");
         } else if (pass !== null) {
           SoundEngine.playError();
           alert("❌ 密碼錯誤！無法解鎖修改。");
+        }
+      },
+
+      async checkSeatAvailability() {
+        if (!this.isCreatingNew) return;
+        const cVal = (document.getElementById('student-class-input')?.value || '').trim();
+        const sVal = (document.getElementById('student-seat-input')?.value || '').trim();
+        const noticeEl = document.getElementById('student-seat-duplicate-notice');
+        if (!noticeEl) return;
+
+        if (!cVal || !sVal) {
+          noticeEl.style.display = 'none';
+          return;
+        }
+
+        const normC = cVal.replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
+        const normS = parseInt(sVal, 10);
+        if (isNaN(normS) || normS <= 0) {
+          noticeEl.style.display = 'none';
+          return;
+        }
+
+        try {
+          const res = await fetch(`${FIREBASE_DB_URL}/saves.json`);
+          if (res.ok) {
+            const allSaves = await res.json();
+            if (allSaves && typeof allSaves === 'object') {
+              for (const [code, item] of Object.entries(allSaves)) {
+                if (!item) continue;
+                const iC = String(item.studentClass || '').replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
+                const iS = parseInt(item.studentSeat || '0', 10);
+                if (iC === normC && iS === normS) {
+                  const rName = item.studentRealName || '同學';
+                  const cName = item.charName || item.name || '勇者';
+                  noticeEl.innerHTML = `⚠️ <strong>【${cVal} 班 ${sVal} 號】已被登記</strong>：登記姓名「${rName}」、角色暱稱「${cName}」。同座號只能登記一個真實姓名與角色暱稱；若為本人請至首頁點選【輸入引繼碼】登入！`;
+                  noticeEl.style.display = 'block';
+                  return;
+                }
+              }
+            }
+          }
+          noticeEl.style.display = 'none';
+        } catch(e) {
+          noticeEl.style.display = 'none';
         }
       },
 
@@ -3140,8 +3195,16 @@
           return;
         }
 
+        // 正規化座號與班級 (例如 01 號與 1 號統一判斷)
+        const normInputClass = String(inputClass).replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
+        const normInputSeat = parseInt(inputSeat, 10);
+        if (isNaN(normInputSeat) || normInputSeat <= 0) {
+          SoundEngine.playError();
+          alert("請輸入正確的座號數字（如 1 ~ 99）！");
+          return;
+        }
+
         // 規則：角色暱稱限定只有管理者可以更改
-        // 若非全新開號且未經管理者解鎖，強制保留原有暱稱，學生不可自行修改
         if (!this.isCreatingNew && this.playerName && !this.isAdminUnlocked) {
           inputCharName = this.playerName;
         } else {
@@ -3157,38 +3220,79 @@
           }
         }
 
-        // 規則：同一個班級座號只能設定一個角色暱稱
-        // 若為新開號，向 Firebase 驗證該班級座號是否已存在註冊紀錄
-        if (this.isCreatingNew) {
-          try {
-            const res = await fetch(`${FIREBASE_DB_URL}/saves.json`);
-            if (res.ok) {
-              const allSaves = await res.json();
-              if (allSaves) {
-                const currentCode = SaveSystem.getPasscode();
-                const duplicateEntry = Object.entries(allSaves).find(([code, item]) => {
-                  if (!item || code === currentCode) return false;
-                  const cClean = String(item.studentClass || '').trim();
-                  const sClean = String(item.studentSeat || '').trim();
-                  return cClean === inputClass && sClean === inputSeat;
-                });
+        // 規則：非管理者解鎖下，不可擅自篡改已綁定的班級、座號或真實姓名
+        if (!this.isCreatingNew && !this.isAdminUnlocked) {
+          if (this.studentClass && String(this.studentClass).replace(/[^0-9a-zA-Z]/g, '').toLowerCase() !== normInputClass) {
+            SoundEngine.playError();
+            alert("⚠️ 班級已鎖定，不可任意更改！如需變更請聯繫管理者。");
+            return;
+          }
+          if (this.studentSeat && parseInt(this.studentSeat, 10) !== normInputSeat) {
+            SoundEngine.playError();
+            alert("⚠️ 座號已鎖定，不可任意更改！如需變更請聯繫管理者。");
+            return;
+          }
+          if (this.studentRealName && inputRealName !== this.studentRealName) {
+            SoundEngine.playError();
+            alert("⚠️ 真實姓名已綁定，不可任意更改！如需更名請聯繫管理者。");
+            return;
+          }
+        }
 
-                if (duplicateEntry) {
-                  SoundEngine.playError();
-                  const [dupCode, dupData] = duplicateEntry;
-                  const existingName = dupData.charName || dupData.name || '勇者';
-                  alert(`⚠️ 班級座號已登記！\n\n【${inputClass} 班 ${inputSeat} 號】已經設定過角色暱稱「${existingName}」！\n\n同一個班級座號只能設定一個角色暱稱：\n• 若您是該座號學生，請使用您原有的【引繼碼】登入遊戲；\n• 如需修改角色暱稱，請向任課老師/管理者申請修改！`);
-                  return;
+        // 核心規則：一個班級座號只能輸入一個真實姓名，且只能設定一個角色暱稱！
+        // 向 Firebase 檢查雲端所有現存紀錄
+        let foundExisting = null;
+        try {
+          const res = await fetch(`${FIREBASE_DB_URL}/saves.json`);
+          if (res.ok) {
+            const allSaves = await res.json();
+            if (allSaves && typeof allSaves === 'object') {
+              for (const [code, item] of Object.entries(allSaves)) {
+                if (!item) continue;
+                const itemClass = String(item.studentClass || '').replace(/[^0-9a-zA-Z]/g, '').toLowerCase();
+                const itemSeat = parseInt(item.studentSeat || '0', 10);
+                if (itemClass === normInputClass && itemSeat === normInputSeat) {
+                  foundExisting = { passcode: code, ...item };
+                  break;
                 }
               }
             }
-          } catch(e) {
-            console.warn("驗證班級座號唯一性延遲:", e);
+          }
+        } catch(e) {
+          console.warn("驗證班級座號唯一性延遲:", e);
+        }
+
+        if (foundExisting) {
+          const dupCode = foundExisting.passcode;
+          const dupRealName = foundExisting.studentRealName || '已登記同學';
+          const dupCharName = foundExisting.charName || foundExisting.name || '勇者';
+          const currentCode = SaveSystem.getPasscode();
+
+          // 情況 A：新開號 (isCreatingNew = true)
+          // 該班級座號已在雲端存在紀錄，嚴禁重複建立或輸入第二個真實姓名/暱稱！
+          if (this.isCreatingNew) {
+            SoundEngine.playError();
+            alert(`⚠️【${inputClass} 班 ${inputSeat} 號】已經完成註冊！\n\n• 已登記學生真實姓名：${dupRealName}\n• 已設定勇者角色暱稱：${dupCharName}\n\n📌 系統嚴格規範：\n每個班級座號只能輸入「一個真實姓名」，且只能設定「一個角色暱稱」！\n\n• 若您是該座號學生，請回到首頁使用專屬引繼碼【${dupCode}】登入；\n• 若您忘記引繼碼或需修改姓名暱稱，請向任課老師/管理者申請！`);
+            return;
+          }
+
+          // 情況 B：非新開號，但目前裝置的引繼碼與登記此座號的引繼碼不符 (企圖竄改成他人座號)
+          if (dupCode !== currentCode) {
+            SoundEngine.playError();
+            alert(`⚠️【${inputClass} 班 ${inputSeat} 號】已被其他同學（${dupRealName}）使用！\n您無法修改為已被他人使用的班級座號。`);
+            return;
+          }
+
+          // 情況 C：為本人帳號，但輸入的真實姓名與原先登記的真實姓名不符 (非管理者解鎖下禁止變更真實姓名)
+          if (inputRealName !== dupRealName && !this.isAdminUnlocked) {
+            SoundEngine.playError();
+            alert(`⚠️ 一個班級座號只能綁定一個真實姓名！\n\n該座號登記姓名為「${dupRealName}」，不可自行修改為「${inputRealName}」。\n如姓名打錯需更正，請向任課老師/管理者申請修改！`);
+            return;
           }
         }
 
         this.playerName = inputCharName;
-        this.saveStudent(inputClass, inputSeat, inputRealName);
+        this.saveStudent(inputClass, String(normInputSeat), inputRealName);
 
         if (this.isCreatingNew) {
           // 全新角色：配發新永久引繼碼並重置各關卡等級
@@ -3206,19 +3310,27 @@
           this.isCreatingNew = false;
         }
 
-        // 若是由管理者解鎖修改暱稱，同步至雲端 saves 與 pvp_leaderboard
+        // 若是由管理者解鎖修改暱稱或姓名，同步至雲端 saves 與 pvp_leaderboard
         if (this.isAdminUnlocked) {
           const code = SaveSystem.getPasscode();
           if (code && code !== 'RAD-000000') {
+            const patchObj = {
+              charName: inputCharName,
+              name: inputCharName,
+              studentRealName: inputRealName,
+              studentClass: inputClass,
+              studentSeat: String(normInputSeat),
+              updatedAt: new Date().toISOString()
+            };
             fetch(`${FIREBASE_DB_URL}/saves/${code}.json`, {
               method: 'PATCH',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ charName: inputCharName, name: inputCharName, updatedAt: new Date().toISOString() })
+              body: JSON.stringify(patchObj)
             }).catch(() => {});
             fetch(`${FIREBASE_DB_URL}/pvp_leaderboard/${code}.json`, {
               method: 'PATCH',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ charName: inputCharName, updatedAt: new Date().toISOString() })
+              body: JSON.stringify({ charName: inputCharName, studentRealName: inputRealName, updatedAt: new Date().toISOString() })
             }).catch(() => {});
           }
           this.isAdminUnlocked = false;
@@ -3239,10 +3351,30 @@
         const charNameEl = document.getElementById('player-name-input');
         const lockNoticeEl = document.getElementById('player-name-locked-notice');
         const unlockBtn = document.getElementById('btn-admin-unlock-char-name');
+        const dupNoticeEl = document.getElementById('student-seat-duplicate-notice');
+        if (dupNoticeEl) dupNoticeEl.style.display = 'none';
 
-        if (classEl) classEl.value = this.studentClass;
-        if (seatEl) seatEl.value = this.studentSeat;
-        if (realNameEl) realNameEl.value = this.studentRealName;
+        if (classEl) {
+          classEl.value = this.studentClass;
+          classEl.readOnly = true;
+          classEl.style.opacity = '0.7';
+          classEl.style.cursor = 'not-allowed';
+          classEl.title = '班級已鎖定，不可任意更改';
+        }
+        if (seatEl) {
+          seatEl.value = this.studentSeat;
+          seatEl.readOnly = true;
+          seatEl.style.opacity = '0.7';
+          seatEl.style.cursor = 'not-allowed';
+          seatEl.title = '座號已鎖定，不可任意更改';
+        }
+        if (realNameEl) {
+          realNameEl.value = this.studentRealName;
+          realNameEl.readOnly = true;
+          realNameEl.style.opacity = '0.7';
+          realNameEl.style.cursor = 'not-allowed';
+          realNameEl.title = '真實姓名已鎖定，一個座號僅限一個姓名';
+        }
         if (charNameEl) {
           charNameEl.value = this.playerName;
           charNameEl.readOnly = true;
@@ -3251,7 +3383,7 @@
           charNameEl.title = '角色暱稱已鎖定，僅限管理者修改';
         }
         if (lockNoticeEl) {
-          lockNoticeEl.innerText = '🔒 暱稱已鎖定·僅限管理者更改';
+          lockNoticeEl.innerText = '🔒 身分與暱稱已鎖定·僅限管理者更改';
           lockNoticeEl.style.color = '#f472b6';
           lockNoticeEl.style.borderColor = '#ec4899';
           lockNoticeEl.style.background = 'rgba(236,72,153,0.2)';
@@ -3906,6 +4038,17 @@
         }
         CharacterSystem.isCreatingNew = true;
         CharacterSystem.isAdminUnlocked = false;
+
+        // 清除舊有的引繼碼與本機學生資料，防止新帳號繼承舊碼
+        localStorage.removeItem('radical_passcode');
+        localStorage.removeItem('radical_rpg_student');
+        localStorage.removeItem('radical_rpg_character');
+        SaveSystem.passcode = null;
+        CharacterSystem.studentClass = '';
+        CharacterSystem.studentSeat = '';
+        CharacterSystem.studentRealName = '';
+        CharacterSystem.playerName = '';
+
         // 重置本機所有對戰紀錄與場次，全新開始
         localStorage.setItem('radical_pvp_wins', '0');
         localStorage.setItem('radical_pvp_matches', '0');
@@ -3917,9 +4060,30 @@
         const pEl = document.getElementById('player-name-input');
         const lockNoticeEl = document.getElementById('player-name-locked-notice');
         const unlockBtn = document.getElementById('btn-admin-unlock-char-name');
-        if (cEl) cEl.value = '';
-        if (sEl) sEl.value = '';
-        if (rEl) rEl.value = '';
+        const dupNoticeEl = document.getElementById('student-seat-duplicate-notice');
+        if (dupNoticeEl) dupNoticeEl.style.display = 'none';
+
+        if (cEl) {
+          cEl.value = '';
+          cEl.readOnly = false;
+          cEl.style.opacity = '1';
+          cEl.style.cursor = 'text';
+          cEl.title = '';
+        }
+        if (sEl) {
+          sEl.value = '';
+          sEl.readOnly = false;
+          sEl.style.opacity = '1';
+          sEl.style.cursor = 'text';
+          sEl.title = '';
+        }
+        if (rEl) {
+          rEl.value = '';
+          rEl.readOnly = false;
+          rEl.style.opacity = '1';
+          rEl.style.cursor = 'text';
+          rEl.title = '';
+        }
         if (pEl) {
           pEl.value = '';
           pEl.readOnly = false;
@@ -4515,7 +4679,7 @@
         document.body.removeChild(ta);
       },
 
-      // 檢查雲端是否有管理者修改後的新暱稱，若有則即時同步至本機
+      // 檢查雲端是否有管理者修改後的新暱稱或真實姓名，若有則即時同步至本機
       async checkCloudProfileSync() {
         const code = this.getPasscode();
         if (!code || code === 'RAD-000000') return;
@@ -4524,6 +4688,7 @@
           if (res.ok) {
             const data = await res.json();
             if (data) {
+              let changed = false;
               const cloudName = data.charName || data.name;
               if (cloudName && cloudName !== CharacterSystem.playerName) {
                 CharacterSystem.playerName = cloudName;
@@ -4532,6 +4697,15 @@
                   cObj.name = cloudName;
                   localStorage.setItem('radical_rpg_character', JSON.stringify(cObj));
                 } catch(e) {}
+                changed = true;
+              }
+              const cloudReal = data.studentRealName;
+              if (cloudReal && cloudReal !== CharacterSystem.studentRealName) {
+                CharacterSystem.studentRealName = cloudReal;
+                CharacterSystem.saveStudent(CharacterSystem.studentClass, CharacterSystem.studentSeat, cloudReal);
+                changed = true;
+              }
+              if (changed) {
                 Game.updateLobbyUI();
               }
             }
@@ -4912,23 +5086,27 @@
         }
         this.editingPasscode = passcode;
         const infoEl = document.getElementById('admin-edit-nick-info');
-        const inputEl = document.getElementById('admin-new-nick-input');
+        const inputRealNameEl = document.getElementById('admin-new-realname-input');
+        const inputNickEl = document.getElementById('admin-new-nick-input');
         if (infoEl) {
           infoEl.innerHTML = `
             <div><strong>班級座號</strong>：${student.studentClass ? `${student.studentClass} 班 ` : ''}${student.studentSeat ? `${student.studentSeat} 號` : ''}</div>
-            <div><strong>學生姓名</strong>：<span style="color:#fde047; font-weight:bold;">${student.studentRealName}</span></div>
-            <div><strong>目前暱稱</strong>：<span style="color:#a5b4fc; font-weight:bold;">${student.charName}</span> (${student.charTitle})</div>
+            <div><strong>目前登記姓名</strong>：<span style="color:#fde047; font-weight:bold;">${student.studentRealName}</span></div>
+            <div><strong>目前角色暱稱</strong>：<span style="color:#a5b4fc; font-weight:bold;">${student.charName}</span> (${student.charTitle})</div>
             <div style="font-size:0.8rem; color:#94a3b8; margin-top:4px;">專屬引繼碼：<code>${student.passcode}</code></div>
           `;
         }
-        if (inputEl) {
-          inputEl.value = student.charName || '';
+        if (inputRealNameEl) {
+          inputRealNameEl.value = student.studentRealName || '';
+        }
+        if (inputNickEl) {
+          inputNickEl.value = student.charName || '';
         }
         document.getElementById('admin-edit-nickname-modal')?.classList.add('active');
         setTimeout(() => {
-          if (inputEl) {
-            inputEl.focus();
-            inputEl.select();
+          if (inputRealNameEl) {
+            inputRealNameEl.focus();
+            inputRealNameEl.select();
           }
         }, 120);
       },
@@ -4944,15 +5122,22 @@
         const passcode = this.editingPasscode;
         if (!passcode) return;
         const student = this.cachedStudents.find(s => s.passcode === passcode);
-        const inputEl = document.getElementById('admin-new-nick-input');
-        const newName = (inputEl ? inputEl.value : '').trim();
+        const inputRealNameEl = document.getElementById('admin-new-realname-input');
+        const inputNickEl = document.getElementById('admin-new-nick-input');
+        const newRealName = (inputRealNameEl ? inputRealNameEl.value : (student?.studentRealName || '')).trim();
+        const newNick = (inputNickEl ? inputNickEl.value : (student?.charName || '')).trim();
 
-        if (!newName) {
+        if (!newRealName) {
+          SoundEngine.playError();
+          alert("學生真實姓名不能為空！");
+          return;
+        }
+        if (!newNick) {
           SoundEngine.playError();
           alert("角色暱稱不能為空！");
           return;
         }
-        if (newName.length > 6) {
+        if (newNick.length > 6) {
           SoundEngine.playError();
           alert("角色暱稱長度最多只能 6 個字喔！");
           return;
@@ -4963,33 +5148,48 @@
           await fetch(`${FIREBASE_DB_URL}/saves/${passcode}.json`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ charName: newName, name: newName, updatedAt: new Date().toISOString() })
+            body: JSON.stringify({
+              studentRealName: newRealName,
+              charName: newNick,
+              name: newNick,
+              updatedAt: new Date().toISOString()
+            })
           });
 
           // 2. 更新 pvp_leaderboard/{passcode}
           await fetch(`${FIREBASE_DB_URL}/pvp_leaderboard/${passcode}.json`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ charName: newName, updatedAt: new Date().toISOString() })
+            body: JSON.stringify({
+              studentRealName: newRealName,
+              charName: newNick,
+              updatedAt: new Date().toISOString()
+            })
           }).catch(() => {});
 
           // 3. 更新快取中的學生資料
           if (student) {
-            student.charName = newName;
+            student.studentRealName = newRealName;
+            student.charName = newNick;
           }
           const filtered = this.filteredStudents.find(s => s.passcode === passcode);
           if (filtered) {
-            filtered.charName = newName;
+            filtered.studentRealName = newRealName;
+            filtered.charName = newNick;
           }
 
           // 4. 若當前本機裝置正好登入此 passcode，立即同步本機資料
           const currentPass = SaveSystem.getPasscode();
           if (currentPass === passcode) {
-            CharacterSystem.playerName = newName;
+            CharacterSystem.studentRealName = newRealName;
+            CharacterSystem.playerName = newNick;
             try {
               const charObj = JSON.parse(localStorage.getItem('radical_rpg_character') || '{}');
-              charObj.name = newName;
+              charObj.name = newNick;
               localStorage.setItem('radical_rpg_character', JSON.stringify(charObj));
+              const sObj = JSON.parse(localStorage.getItem('radical_rpg_student') || '{}');
+              sObj.realName = newRealName;
+              localStorage.setItem('radical_rpg_student', JSON.stringify(sObj));
             } catch(e) {}
             Game.updateLobbyUI();
           }
@@ -4997,10 +5197,10 @@
           this.closeEditNicknameModal();
           this.renderTable();
           SoundEngine.playSuccess();
-          alert(`✅ 已成功將【${student ? student.studentRealName : ''}】的角色暱稱修改為「${newName}」！\n雲端與排行榜已同步更新。`);
+          alert(`✅ 已成功更新【${student ? `${student.studentClass}班 ${student.studentSeat}號` : ''}】！\n• 學生真實姓名：${newRealName}\n• 勇者角色暱稱：${newNick}\n雲端與排行榜已同步更新。`);
         } catch(e) {
           SoundEngine.playError();
-          alert("修改暱稱失敗：" + e.message);
+          alert("修改失敗：" + e.message);
         }
       },
 
