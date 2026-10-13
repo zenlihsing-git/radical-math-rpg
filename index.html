@@ -1087,6 +1087,8 @@
       .admin-table-container { border: 1px solid #333 !important; max-height: none !important; overflow: visible !important; }
       .admin-table { color: #000000 !important; font-size: 10pt !important; min-width: 100% !important; }
       .admin-table th, .admin-table td { border: 1px solid #666 !important; color: #000000 !important; padding: 4px !important; }
+    }
+
     /* 雙人對戰 (PvP) & 排行榜樣式 */
     .pvp-banner-card {
       background: linear-gradient(135deg, rgba(147, 51, 234, 0.25), rgba(219, 39, 119, 0.25));
@@ -1268,43 +1270,368 @@
     .status-ready { background: #059669; color: #fff; }
     .status-waiting { background: #d97706; color: #fff; }
 
-    /* 對戰戰鬥畫面專用樣式 */
+    /* =========================================================
+       對戰戰鬥畫面：橫式大血條與對決舞台專用樣式
+       ========================================================= */
     .pvp-battle-arena {
-      background: rgba(15, 23, 42, 0.7);
-      border: 2px solid var(--card-border);
-      border-radius: 18px;
-      padding: 14px 18px;
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.92));
+      border: 2px solid #4f46e5;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 18px 22px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 頂部 HUD：左右全幅長度血條列 */
+    .pvp-hud-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
       margin-bottom: 14px;
     }
-    .pvp-fighters-row {
+
+    .pvp-hud-fighter {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .pvp-hud-info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .pvp-hud-info.right {
+      flex-direction: row-reverse;
+    }
+
+    .pvp-hud-tag-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pvp-hud-tag-group.right {
+      flex-direction: row-reverse;
+    }
+
+    .pvp-hud-name {
+      font-weight: 900;
+      font-size: 1.12rem;
+      letter-spacing: 0.5px;
+    }
+    .pvp-hud-fighter.p1 .pvp-hud-name { color: #fde047; }
+    .pvp-hud-fighter.p2 .pvp-hud-name { color: #60a5fa; }
+
+    .pvp-hud-atk {
+      font-size: 0.82rem;
+      font-weight: bold;
+      color: #fbbf24;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #475569;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .pvp-hud-status {
+      font-size: 0.82rem;
+      font-weight: bold;
+      color: #94a3b8;
+      background: rgba(30, 41, 59, 0.85);
+      padding: 2px 10px;
+      border-radius: 6px;
+      transition: color 0.3s ease;
+    }
+
+    /* 長度血條外框 (Prominent Length-based Health Bar) */
+    .pvp-hp-bar-outer {
+      width: 100%;
+      height: 28px;
+      background: #090d16;
+      border: 2px solid #334155;
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+    .pvp-hud-fighter.p1 .pvp-hp-bar-outer {
+      border-color: #6366f1;
+      display: flex;
+      justify-content: flex-start;
+    }
+    .pvp-hud-fighter.p2 .pvp-hp-bar-outer {
+      border-color: #0284c7;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    /* 血量填滿條 (依百分比變化長度與動態色彩) */
+    .pvp-hp-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #10b981, #34d399);
+      transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1), background 0.35s ease;
+      position: relative;
+      border-radius: 12px;
+      flex-shrink: 0;
+    }
+
+    .pvp-hp-fill::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 42%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.45), rgba(255,255,255,0.05));
+      border-radius: 12px 12px 0 0;
+    }
+
+    .pvp-hp-fill.hp-mid {
+      background: linear-gradient(90deg, #d97706, #fbbf24) !important;
+    }
+    .pvp-hp-fill.hp-low {
+      background: linear-gradient(90deg, #b91c1c, #ef4444) !important;
+      animation: pvpLowHpGlow 0.8s ease-in-out infinite alternate;
+    }
+    @keyframes pvpLowHpGlow {
+      0% { filter: brightness(1); }
+      100% { filter: brightness(1.4) drop-shadow(0 0 10px #ef4444); }
+    }
+
+    .pvp-hp-text-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.92rem;
+      font-weight: 900;
+      color: #ffffff;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.95), 0 0 8px rgba(0,0,0,0.9);
+      pointer-events: none;
+      letter-spacing: 0.5px;
+      z-index: 5;
+    }
+
+    /* 中間 VS 徽章 */
+    .pvp-vs-emblem {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: #ef4444;
+      text-shadow: 0 0 14px rgba(239, 68, 68, 0.8);
+      background: #0f172a;
+      border: 2px solid #ef4444;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      animation: vsPulse 2s ease-in-out infinite;
+    }
+    @keyframes vsPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+      50% { transform: scale(1.1); box-shadow: 0 0 20px rgba(239, 68, 68, 0.85); }
+    }
+
+    /* 擂台中央對戰舞台 (橫式正面對決) */
+    .pvp-stage-field {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
+      min-height: 230px;
+      padding: 16px 24px;
+      position: relative;
+      background: radial-gradient(ellipse at 50% 88%, rgba(67, 56, 202, 0.35) 0%, rgba(15, 23, 42, 0) 72%);
+      border-radius: 16px;
+      border-bottom: 2px solid rgba(71, 85, 105, 0.5);
+      overflow: visible;
     }
-    .pvp-player-box {
+
+    .pvp-fighter-stand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      width: 170px;
+      flex-shrink: 0;
+      transition: transform 0.2s ease;
+      z-index: 2;
+    }
+
+    /* 主角立體精靈 Sprite：加大圖像 */
+    .pvp-hero-sprite {
+      font-size: clamp(5.8rem, 11vw, 7.5rem);
+      line-height: 1;
+      filter: drop-shadow(0 10px 22px rgba(0,0,0,0.75));
+      display: inline-block;
+      cursor: default;
+      transition: filter 0.2s ease;
+      user-select: none;
+    }
+    .pvp-hero-sprite.hero-p1 {
+      animation: pvpFloatP1 3s ease-in-out infinite;
+    }
+    .pvp-hero-sprite.hero-p2 {
+      transform: scaleX(-1);
+      animation: pvpFloatP2 3s ease-in-out infinite;
+    }
+
+    @keyframes pvpFloatP1 {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    @keyframes pvpFloatP2 {
+      0%, 100% { transform: scaleX(-1) translateY(0); }
+      50% { transform: scaleX(-1) translateY(-8px); }
+    }
+
+    /* 角色底座光影 */
+    .pvp-pedestal {
+      width: 125px;
+      height: 24px;
+      background: radial-gradient(ellipse at center, rgba(16, 185, 129, 0.55) 0%, rgba(0, 0, 0, 0.7) 60%, transparent 80%);
+      border-radius: 50%;
+      margin-top: -6px;
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.35);
+    }
+    .pvp-fighter-stand.right .pvp-pedestal {
+      background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.55) 0%, rgba(0, 0, 0, 0.7) 60%, transparent 80%);
+      box-shadow: 0 0 18px rgba(56, 189, 248, 0.35);
+    }
+
+    .pvp-hero-title-tag {
+      font-size: 0.85rem;
+      color: #e2e8f0;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid #475569;
+      border-radius: 12px;
+      padding: 3px 12px;
+      margin-top: 8px;
+      white-space: nowrap;
+      font-weight: bold;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+
+    /* 擂台中央提示列 */
+    .pvp-stage-center {
       flex: 1;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 10px;
+      justify-content: center;
+      padding: 0 12px;
+      z-index: 1;
     }
-    .pvp-player-box.right {
-      flex-direction: row-reverse;
-      text-align: right;
+    .pvp-action-banner {
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid #475569;
+      border-radius: 12px;
+      padding: 8px 18px;
+      font-size: 0.92rem;
+      font-weight: bold;
+      color: #fde047;
+      text-align: center;
+      max-width: 340px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      transition: all 0.3s ease;
     }
-    .pvp-hp-bar-bg {
-      background: #334155;
-      height: 14px;
-      border-radius: 7px;
-      overflow: hidden;
-      margin-top: 4px;
-      width: 100%;
-      max-width: 180px;
+
+    /* 浮動扣血層 */
+    .pvp-damage-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 20;
     }
-    .pvp-hp-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #ef4444, #10b981);
-      transition: width 0.3s ease;
+
+    /* =========================================================
+       攻擊與受傷動作動畫 (Hurt & Attack Animations)
+       ========================================================= */
+    /* P1 突進攻擊動作 */
+    .pvp-lunge-p1 {
+      animation: p1Lunge 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
+    }
+    @keyframes p1Lunge {
+      0% { transform: scale(1) translateX(0); }
+      40% { transform: scale(1.22) translateX(85px); }
+      70% { transform: scale(1.15) translateX(90px); }
+      100% { transform: scale(1) translateX(0); }
+    }
+
+    /* P2 突進攻擊動作 */
+    .pvp-lunge-p2 {
+      animation: p2Lunge 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
+    }
+    @keyframes p2Lunge {
+      0% { transform: scale(1) translateX(0); }
+      40% { transform: scale(1.22) translateX(-85px); }
+      70% { transform: scale(1.15) translateX(-90px); }
+      100% { transform: scale(1) translateX(0); }
+    }
+
+    /* P1 受傷動畫 (向後仰退、震動、紅光閃爍) */
+    .pvp-hurt-p1 {
+      animation: p1Hurt 0.58s cubic-bezier(0.36, 0.07, 0.19, 0.97) both !important;
+    }
+    @keyframes p1Hurt {
+      0% { transform: translateX(0) rotate(0deg); filter: none; }
+      15% { transform: translateX(-32px) rotate(-14deg) scale(0.92); filter: brightness(2.8) contrast(2) drop-shadow(0 0 28px #ef4444); }
+      35% { transform: translateX(-20px) rotate(10deg); filter: brightness(2.2) drop-shadow(0 0 20px #ef4444); }
+      55% { transform: translateX(-12px) rotate(-6deg); filter: brightness(1.6) drop-shadow(0 0 14px #ef4444); }
+      75% { transform: translateX(-4px) rotate(3deg); filter: brightness(1.2); }
+      100% { transform: translateX(0) rotate(0deg); filter: none; }
+    }
+
+    /* P2 受傷動畫 (向後仰退、震動、紅光閃爍) */
+    .pvp-hurt-p2 {
+      animation: p2Hurt 0.58s cubic-bezier(0.36, 0.07, 0.19, 0.97) both !important;
+    }
+    @keyframes p2Hurt {
+      0% { transform: translateX(0) rotate(0deg); filter: none; }
+      15% { transform: translateX(32px) rotate(14deg) scale(0.92); filter: brightness(2.8) contrast(2) drop-shadow(0 0 28px #ef4444); }
+      35% { transform: translateX(20px) rotate(-10deg); filter: brightness(2.2) drop-shadow(0 0 20px #ef4444); }
+      55% { transform: translateX(12px) rotate(6deg); filter: brightness(1.6) drop-shadow(0 0 14px #ef4444); }
+      75% { transform: translateX(4px) rotate(-3deg); filter: brightness(1.2); }
+      100% { transform: translateX(0) rotate(0deg); filter: none; }
+    }
+
+    /* 受創斬擊特效光芒 (💥 / 斬擊閃光) */
+    .pvp-slash-overlay {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      font-size: 4.5rem;
+      pointer-events: none;
+      z-index: 10;
+      opacity: 0;
+    }
+    .pvp-slash-overlay.active {
+      animation: pvpSlashPop 0.45s ease-out forwards;
+    }
+    @keyframes pvpSlashPop {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3) rotate(-35deg); }
+      40% { opacity: 1; transform: translate(-50%, -50%) scale(1.4) rotate(0deg); filter: drop-shadow(0 0 20px #fbbf24); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.8) rotate(35deg); }
+    }
+
+    /* 橫式作答佈局 (Controls Layout) */
+    .pvp-controls-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 768px) {
+      .pvp-controls-layout {
+        grid-template-columns: 1.05fr 1fr;
+        gap: 16px;
+        align-items: start;
+      }
     }
 
     /* 排行榜表格專用樣式 */
@@ -2081,91 +2408,119 @@
       </div>
     </header>
 
-    <!-- 對戰舞台：雙方血量與角色展示 -->
+    <!-- 橫式對戰舞台：雙方長度血條與兩位主角正面對決 -->
     <div class="pvp-battle-arena">
-      <div class="pvp-fighters-row">
-        <!-- 玩家 1 (左方) -->
-        <div class="pvp-player-box" id="pvp-fighter-box-p1">
-          <div class="fighter-sprite hero-sprite" id="pvp-arena-p1-avatar" style="font-size:2.2rem;">🧙‍♂️</div>
-          <div style="flex:1;">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-              <span id="pvp-arena-p1-name" style="font-weight:bold; color:#fde047; font-size:0.95rem;">勇者小算</span>
-              <span style="font-size:0.75rem; color:#fbbf24; background:#334155; padding:1px 5px; border-radius:4px;" id="pvp-arena-p1-atk-badge">⚔️ 25</span>
+      <!-- 頂部：雙方全幅長度血條 HUD -->
+      <div class="pvp-hud-row">
+        <!-- 玩家 1 HUD -->
+        <div class="pvp-hud-fighter p1">
+          <div class="pvp-hud-info">
+            <div class="pvp-hud-tag-group">
+              <span style="font-size:1.1rem;">👑</span>
+              <span id="pvp-arena-p1-name" class="pvp-hud-name">勇者小算 (05號)</span>
+              <span id="pvp-arena-p1-atk-badge" class="pvp-hud-atk">⚔️ 25</span>
             </div>
-            <div class="pvp-hp-bar-bg">
-              <div class="pvp-hp-fill" id="pvp-arena-p1-hp-bar" style="width:100%;"></div>
-            </div>
-            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#94a3b8; margin-top:2px;">
-              <span id="pvp-arena-p1-hp-text">100 / 100</span>
-              <span id="pvp-arena-p1-status-text" style="color:#34d399;">計算中...</span>
-            </div>
+            <span id="pvp-arena-p1-status-text" class="pvp-hud-status">計算中...</span>
+          </div>
+          <div class="pvp-hp-bar-outer p1-bar">
+            <div class="pvp-hp-fill" id="pvp-arena-p1-hp-bar" style="width: 100%;"></div>
+            <div class="pvp-hp-text-overlay" id="pvp-arena-p1-hp-text">100 / 100 HP</div>
           </div>
         </div>
 
-        <!-- 中間 VS -->
-        <div style="font-size:1.3rem; font-weight:900; color:#ef4444; padding:0 6px;">VS</div>
+        <!-- 中間 VS 徽章 -->
+        <div class="pvp-vs-emblem">VS</div>
 
-        <!-- 玩家 2 (右方) -->
-        <div class="pvp-player-box right" id="pvp-fighter-box-p2">
-          <div class="fighter-sprite hero-sprite" id="pvp-arena-p2-avatar" style="font-size:2.2rem;">🧝‍♀️</div>
-          <div style="flex:1;">
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-direction:row-reverse;">
-              <span id="pvp-arena-p2-name" style="font-weight:bold; color:#60a5fa; font-size:0.95rem;">閃電法師</span>
-              <span style="font-size:0.75rem; color:#fbbf24; background:#334155; padding:1px 5px; border-radius:4px;" id="pvp-arena-p2-atk-badge">⚔️ 20</span>
+        <!-- 玩家 2 HUD -->
+        <div class="pvp-hud-fighter p2">
+          <div class="pvp-hud-info right">
+            <div class="pvp-hud-tag-group right">
+              <span style="font-size:1.1rem;">⚔️</span>
+              <span id="pvp-arena-p2-name" class="pvp-hud-name">閃電法師 (12號)</span>
+              <span id="pvp-arena-p2-atk-badge" class="pvp-hud-atk">⚔️ 20</span>
             </div>
-            <div class="pvp-hp-bar-bg" style="margin-left:auto;">
-              <div class="pvp-hp-fill" id="pvp-arena-p2-hp-bar" style="width:100%;"></div>
-            </div>
-            <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#94a3b8; margin-top:2px; flex-direction:row-reverse;">
-              <span id="pvp-arena-p2-hp-text">100 / 100</span>
-              <span id="pvp-arena-p2-status-text" style="color:#34d399;">計算中...</span>
-            </div>
+            <span id="pvp-arena-p2-status-text" class="pvp-hud-status">計算中...</span>
+          </div>
+          <div class="pvp-hp-bar-outer p2-bar">
+            <div class="pvp-hp-fill" id="pvp-arena-p2-hp-bar" style="width: 100%;"></div>
+            <div class="pvp-hp-text-overlay" id="pvp-arena-p2-hp-text">100 / 100 HP</div>
           </div>
         </div>
       </div>
-      <div id="pvp-damage-container" style="position:relative;"></div>
+
+      <!-- 中間：橫式對決舞台 (兩位主角同時現身正面對決) -->
+      <div class="pvp-stage-field">
+        <!-- 主角 1 (左方) -->
+        <div class="pvp-fighter-stand" id="pvp-stand-p1">
+          <div class="pvp-slash-overlay" id="pvp-slash-p1">💥</div>
+          <div class="pvp-hero-sprite hero-p1" id="pvp-arena-p1-avatar">🧙‍♂️</div>
+          <div class="pvp-pedestal"></div>
+          <div class="pvp-hero-title-tag" id="pvp-arena-p1-title-tag">疾風劍士</div>
+        </div>
+
+        <!-- 擂台中央動態提示橫幅 -->
+        <div class="pvp-stage-center">
+          <div class="pvp-action-banner" id="pvp-action-banner">
+            ⚡ 雙方準備完畢！請專心計算並搶先發動攻擊！
+          </div>
+        </div>
+
+        <!-- 主角 2 (右方) -->
+        <div class="pvp-fighter-stand right" id="pvp-stand-p2">
+          <div class="pvp-slash-overlay" id="pvp-slash-p2">💥</div>
+          <div class="pvp-hero-sprite hero-p2" id="pvp-arena-p2-avatar">🧝‍♀️</div>
+          <div class="pvp-pedestal"></div>
+          <div class="pvp-hero-title-tag" id="pvp-arena-p2-title-tag">精靈射手</div>
+        </div>
+
+        <!-- 浮動傷害層 -->
+        <div id="pvp-damage-container" class="pvp-damage-layer"></div>
+      </div>
     </div>
 
-    <!-- 題目區域 -->
-    <div class="question-card">
-      <div class="question-prompt" id="pvp-question-prompt">
-        <span>⚡ 模式 A 搶答戰：請計算最簡結果並搶先發動攻擊！</span>
+    <!-- 下方：橫式自適應作答與鍵盤區域 -->
+    <div class="pvp-controls-layout">
+      <!-- 題目區域 -->
+      <div class="question-card" style="margin-bottom:0;">
+        <div class="question-prompt" id="pvp-question-prompt">
+          <span>⚡ 模式 A 搶答戰：請計算最簡結果並搶先發動攻擊！</span>
+        </div>
+        <div class="question-math" id="pvp-question-text"></div>
+        <div class="timer-container" id="pvp-timer-container">
+          <div class="timer-bar" id="pvp-timer-bar"></div>
+        </div>
       </div>
-      <div class="question-math" id="pvp-question-text"></div>
-      <div class="timer-container" id="pvp-timer-container">
-        <div class="timer-bar" id="pvp-timer-bar"></div>
+
+      <!-- 作答輸入框與鍵盤 -->
+      <div class="pvp-input-keypad-panel">
+        <!-- 學生作答顯示框 -->
+        <div class="answer-display-box" id="pvp-answer-preview-box">
+          <span class="answer-placeholder" id="pvp-answer-placeholder">點擊下方鍵盤輸入計算結果</span>
+          <div class="formatted-answer" id="pvp-formatted-answer" style="display: none;"></div>
+        </div>
+
+        <!-- 4x4 大型觸控鍵盤 -->
+        <div class="touch-keypad">
+          <button class="key-btn" onclick="PvPSystem.appendKey('7')">7</button>
+          <button class="key-btn" onclick="PvPSystem.appendKey('8')">8</button>
+          <button class="key-btn" onclick="PvPSystem.appendKey('9')">9</button>
+          <button class="key-btn key-btn-fn" onclick="PvPSystem.backspace()">⌫ 刪除</button>
+
+          <button class="key-btn" onclick="PvPSystem.appendKey('4')">4</button>
+          <button class="key-btn" onclick="PvPSystem.appendKey('5')">5</button>
+          <button class="key-btn" onclick="PvPSystem.appendKey('6')">6</button>
+          <button class="key-btn key-btn-clear" onclick="PvPSystem.clearInput()">C 清空</button>
+
+          <button class="key-btn" onclick="PvPSystem.appendKey('1')">1</button>
+          <button class="key-btn" onclick="PvPSystem.appendKey('2')">2</button>
+          <button class="key-btn" onclick="PvPSystem.appendKey('3')">3</button>
+          <button class="key-btn key-btn-radical" onclick="PvPSystem.appendKey('√')">√ 根號</button>
+
+          <button class="key-btn" onclick="PvPSystem.appendKey('-')">- 負號</button>
+          <button class="key-btn" onclick="PvPSystem.appendKey('0')">0</button>
+          <button class="key-btn key-btn-attack" style="grid-column: span 2;" onclick="PvPSystem.submitAttack()">⚔️ 發動攻擊！</button>
+        </div>
       </div>
-      <div class="speed-bonus-hint" id="pvp-action-banner" style="color:#fde047;">
-        <span>⚡ 搶先算對者扣對手血量！答錯受到 10 HP 反噬！</span>
-      </div>
-    </div>
-
-    <!-- 學生作答顯示框 -->
-    <div class="answer-display-box" id="pvp-answer-preview-box">
-      <span class="answer-placeholder" id="pvp-answer-placeholder">點擊下方鍵盤輸入計算結果</span>
-      <div class="formatted-answer" id="pvp-formatted-answer" style="display: none;"></div>
-    </div>
-
-    <!-- 4x4 大型觸控鍵盤 -->
-    <div class="touch-keypad">
-      <button class="key-btn" onclick="PvPSystem.appendKey('7')">7</button>
-      <button class="key-btn" onclick="PvPSystem.appendKey('8')">8</button>
-      <button class="key-btn" onclick="PvPSystem.appendKey('9')">9</button>
-      <button class="key-btn key-btn-fn" onclick="PvPSystem.backspace()">⌫ 刪除</button>
-
-      <button class="key-btn" onclick="PvPSystem.appendKey('4')">4</button>
-      <button class="key-btn" onclick="PvPSystem.appendKey('5')">5</button>
-      <button class="key-btn" onclick="PvPSystem.appendKey('6')">6</button>
-      <button class="key-btn key-btn-clear" onclick="PvPSystem.clearInput()">C 清空</button>
-
-      <button class="key-btn" onclick="PvPSystem.appendKey('1')">1</button>
-      <button class="key-btn" onclick="PvPSystem.appendKey('2')">2</button>
-      <button class="key-btn" onclick="PvPSystem.appendKey('3')">3</button>
-      <button class="key-btn key-btn-radical" onclick="PvPSystem.appendKey('√')">√ 根號</button>
-
-      <button class="key-btn" onclick="PvPSystem.appendKey('-')">- 負號</button>
-      <button class="key-btn" onclick="PvPSystem.appendKey('0')">0</button>
-      <button class="key-btn key-btn-attack" style="grid-column: span 2;" onclick="PvPSystem.submitAttack()">⚔️ 發動攻擊！</button>
     </div>
   </section>
 
@@ -2262,8 +2617,13 @@
       ctx: null,
       init() {
         if (!this.ctx) {
-          const AudioContext = window.AudioContext || window.webkitAudioContext;
-          if (AudioContext) this.ctx = new AudioContext();
+          try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext) this.ctx = new AudioContext();
+          } catch(e) {}
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume().catch(() => {});
         }
       },
       playTone(freq, type, duration, gainStart = 0.2) {
@@ -3114,18 +3474,15 @@
 
       showScreen(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        const screenEl = document.getElementById('screen-' + screenId);
+        if (screenEl) {
+          screenEl.classList.add('active');
+          try { window.scrollTo({ top: 0, behavior: 'instant' }); } catch(e) {}
+        }
         if (screenId === 'start') {
           this.renderStartScreen();
-          document.getElementById('screen-start').classList.add('active');
-        } else if (screenId === 'character-select') {
-          document.getElementById('screen-character-select').classList.add('active');
         } else if (screenId === 'stage-select') {
           this.updateLobbyUI();
-          document.getElementById('screen-stage-select').classList.add('active');
-        } else if (screenId === 'battle') {
-          document.getElementById('screen-battle').classList.add('active');
-        } else if (screenId === 'teacher-admin') {
-          document.getElementById('screen-teacher-admin').classList.add('active');
         }
       },
 
@@ -4177,6 +4534,10 @@
       roundTimerInterval: null,
       roundStartTime: 0,
       maxRoundSeconds: 20,
+      isCountingDown: false,
+      countdownInterval: null,
+      currentProblemKey: null,
+      lastActionTime: 0,
 
       // 1. 驗證對戰資格：班級必須為 201，座號必須為 01 ~ 43
       checkEligibility(showModal = true) {
@@ -4505,14 +4866,14 @@
           });
         }
 
-        // 輪詢作為雙重備援 (每 900ms 檢查一次)
+        // 輪詢作為雙重備援 (每 1000ms 檢查一次)
         this.pollInterval = setInterval(async () => {
           try {
             const res = await fetch(`${FIREBASE_DB_URL}/pvp_rooms/${roomId}.json`);
             const data = await res.json();
             if (data) this.onRoomUpdated(data);
           } catch(e) {}
-        }, 900);
+        }, 1000);
       },
 
       cleanupRoomConnection() {
@@ -4525,8 +4886,15 @@
           clearInterval(this.pollInterval);
           this.pollInterval = null;
         }
-        clearInterval(this.roundTimerInterval);
-        this.roundTimerInterval = null;
+        if (this.countdownInterval) {
+          clearInterval(this.countdownInterval);
+          this.countdownInterval = null;
+        }
+        this.isCountingDown = false;
+        if (this.roundTimerInterval) {
+          clearInterval(this.roundTimerInterval);
+          this.roundTimerInterval = null;
+        }
       },
 
       async updateRoom(patch) {
@@ -4563,16 +4931,34 @@
         }
 
         if (room.status === 'waiting') {
+          if (this.isCountingDown) {
+            clearInterval(this.countdownInterval);
+            this.countdownInterval = null;
+            this.isCountingDown = false;
+          }
           this.renderWaitingRoom(room);
         } else if (room.status === 'countdown') {
-          this.renderCountdown(room);
+          if (!this.isCountingDown) {
+            this.isCountingDown = true;
+            this.renderCountdown(room);
+          }
         } else if (room.status === 'playing') {
+          if (this.isCountingDown) {
+            clearInterval(this.countdownInterval);
+            this.countdownInterval = null;
+            this.isCountingDown = false;
+          }
           if (!this.isInBattle) {
             this.startBattle(room);
           } else {
             this.updateBattleUI(room);
           }
         } else if (room.status === 'finished') {
+          if (this.isCountingDown) {
+            clearInterval(this.countdownInterval);
+            this.countdownInterval = null;
+            this.isCountingDown = false;
+          }
           this.handleMatchFinished(room);
         }
       },
@@ -4679,24 +5065,32 @@
       },
 
       renderCountdown(room) {
+        if (this.countdownInterval) {
+          clearInterval(this.countdownInterval);
+          this.countdownInterval = null;
+        }
         const countdownEl = document.getElementById('pvp-countdown-overlay');
-        if (countdownEl) countdownEl.style.display = 'block';
+        if (countdownEl) {
+          countdownEl.style.display = 'block';
+          countdownEl.innerText = '🔥 戰鬥倒數：3 🔥';
+        }
         const startBtn = document.getElementById('btn-pvp-start-match');
         const readyBtn = document.getElementById('btn-pvp-toggle-ready');
         if (startBtn) startBtn.style.display = 'none';
         if (readyBtn) readyBtn.style.display = 'none';
 
         let count = 3;
-        if (countdownEl) countdownEl.innerText = `🔥 戰鬥倒數：${count} 🔥`;
         SoundEngine.playTone(350, 'sine', 0.2, 0.3);
 
-        const iv = setInterval(() => {
+        this.countdownInterval = setInterval(() => {
           count--;
           if (count > 0) {
             if (countdownEl) countdownEl.innerText = `🔥 戰鬥倒數：${count} 🔥`;
             SoundEngine.playTone(350 + (3 - count) * 80, 'sine', 0.2, 0.3);
           } else {
-            clearInterval(iv);
+            clearInterval(this.countdownInterval);
+            this.countdownInterval = null;
+            this.isCountingDown = false;
             if (countdownEl) countdownEl.innerText = `⚔️ 戰鬥開始！⚔️`;
             SoundEngine.playSlash();
             if (this.isHost) {
@@ -4710,6 +5104,8 @@
       startBattle(room) {
         this.isInBattle = true;
         this.userInput = "";
+        this.currentProblemKey = room.currentProblem ? room.currentProblem.key : null;
+        this.lastActionTime = room.lastAction ? room.lastAction.time : 0;
         this.renderInput();
         Game.showScreen('pvp-battle');
 
@@ -4718,31 +5114,44 @@
         const roundBadge = document.getElementById('pvp-battle-round-badge');
         const promptEl = document.getElementById('pvp-question-prompt');
         const actionBanner = document.getElementById('pvp-action-banner');
+        const timerContainer = document.getElementById('pvp-timer-container');
 
         if (room.mode === 'modeA') {
           if (titleEl) titleEl.innerText = '⚡ 雙人即時對戰：搶答扣血競速戰';
           if (roundBadge) roundBadge.innerText = '⚡ 模式 A 競速搶答';
           if (promptEl) promptEl.innerHTML = '<span>⚡ 模式 A 搶答戰：請計算最簡結果並搶先發動攻擊！</span>';
           if (actionBanner) actionBanner.innerText = '⚡ 搶先算對者扣對手血量！答錯受到 10 HP 反噬！';
+          if (timerContainer) timerContainer.style.display = 'none';
         } else {
           if (titleEl) titleEl.innerText = '⏱️ 雙人即時對戰：5 題決勝回合制';
           if (roundBadge) roundBadge.innerText = `第 ${room.currentRound || 1} / 5 回合`;
           if (promptEl) promptEl.innerHTML = '<span>⏱️ 模式 B 回合戰：請在 20 秒內計算作答，雙方皆答對比速度爆擊！</span>';
           if (actionBanner) actionBanner.innerText = '⏱️ 每題 20 秒！雙方提交後同時結算傷害！';
+          if (timerContainer) timerContainer.style.display = 'block';
         }
 
-        // 綁定雙方頭像與名字
+        // 綁定雙方頭像、名字、職業頭銜與攻擊力
         const p1 = room.player1;
         const p2 = room.player2;
         if (p1) {
-          document.getElementById('pvp-arena-p1-avatar').innerText = p1.avatar;
-          document.getElementById('pvp-arena-p1-name').innerText = `${p1.name} (${p1.seat}號)`;
-          document.getElementById('pvp-arena-p1-atk-badge').innerText = `⚔️ ${p1.atk}`;
+          const a1 = document.getElementById('pvp-arena-p1-avatar');
+          const n1 = document.getElementById('pvp-arena-p1-name');
+          const atk1 = document.getElementById('pvp-arena-p1-atk-badge');
+          const t1 = document.getElementById('pvp-arena-p1-title-tag');
+          if (a1) a1.innerText = p1.avatar || '🧙‍♂️';
+          if (n1) n1.innerText = `${p1.name} (${p1.seat}號)`;
+          if (atk1) atk1.innerText = `⚔️ ${p1.atk}`;
+          if (t1) t1.innerText = p1.title || '冒險勇者';
         }
         if (p2) {
-          document.getElementById('pvp-arena-p2-avatar').innerText = p2.avatar;
-          document.getElementById('pvp-arena-p2-name').innerText = `${p2.name} (${p2.seat}號)`;
-          document.getElementById('pvp-arena-p2-atk-badge').innerText = `⚔️ ${p2.atk}`;
+          const a2 = document.getElementById('pvp-arena-p2-avatar');
+          const n2 = document.getElementById('pvp-arena-p2-name');
+          const atk2 = document.getElementById('pvp-arena-p2-atk-badge');
+          const t2 = document.getElementById('pvp-arena-p2-title-tag');
+          if (a2) a2.innerText = p2.avatar || '🧝‍♀️';
+          if (n2) n2.innerText = `${p2.name} (${p2.seat}號)`;
+          if (atk2) atk2.innerText = `⚔️ ${p2.atk}`;
+          if (t2) t2.innerText = p2.title || '冒險勇者';
         }
 
         this.updateBattleUI(room);
@@ -4750,6 +5159,67 @@
 
         if (room.mode === 'modeB') {
           this.startRoundTimer();
+        }
+      },
+
+      // 動態更新血條長度百分比與顏色
+      updateHpBar(barEl, textEl, hp) {
+        if (!barEl) return;
+        const safeHp = Math.max(0, Math.min(100, hp ?? 100));
+        barEl.style.width = safeHp + '%';
+        if (textEl) textEl.innerText = `${safeHp} / 100 HP`;
+
+        barEl.classList.remove('hp-mid', 'hp-low');
+        if (safeHp <= 25) {
+          barEl.classList.add('hp-low');
+        } else if (safeHp <= 50) {
+          barEl.classList.add('hp-mid');
+        }
+      },
+
+      // 觸發攻擊突進動作與受害者受傷動作
+      triggerCombatAnimation(attackerRole, targetRole, damage, isCrit = false) {
+        // 1. 攻擊者動作：向前突進衝刺
+        if (attackerRole) {
+          const atkStand = document.getElementById(attackerRole === 'player1' ? 'pvp-stand-p1' : 'pvp-stand-p2');
+          const lungeClass = (attackerRole === 'player1') ? 'pvp-lunge-p1' : 'pvp-lunge-p2';
+          if (atkStand) {
+            atkStand.classList.remove('pvp-lunge-p1', 'pvp-lunge-p2');
+            void atkStand.offsetWidth;
+            atkStand.classList.add(lungeClass);
+            setTimeout(() => atkStand.classList.remove(lungeClass), 380);
+          }
+        }
+
+        // 2. 被攻擊者動作：震動、紅光閃爍、向後受創後仰、斬擊光芒
+        if (targetRole) {
+          const tgtStand = document.getElementById(targetRole === 'player1' ? 'pvp-stand-p1' : 'pvp-stand-p2');
+          const hurtClass = (targetRole === 'player1') ? 'pvp-hurt-p1' : 'pvp-hurt-p2';
+          const slashEl = document.getElementById(targetRole === 'player1' ? 'pvp-slash-p1' : 'pvp-slash-p2');
+
+          if (tgtStand) {
+            tgtStand.classList.remove('pvp-hurt-p1', 'pvp-hurt-p2');
+            void tgtStand.offsetWidth;
+            tgtStand.classList.add(hurtClass);
+            setTimeout(() => tgtStand.classList.remove(hurtClass), 580);
+          }
+
+          if (slashEl) {
+            slashEl.classList.remove('active');
+            void slashEl.offsetWidth;
+            slashEl.classList.add('active');
+            setTimeout(() => slashEl.classList.remove('active'), 450);
+          }
+
+          if (isCrit) {
+            SoundEngine.playCrit();
+          } else {
+            SoundEngine.playHit();
+          }
+
+          if (damage > 0) {
+            this.showFloatingDamage(damage, targetRole, isCrit);
+          }
         }
       },
 
@@ -4762,8 +5232,7 @@
           const p1Hp = Math.max(0, p1.hp ?? 100);
           const p1Bar = document.getElementById('pvp-arena-p1-hp-bar');
           const p1Text = document.getElementById('pvp-arena-p1-hp-text');
-          if (p1Bar) p1Bar.style.width = p1Hp + '%';
-          if (p1Text) p1Text.innerText = `${p1Hp} / 100`;
+          this.updateHpBar(p1Bar, p1Text, p1Hp);
 
           const p1Status = document.getElementById('pvp-arena-p1-status-text');
           if (p1Status) {
@@ -4781,8 +5250,7 @@
           const p2Hp = Math.max(0, p2.hp ?? 100);
           const p2Bar = document.getElementById('pvp-arena-p2-hp-bar');
           const p2Text = document.getElementById('pvp-arena-p2-hp-text');
-          if (p2Bar) p2Bar.style.width = p2Hp + '%';
-          if (p2Text) p2Text.innerText = `${p2Hp} / 100`;
+          this.updateHpBar(p2Bar, p2Text, p2Hp);
 
           const p2Status = document.getElementById('pvp-arena-p2-status-text');
           if (p2Status) {
@@ -4816,7 +5284,7 @@
           }
         }
 
-        // 動作提示通知
+        // 動作提示通知與受傷/攻擊動畫
         if (room.lastAction && room.lastAction.time !== this.lastActionTime) {
           this.lastActionTime = room.lastAction.time;
           const banner = document.getElementById('pvp-action-banner');
@@ -4824,8 +5292,20 @@
             banner.innerText = room.lastAction.text;
             banner.style.color = room.lastAction.color || '#fde047';
           }
-          if (room.lastAction.damage) {
-            this.showFloatingDamage(room.lastAction.damage, room.lastAction.target);
+          if (room.lastAction.target) {
+            this.triggerCombatAnimation(
+              room.lastAction.by,
+              room.lastAction.target,
+              room.lastAction.damage,
+              room.lastAction.isCrit
+            );
+          } else if (room.lastAction.damageP1 !== undefined || room.lastAction.damageP2 !== undefined) {
+            if (room.lastAction.damageP1 > 0) {
+              this.triggerCombatAnimation('player2', 'player1', room.lastAction.damageP1, room.lastAction.isCrit);
+            }
+            if (room.lastAction.damageP2 > 0) {
+              this.triggerCombatAnimation('player1', 'player2', room.lastAction.damageP2, room.lastAction.isCrit);
+            }
           }
         }
       },
@@ -4963,10 +5443,14 @@
               by: this.myRole,
               target: oppRole,
               damage: dmg,
+              isCrit: false,
               text: `⚡【${myPlayer.name}】搶先算對！對對手造成 ${dmg} 點傷害！`,
               color: '#34d399',
               time: Date.now()
             };
+
+            // 本地立即播放攻擊突進與受傷後仰動作
+            this.triggerCombatAnimation(this.myRole, oppRole, dmg, false);
 
             if (newOppHp <= 0) {
               patch['status'] = 'finished';
@@ -4986,13 +5470,17 @@
             const patch = {};
             patch[`${this.myRole}/hp`] = newMyHp;
             patch['lastAction'] = {
-              by: this.myRole,
+              by: null,
               target: this.myRole,
               damage: 10,
+              isCrit: false,
               text: `❌【${myPlayer.name}】算錯了！受到反噬扣血 10 HP！`,
               color: '#ef4444',
               time: Date.now()
             };
+
+            // 本地立即播放受創反噬動作
+            this.triggerCombatAnimation(null, this.myRole, 10, false);
 
             if (newMyHp <= 0) {
               patch['status'] = 'finished';
@@ -5075,6 +5563,9 @@
           lastAction: {
             text: resultText,
             color: '#fbbf24',
+            damageP1: p2Dmg,
+            damageP2: p1Dmg,
+            isCrit: (p1Ans.isCorrect && p2Ans.isCorrect),
             time: Date.now()
           }
         };
@@ -5097,21 +5588,21 @@
         }, 1200);
       },
 
-      showFloatingDamage(amount, targetRole) {
+      showFloatingDamage(amount, targetRole, isCrit = false) {
         const container = document.getElementById('pvp-damage-container');
         if (!container) return;
         const dmgEl = document.createElement('div');
-        dmgEl.className = 'floating-damage critical';
-        dmgEl.innerText = `-${amount}`;
+        dmgEl.className = 'floating-damage' + (isCrit ? ' critical' : '');
+        dmgEl.innerText = isCrit ? `⚡暴擊 -${amount}` : `-${amount}`;
         dmgEl.style.position = 'absolute';
-        dmgEl.style.top = '10px';
+        dmgEl.style.top = '15px';
         if (targetRole === 'player1') {
-          dmgEl.style.left = '20%';
+          dmgEl.style.left = '16%';
         } else {
-          dmgEl.style.right = '20%';
+          dmgEl.style.right = '16%';
         }
         container.appendChild(dmgEl);
-        setTimeout(() => dmgEl.remove(), 900);
+        setTimeout(() => dmgEl.remove(), 950);
       },
 
       // 13. 認輸放棄對戰
@@ -5187,7 +5678,8 @@
         SoundEngine.playClick();
         const modal = document.getElementById('pvp-result-modal');
         if (modal) modal.classList.remove('active');
-        this.exitLobby();
+        this.cleanupRoomConnection();
+        this.openLobby();
       },
 
       leaveRoom() {
