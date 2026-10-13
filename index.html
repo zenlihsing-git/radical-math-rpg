@@ -1913,22 +1913,22 @@
           <div class="choice-arrow">➔</div>
         </div>
 
-        <!-- 選項 4：雙人線上即時對戰 (201班專屬) -->
+        <!-- 選項 4：雙人線上即時對戰 (自由連線對決) -->
         <div class="menu-choice-btn" onclick="PvPSystem.openLobby()" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(168, 85, 247, 0.2)); border: 2px solid #ec4899;">
           <div class="choice-icon">⚔️</div>
           <div class="choice-content">
-            <div class="choice-title" style="color:#f472b6;">雙人線上即時對戰（201班專屬）</div>
+            <div class="choice-title" style="color:#f472b6;">雙人線上即時對戰</div>
             <div class="choice-sub">模式A搶答競速 / 模式B五題回合制 · 即時連線PK</div>
           </div>
           <div class="choice-arrow">➔</div>
         </div>
 
-        <!-- 選項 5：全班榮譽排行榜 -->
+        <!-- 選項 5：全校榮譽排行榜 -->
         <div class="menu-choice-btn" onclick="LeaderboardSystem.open()" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(234, 179, 8, 0.2)); border: 2px solid #f59e0b;">
           <div class="choice-icon">🏆</div>
           <div class="choice-content">
-            <div class="choice-title" style="color:#fbbf24;">全班榮譽排行榜</div>
-            <div class="choice-sub">即時查詢對戰獲勝次數、勝率與全班英雄排名</div>
+            <div class="choice-title" style="color:#fbbf24;">全校榮譽排行榜</div>
+            <div class="choice-sub">即時查詢對戰獲勝次數、勝率與全校英雄排名</div>
           </div>
           <div class="choice-arrow">➔</div>
         </div>
@@ -1973,16 +1973,23 @@
           </div>
         </div>
 
-        <!-- 步驟 2：角色名稱輸入 (最多6字) -->
+        <!-- 步驟 2：角色名稱輸入 (最多6字，限定同班級座號唯一，後續僅管理者可修改) -->
         <div style="border-top:1px dashed #475569; margin-top:14px; padding-top:12px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; flex-wrap:wrap; gap:6px;">
             <label for="player-name-input" style="font-weight:bold; color:#fde047; font-size:1.05rem;">
-              <span>⚔️</span> 第二步：自訂勇者角色暱稱：
+              <span>⚔️</span> 第二步：勇者角色暱稱：
             </label>
-            <span style="font-size:0.8rem; color:#fbbf24; font-weight:bold;">★ 限制最多 6 個字</span>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span id="player-name-locked-notice" style="display:none; font-size:0.8rem; background:rgba(236,72,153,0.2); border:1px solid #ec4899; color:#f472b6; padding:2px 8px; border-radius:6px; font-weight:bold;">🔒 暱稱已鎖定·僅限管理者更改</span>
+              <button id="btn-admin-unlock-char-name" type="button" class="btn-table-action" onclick="CharacterSystem.adminUnlockName()" style="display:none; font-size:0.75rem; padding:2px 8px; background:#4f46e5; color:white; border-radius:6px; cursor:pointer;" title="輸入教師管理密碼解鎖修改">🔑 管理者解鎖</button>
+              <span style="font-size:0.8rem; color:#fbbf24; font-weight:bold;">★ 限制最多 6 個字</span>
+            </div>
           </div>
           <div>
             <input type="text" id="player-name-input" class="name-input-box" maxlength="6" placeholder="輸入暱稱 (最多6字，如: 算術小神童)">
+          </div>
+          <div style="font-size:0.75rem; color:#94a3b8; margin-top:5px; line-height:1.4;">
+            📌 <strong>帳號暱稱規範：</strong>同一個班級座號只能設定一個角色暱稱；設定完成後僅限任課老師/管理者方可修改。
           </div>
         </div>
       </div>
@@ -2047,7 +2054,7 @@
         <div style="font-size:2.2rem;">⚔️</div>
         <div>
           <div style="font-size:1.1rem; font-weight:900; color:#f472b6; display:flex; align-items:center; gap:8px;">
-            雙人線上即時對戰 (201班專屬)
+            雙人線上即時對戰
             <span style="font-size:0.75rem; background:#ec4899; color:white; padding:2px 6px; border-radius:4px;">即時連線 PK</span>
           </div>
           <div style="font-size:0.82rem; color:#cbd5e1; margin-top:3px;">
@@ -2331,6 +2338,7 @@
           <button class="admin-btn btn-export-csv" onclick="AdminSystem.exportCSV()">📥 匯出 Excel (CSV離線備份)</button>
           <button class="admin-btn btn-copy-txt" onclick="AdminSystem.copyRoster()">📋 複製名冊清單</button>
           <button class="admin-btn btn-print" onclick="window.print()">🖨️ 列印名冊 / 另存PDF</button>
+          <button class="admin-btn btn-danger" onclick="AdminSystem.clearAllLeaderboardAndHistory()" style="background:#dc2626; color:white; border-color:#ef4444;" title="新學年重置排行榜與所有對戰紀錄">🧹 清除所有排行榜對戰紀錄</button>
           <button class="admin-btn btn-exit" onclick="AdminSystem.exit()">🚪 返回遊戲</button>
         </div>
       </div>
@@ -2434,6 +2442,24 @@
     </div>
   </div>
 
+  <!-- 教師管理者修改學生角色暱稱專用彈窗 -->
+  <div class="modal-overlay" id="admin-edit-nickname-modal">
+    <div class="modal-card" style="max-width: 440px; text-align: center;">
+      <div class="modal-title" style="color:#fde047;">✏️ 管理者修改學生角色暱稱</div>
+      <div id="admin-edit-nick-info" style="font-size:0.9rem; color:#cbd5e1; margin: 10px 0 16px 0; line-height: 1.6; background:#0f172a; padding:12px; border-radius:10px; border:1px solid #334155; text-align:left;">
+      </div>
+      <div style="margin-bottom:16px; text-align:left;">
+        <label for="admin-new-nick-input" style="font-size:0.85rem; font-weight:bold; color:#38bdf8; display:block; margin-bottom:6px;">請輸入新的角色暱稱：</label>
+        <input type="text" id="admin-new-nick-input" maxlength="6" placeholder="請輸入新暱稱 (最多6字)" class="name-input-box" style="text-align:center; font-size:1.15rem;" onkeydown="if(event.key==='Enter') AdminSystem.confirmEditNickname()" />
+        <div style="font-size:0.75rem; color:#94a3b8; margin-top:4px;">★ 限制最多 6 個字，修改後將同步更新雲端、排行榜與學生端。</div>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="modal-btn modal-btn-alt" onclick="AdminSystem.closeEditNicknameModal()">取消</button>
+        <button class="modal-btn" onclick="AdminSystem.confirmEditNickname()" style="background:linear-gradient(180deg, #10b981, #059669);">💾 確定修改並同步</button>
+      </div>
+    </div>
+  </div>
+
   <!-- =========================================================
        畫面 5：雙人線上即時對戰大廳 (PvP Lobby)
        ========================================================= -->
@@ -2444,7 +2470,7 @@
         <div style="display:flex; align-items:center; gap:12px;">
           <div class="player-avatar-badge" id="pvp-my-avatar" style="font-size:2rem; width:52px; height:52px;">🧙‍♂️</div>
           <div>
-            <div id="pvp-my-student-badge" style="font-size:0.85rem; color:#38bdf8; font-weight:bold;">🏫 201班 05號 · 王小明</div>
+            <div id="pvp-my-student-badge" style="font-size:0.85rem; color:#38bdf8; font-weight:bold;">🏫 冒險勇者</div>
             <div id="pvp-my-char-name" style="font-size:1.15rem; font-weight:bold; color:#fde047;">勇者小算</div>
             <div style="display:flex; gap:6px; margin-top:4px; flex-wrap:wrap;">
               <span class="pvp-stat-pill" style="color:#fbbf24;" id="pvp-my-atk-pill">⚔️ 攻擊力: 25</span>
@@ -2522,7 +2548,7 @@
               <span>🚪</span> 加入同學的房間
             </div>
             <div style="font-size:0.85rem; color:#94a3b8; margin-top:-6px;">
-              請向開房的同學索取 4 位數房間代碼（如 2018）
+              請向開房的同學索取 4 位數房間代碼（如 8888）
             </div>
 
             <div style="margin:20px 0; text-align:center;">
@@ -2536,19 +2562,19 @@
 
             <!-- 說明提示 -->
             <div style="background:#0f172a; border:1px solid #334155; border-radius:10px; padding:12px; margin-top:10px; font-size:0.8rem; color:#cbd5e1; line-height:1.5;">
-              📌 <strong>201 班對戰守則：</strong><br>
+              📌 <strong>雙人即時對戰守則：</strong><br>
               • 攻擊力公式：<strong style="color:#fbbf24;">10 + (完成關卡數 / 4) × 20</strong><br>
               • 雙方若完成關卡數相同，則單次攻擊力完全相同！<br>
-              • 獲勝次數將即時登錄至【全班榮譽排行榜】。
+              • 獲勝次數將即時登錄至【全校榮譽排行榜】。
             </div>
           </div>
         </div>
 
-        <!-- 卡片 3：目前等待中的 201 班房間列表 -->
+        <!-- 卡片 3：目前等待中的房間列表 -->
         <div class="pvp-box">
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <div class="pvp-box-title">
-              <span>🔥</span> 201 班即時等待中房間列表
+              <span>🔥</span> 即時等待中房間列表
             </div>
             <button class="btn-table-action" onclick="PvPSystem.refreshPublicRooms()" style="background:#334155; color:#38bdf8;">🔄 重新整理</button>
           </div>
@@ -2565,7 +2591,7 @@
             ⚡ 模式 A：搶答扣血競速戰 · 綜合關卡
           </div>
           <div style="font-size:0.9rem; color:#94a3b8; margin-top:8px;">請將以下 4 位數房號告訴對手：</div>
-          <div class="waiting-code-display" id="pvp-room-code-display">2018</div>
+          <div class="waiting-code-display" id="pvp-room-code-display">8888</div>
           <button class="btn-table-action" onclick="PvPSystem.copyRoomCode()" style="background:#334155; color:#34d399; font-size:0.85rem; padding:4px 12px;">📋 一鍵複製房號</button>
 
           <!-- 雙方選手席 -->
@@ -2574,7 +2600,7 @@
             <div class="fighter-slot filled" id="pvp-slot-p1">
               <div style="font-size:2.4rem;" id="pvp-p1-avatar">🧙‍♂️</div>
               <div style="font-weight:bold; color:#fde047; font-size:1.05rem;" id="pvp-p1-name">勇者小算</div>
-              <div style="font-size:0.8rem; color:#38bdf8;" id="pvp-p1-student">201班 05號 · 王小明</div>
+              <div style="font-size:0.8rem; color:#38bdf8;" id="pvp-p1-student">房主資訊</div>
               <div style="font-size:0.8rem; color:#fbbf24; margin-top:4px;" id="pvp-p1-atk">⚔️ ATK: 25 (3/4關)</div>
               <div><span class="status-badge status-ready" id="pvp-p1-status">👑 房主 (已就緒)</span></div>
             </div>
@@ -2749,7 +2775,7 @@
       <!-- 頂部操作欄 -->
       <div class="admin-header-bar">
         <div class="admin-title" style="color:#fbbf24;">
-          <span>🏆</span> 根號冒險譚 · 201 班榮譽排行榜
+          <span>🏆</span> 根號冒險譚 · 全校榮譽排行榜
         </div>
         <div class="admin-actions">
           <button class="admin-btn btn-refresh" onclick="LeaderboardSystem.refresh()">🔄 重新整理</button>
@@ -2760,7 +2786,7 @@
       <!-- 我的個人戰績摘要 -->
       <div class="admin-stats-bar" style="margin-bottom:14px;">
         <div class="stat-card">
-          <div class="stat-label">我的全班排名</div>
+          <div class="stat-label">我的全校排名</div>
           <div class="stat-val" id="lb-my-rank" style="color:#fbbf24;">-</div>
         </div>
         <div class="stat-card">
@@ -2809,7 +2835,7 @@
           <tbody id="leaderboard-table-body">
             <tr>
               <td colspan="8" style="text-align:center; padding:30px; color:#94a3b8;">
-                ⏳ 正在讀取 201 班排行榜資料...
+                ⏳ 正在讀取全校榮譽排行榜資料...
               </td>
             </tr>
           </tbody>
@@ -2842,7 +2868,7 @@
               <span>📊 個人對戰勝負分析報告</span>
             </div>
             <div style="font-size:0.85rem; color:#cbd5e1; margin-top:2px;" id="analysis-header-name">勇者小算 (疾風劍士)</div>
-            <div style="font-size:0.75rem; color:#94a3b8;" id="analysis-header-sub">201班 05號 · 算術勇者 ｜ 密碼引繼碼</div>
+            <div style="font-size:0.75rem; color:#94a3b8;" id="analysis-header-sub">勇者資料 ｜ 密碼引繼碼</div>
           </div>
         </div>
         <button class="btn-table-action" onclick="LeaderboardSystem.closeAnalysis()" style="background:#334155; color:#cbd5e1; font-size:1.1rem; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;">✕</button>
@@ -2851,7 +2877,7 @@
       <!-- 分頁切換選單 -->
       <div class="analysis-tabs">
         <button class="analysis-tab-btn active" id="tab-btn-matchups" onclick="LeaderboardSystem.switchAnalysisTab('matchups')">
-          <span>⚔️</span> 對戰角色統計與勝率
+          <span>👥</span> 對戰玩家統計與勝率
         </button>
         <button class="analysis-tab-btn" id="tab-btn-history" onclick="LeaderboardSystem.switchAnalysisTab('history')">
           <span>📜</span> 所有歷史對戰紀錄 (<span id="analysis-history-count">0</span>)
@@ -2860,7 +2886,7 @@
 
       <!-- 主體內容容器 -->
       <div class="analysis-body">
-        <!-- 分頁 1：角色克制分析與總體指標 -->
+        <!-- 分頁 1：玩家克制分析與總體指標 -->
         <div id="tab-content-matchups">
           <!-- 4 格核心指標 -->
           <div class="analysis-kpi-grid" style="margin-bottom:16px;">
@@ -2886,25 +2912,14 @@
             </div>
           </div>
 
-          <!-- 對各角色勝負次數統計與勝率清單 -->
-          <div style="margin-bottom:16px;">
+          <!-- 對同一個玩家的勝負次數統計與勝率清單 -->
+          <div>
             <div style="font-weight:bold; font-size:1.05rem; color:#fde047; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between;">
-              <span>⚔️ 對同一個角色的勝負次數統計與勝率</span>
+              <span>👥 對同一個玩家的勝負次數統計與勝率</span>
               <span style="font-size:0.75rem; color:#94a3b8; font-weight:normal;">依交手次數排序</span>
             </div>
-            <div class="matchup-card-list" id="analysis-char-matchups-list">
-              <!-- 動態生成角色勝負列表 -->
-            </div>
-          </div>
-
-          <!-- 對戰同學紀錄統計 -->
-          <div>
-            <div style="font-weight:bold; font-size:1.05rem; color:#60a5fa; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between;">
-              <span>👥 201 班同學交手勝負紀錄</span>
-              <span style="font-size:0.75rem; color:#94a3b8; font-weight:normal;">依同學座號與姓名</span>
-            </div>
-            <div class="matchup-card-list" id="analysis-classmate-matchups-list">
-              <!-- 動態生成同學對戰列表 -->
+            <div class="matchup-card-list" id="analysis-player-matchups-list">
+              <!-- 動態生成對同一個玩家的勝負列表 -->
             </div>
           </div>
         </div>
@@ -3080,7 +3095,39 @@
         this.renderCharacterGrid();
       },
 
-      confirmCharacter() {
+      isAdminUnlocked: false,
+
+      adminUnlockName() {
+        SoundEngine.playClick();
+        const pass = prompt("請輸入教師管理密碼以解鎖修改角色暱稱：");
+        if (pass === AdminSystem.adminPassword) {
+          this.isAdminUnlocked = true;
+          const pEl = document.getElementById('player-name-input');
+          const noticeEl = document.getElementById('player-name-locked-notice');
+          const unlockBtn = document.getElementById('btn-admin-unlock-char-name');
+          if (pEl) {
+            pEl.readOnly = false;
+            pEl.style.opacity = '1';
+            pEl.style.cursor = 'text';
+            pEl.focus();
+            pEl.select();
+          }
+          if (noticeEl) {
+            noticeEl.innerText = "🔓 管理者已解鎖可修改";
+            noticeEl.style.color = "#34d399";
+            noticeEl.style.borderColor = "#10b981";
+            noticeEl.style.background = "rgba(16,185,129,0.2)";
+          }
+          if (unlockBtn) unlockBtn.style.display = 'none';
+          SoundEngine.playSuccess();
+          alert("✅ 已解鎖！現在可以修改角色暱稱，修改完成後請點擊下方【踏上冒險！進入關卡】儲存。");
+        } else if (pass !== null) {
+          SoundEngine.playError();
+          alert("❌ 密碼錯誤！無法解鎖修改。");
+        }
+      },
+
+      async confirmCharacter() {
         SoundEngine.playClick();
         const inputClass = (document.getElementById('student-class-input')?.value || '').trim();
         const inputSeat = (document.getElementById('student-seat-input')?.value || '').trim();
@@ -3093,15 +3140,51 @@
           return;
         }
 
-        if (!inputCharName) {
-          const char = CHARACTERS_DB.find(c => c.id === this.selectedCharId);
-          inputCharName = char.name;
+        // 規則：角色暱稱限定只有管理者可以更改
+        // 若非全新開號且未經管理者解鎖，強制保留原有暱稱，學生不可自行修改
+        if (!this.isCreatingNew && this.playerName && !this.isAdminUnlocked) {
+          inputCharName = this.playerName;
+        } else {
+          if (!inputCharName) {
+            const char = CHARACTERS_DB.find(c => c.id === this.selectedCharId);
+            inputCharName = char.name;
+          }
+
+          if (inputCharName.length > 6) {
+            SoundEngine.playError();
+            alert("勇者角色暱稱長度最多只能 6 個字喔！請重新輸入。");
+            return;
+          }
         }
 
-        if (inputCharName.length > 6) {
-          SoundEngine.playError();
-          alert("勇者角色暱稱長度最多只能 6 個字喔！請重新輸入。");
-          return;
+        // 規則：同一個班級座號只能設定一個角色暱稱
+        // 若為新開號，向 Firebase 驗證該班級座號是否已存在註冊紀錄
+        if (this.isCreatingNew) {
+          try {
+            const res = await fetch(`${FIREBASE_DB_URL}/saves.json`);
+            if (res.ok) {
+              const allSaves = await res.json();
+              if (allSaves) {
+                const currentCode = SaveSystem.getPasscode();
+                const duplicateEntry = Object.entries(allSaves).find(([code, item]) => {
+                  if (!item || code === currentCode) return false;
+                  const cClean = String(item.studentClass || '').trim();
+                  const sClean = String(item.studentSeat || '').trim();
+                  return cClean === inputClass && sClean === inputSeat;
+                });
+
+                if (duplicateEntry) {
+                  SoundEngine.playError();
+                  const [dupCode, dupData] = duplicateEntry;
+                  const existingName = dupData.charName || dupData.name || '勇者';
+                  alert(`⚠️ 班級座號已登記！\n\n【${inputClass} 班 ${inputSeat} 號】已經設定過角色暱稱「${existingName}」！\n\n同一個班級座號只能設定一個角色暱稱：\n• 若您是該座號學生，請使用您原有的【引繼碼】登入遊戲；\n• 如需修改角色暱稱，請向任課老師/管理者申請修改！`);
+                  return;
+                }
+              }
+            }
+          } catch(e) {
+            console.warn("驗證班級座號唯一性延遲:", e);
+          }
         }
 
         this.playerName = inputCharName;
@@ -3116,7 +3199,29 @@
             3: { level: 1, exp: 0, monsterIndex: 0, cleared: false },
             4: { level: 1, exp: 0, monsterIndex: 0, cleared: false }
           };
+          // 重置對戰紀錄為 0
+          localStorage.setItem('radical_pvp_wins', '0');
+          localStorage.setItem('radical_pvp_matches', '0');
+          localStorage.setItem('radical_pvp_history', '[]');
           this.isCreatingNew = false;
+        }
+
+        // 若是由管理者解鎖修改暱稱，同步至雲端 saves 與 pvp_leaderboard
+        if (this.isAdminUnlocked) {
+          const code = SaveSystem.getPasscode();
+          if (code && code !== 'RAD-000000') {
+            fetch(`${FIREBASE_DB_URL}/saves/${code}.json`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ charName: inputCharName, name: inputCharName, updatedAt: new Date().toISOString() })
+            }).catch(() => {});
+            fetch(`${FIREBASE_DB_URL}/pvp_leaderboard/${code}.json`, {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ charName: inputCharName, updatedAt: new Date().toISOString() })
+            }).catch(() => {});
+          }
+          this.isAdminUnlocked = false;
         }
 
         Game.saveCharacter(this.selectedCharId, this.playerName);
@@ -3127,14 +3232,32 @@
       openEditCharacter() {
         SoundEngine.playClick();
         this.isCreatingNew = false;
+        this.isAdminUnlocked = false;
         const classEl = document.getElementById('student-class-input');
         const seatEl = document.getElementById('student-seat-input');
         const realNameEl = document.getElementById('student-realname-input');
         const charNameEl = document.getElementById('player-name-input');
+        const lockNoticeEl = document.getElementById('player-name-locked-notice');
+        const unlockBtn = document.getElementById('btn-admin-unlock-char-name');
+
         if (classEl) classEl.value = this.studentClass;
         if (seatEl) seatEl.value = this.studentSeat;
         if (realNameEl) realNameEl.value = this.studentRealName;
-        if (charNameEl) charNameEl.value = this.playerName;
+        if (charNameEl) {
+          charNameEl.value = this.playerName;
+          charNameEl.readOnly = true;
+          charNameEl.style.opacity = '0.7';
+          charNameEl.style.cursor = 'not-allowed';
+          charNameEl.title = '角色暱稱已鎖定，僅限管理者修改';
+        }
+        if (lockNoticeEl) {
+          lockNoticeEl.innerText = '🔒 暱稱已鎖定·僅限管理者更改';
+          lockNoticeEl.style.color = '#f472b6';
+          lockNoticeEl.style.borderColor = '#ec4899';
+          lockNoticeEl.style.background = 'rgba(236,72,153,0.2)';
+          lockNoticeEl.style.display = 'inline-block';
+        }
+        if (unlockBtn) unlockBtn.style.display = 'inline-block';
         Game.showScreen('character-select');
       }
     };
@@ -3716,6 +3839,7 @@
         CharacterSystem.init();
         this.renderStartScreen();
         this.showScreen('start');
+        SaveSystem.checkCloudProfileSync().catch(() => {});
 
         // 鍵盤監聽
         window.addEventListener('keydown', (e) => {
@@ -3781,14 +3905,30 @@
           if (!ok) return;
         }
         CharacterSystem.isCreatingNew = true;
+        CharacterSystem.isAdminUnlocked = false;
+        // 重置本機所有對戰紀錄與場次，全新開始
+        localStorage.setItem('radical_pvp_wins', '0');
+        localStorage.setItem('radical_pvp_matches', '0');
+        localStorage.setItem('radical_pvp_history', '[]');
+
         const cEl = document.getElementById('student-class-input');
         const sEl = document.getElementById('student-seat-input');
         const rEl = document.getElementById('student-realname-input');
         const pEl = document.getElementById('player-name-input');
+        const lockNoticeEl = document.getElementById('player-name-locked-notice');
+        const unlockBtn = document.getElementById('btn-admin-unlock-char-name');
         if (cEl) cEl.value = '';
         if (sEl) sEl.value = '';
         if (rEl) rEl.value = '';
-        if (pEl) pEl.value = '';
+        if (pEl) {
+          pEl.value = '';
+          pEl.readOnly = false;
+          pEl.style.opacity = '1';
+          pEl.style.cursor = 'text';
+          pEl.title = '';
+        }
+        if (lockNoticeEl) lockNoticeEl.style.display = 'none';
+        if (unlockBtn) unlockBtn.style.display = 'none';
         this.showScreen('character-select');
       },
 
@@ -4375,9 +4515,38 @@
         document.body.removeChild(ta);
       },
 
+      // 檢查雲端是否有管理者修改後的新暱稱，若有則即時同步至本機
+      async checkCloudProfileSync() {
+        const code = this.getPasscode();
+        if (!code || code === 'RAD-000000') return;
+        try {
+          const res = await fetch(`${FIREBASE_DB_URL}/saves/${code}.json`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data) {
+              const cloudName = data.charName || data.name;
+              if (cloudName && cloudName !== CharacterSystem.playerName) {
+                CharacterSystem.playerName = cloudName;
+                try {
+                  const cObj = JSON.parse(localStorage.getItem('radical_rpg_character') || '{}');
+                  cObj.name = cloudName;
+                  localStorage.setItem('radical_rpg_character', JSON.stringify(cObj));
+                } catch(e) {}
+                Game.updateLobbyUI();
+              }
+            }
+          }
+        } catch(e) {}
+      },
+
       // 背景自動同步至 Firebase 雲端 (進度更新時自動觸發)
       async syncToCloud(isSilent = false) {
         const code = this.getPasscode();
+        if (!code || code === 'RAD-000000') return;
+
+        // 同步前先確保角色暱稱不會逆向覆蓋管理者的修改
+        await this.checkCloudProfileSync();
+
         const payload = {
           passcode: code,
           studentClass: CharacterSystem.studentClass || "",
@@ -4703,7 +4872,10 @@
               <td><strong>${s.studentClass ? `${s.studentClass}班` : '-'}</strong></td>
               <td>${s.studentSeat ? `${s.studentSeat}號` : '-'}</td>
               <td style="font-weight:bold; color:#fde047;">${s.studentRealName}</td>
-              <td style="color:#a5b4fc;">${s.charName}</td>
+              <td style="color:#a5b4fc; white-space:nowrap;">
+                <span>${s.charName}</span>
+                <button class="btn-table-action" onclick="AdminSystem.openEditNicknameModal('${s.passcode}')" style="margin-left:6px; font-size:0.75rem; padding:2px 8px; background:#4f46e5; color:white; border-radius:4px;" title="管理者修改學生角色暱稱">✏️ 修改</button>
+              </td>
               <td><span>${s.charAvatar}</span> <span style="font-size:0.8rem; color:#94a3b8;">${s.charTitle}</span></td>
               <td>
                 <span class="passcode-pill" onclick="AdminSystem.copyCode('${s.passcode}')" title="點擊直接複製引繼碼">
@@ -4727,6 +4899,164 @@
             </tr>
           `;
         }).join('');
+      },
+
+      editingPasscode: null,
+
+      openEditNicknameModal(passcode) {
+        SoundEngine.playClick();
+        const student = this.cachedStudents.find(s => s.passcode === passcode);
+        if (!student) {
+          alert("找不到此學生資料！");
+          return;
+        }
+        this.editingPasscode = passcode;
+        const infoEl = document.getElementById('admin-edit-nick-info');
+        const inputEl = document.getElementById('admin-new-nick-input');
+        if (infoEl) {
+          infoEl.innerHTML = `
+            <div><strong>班級座號</strong>：${student.studentClass ? `${student.studentClass} 班 ` : ''}${student.studentSeat ? `${student.studentSeat} 號` : ''}</div>
+            <div><strong>學生姓名</strong>：<span style="color:#fde047; font-weight:bold;">${student.studentRealName}</span></div>
+            <div><strong>目前暱稱</strong>：<span style="color:#a5b4fc; font-weight:bold;">${student.charName}</span> (${student.charTitle})</div>
+            <div style="font-size:0.8rem; color:#94a3b8; margin-top:4px;">專屬引繼碼：<code>${student.passcode}</code></div>
+          `;
+        }
+        if (inputEl) {
+          inputEl.value = student.charName || '';
+        }
+        document.getElementById('admin-edit-nickname-modal')?.classList.add('active');
+        setTimeout(() => {
+          if (inputEl) {
+            inputEl.focus();
+            inputEl.select();
+          }
+        }, 120);
+      },
+
+      closeEditNicknameModal() {
+        SoundEngine.playClick();
+        document.getElementById('admin-edit-nickname-modal')?.classList.remove('active');
+        this.editingPasscode = null;
+      },
+
+      async confirmEditNickname() {
+        SoundEngine.playClick();
+        const passcode = this.editingPasscode;
+        if (!passcode) return;
+        const student = this.cachedStudents.find(s => s.passcode === passcode);
+        const inputEl = document.getElementById('admin-new-nick-input');
+        const newName = (inputEl ? inputEl.value : '').trim();
+
+        if (!newName) {
+          SoundEngine.playError();
+          alert("角色暱稱不能為空！");
+          return;
+        }
+        if (newName.length > 6) {
+          SoundEngine.playError();
+          alert("角色暱稱長度最多只能 6 個字喔！");
+          return;
+        }
+
+        try {
+          // 1. 更新 saves/{passcode}
+          await fetch(`${FIREBASE_DB_URL}/saves/${passcode}.json`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ charName: newName, name: newName, updatedAt: new Date().toISOString() })
+          });
+
+          // 2. 更新 pvp_leaderboard/{passcode}
+          await fetch(`${FIREBASE_DB_URL}/pvp_leaderboard/${passcode}.json`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ charName: newName, updatedAt: new Date().toISOString() })
+          }).catch(() => {});
+
+          // 3. 更新快取中的學生資料
+          if (student) {
+            student.charName = newName;
+          }
+          const filtered = this.filteredStudents.find(s => s.passcode === passcode);
+          if (filtered) {
+            filtered.charName = newName;
+          }
+
+          // 4. 若當前本機裝置正好登入此 passcode，立即同步本機資料
+          const currentPass = SaveSystem.getPasscode();
+          if (currentPass === passcode) {
+            CharacterSystem.playerName = newName;
+            try {
+              const charObj = JSON.parse(localStorage.getItem('radical_rpg_character') || '{}');
+              charObj.name = newName;
+              localStorage.setItem('radical_rpg_character', JSON.stringify(charObj));
+            } catch(e) {}
+            Game.updateLobbyUI();
+          }
+
+          this.closeEditNicknameModal();
+          this.renderTable();
+          SoundEngine.playSuccess();
+          alert(`✅ 已成功將【${student ? student.studentRealName : ''}】的角色暱稱修改為「${newName}」！\n雲端與排行榜已同步更新。`);
+        } catch(e) {
+          SoundEngine.playError();
+          alert("修改暱稱失敗：" + e.message);
+        }
+      },
+
+      // 清除所有排行榜與對戰紀錄 (新學年重置系統)
+      async clearAllLeaderboardAndHistory() {
+        SoundEngine.playClick();
+        const confirm1 = confirm("⚠️【重大操作警告】\n\n您即將執行【清除所有排行榜與對戰紀錄】！\n此操作通常用於新學年或新學期重置遊戲系統。\n\n執行後將會：\n1. 永久清空所有學生的雲端對戰勝場數與總場次（重設為 0）\n2. 清空雲端榮譽排行榜 (pvp_leaderboard)\n3. 清空所有對戰歷史明細 (pvp_history)\n4. 清除現存的對戰房間資料 (pvp_rooms)\n5. 清除本機排行榜與戰績快取\n\n📌 註：學生的單人闖關進度與引繼碼將「完全保留」，不受影響。\n\n確定要繼續嗎？");
+        if (!confirm1) return;
+
+        const confirm2 = prompt("請輸入「確認清除」以確認執行重置操作：");
+        if (confirm2 !== "確認清除") {
+          alert("輸入不相符，已取消清除操作。");
+          return;
+        }
+
+        try {
+          // 1. 清空雲端排行榜
+          await fetch(`${FIREBASE_DB_URL}/pvp_leaderboard.json`, { method: 'DELETE' });
+
+          // 2. 清空所有對戰歷史
+          await fetch(`${FIREBASE_DB_URL}/pvp_history.json`, { method: 'DELETE' });
+
+          // 3. 清空所有房間
+          await fetch(`${FIREBASE_DB_URL}/pvp_rooms.json`, { method: 'DELETE' });
+
+          // 4. 重置所有學生存檔中的 pvpWins 與 pvpMatches
+          const res = await fetch(`${FIREBASE_DB_URL}/saves.json`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && typeof data === 'object') {
+              const updates = {};
+              for (const code of Object.keys(data)) {
+                updates[`${code}/pvpWins`] = 0;
+                updates[`${code}/pvpMatches`] = 0;
+                updates[`${code}/pvpHistory`] = null;
+              }
+              await fetch(`${FIREBASE_DB_URL}/saves.json`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updates)
+              });
+            }
+          }
+
+          // 5. 清除本機 localStorage
+          localStorage.removeItem('radical_pvp_wins');
+          localStorage.removeItem('radical_pvp_matches');
+          localStorage.removeItem('radical_pvp_history');
+
+          SoundEngine.playSuccess();
+          alert("🎉 已成功清空所有排行榜、對戰歷史與房間！\n所有學生對戰勝場數已重設為 0，新學年重置完成！");
+          await this.refresh();
+        } catch(e) {
+          SoundEngine.playError();
+          alert("清除過程發生錯誤：" + e.message);
+        }
       },
 
       copyCode(code) {
@@ -4838,7 +5168,7 @@
     };
 
     /* =========================================================
-       9. 雙人線上即時對戰系統 (PvPSystem - 201班專屬擂台)
+       9. 雙人線上即時對戰系統 (PvPSystem)
        ========================================================= */
     const PvPSystem = {
       isInBattle: false,
@@ -4859,37 +5189,8 @@
       currentProblemKey: null,
       lastActionTime: 0,
 
-      // 1. 驗證對戰資格：班級必須為 201，座號必須為 01 ~ 43
+      // 1. 驗證對戰資格：所有玩家皆可自由連線對決
       checkEligibility(showModal = true) {
-        const rawClass = (CharacterSystem.studentClass || "").trim();
-        const rawSeat = (CharacterSystem.studentSeat || "").trim();
-        const seatNum = parseInt(rawSeat, 10);
-        const classClean = rawClass.replace(/[^0-9]/g, '');
-
-        const isClass201 = (classClean === "201");
-        const isSeatValid = (!isNaN(seatNum) && seatNum >= 1 && seatNum <= 43);
-
-        if (!isClass201 || !isSeatValid) {
-          if (showModal) {
-            SoundEngine.playError();
-            const currentDesc = (rawClass || rawSeat) 
-              ? `您目前的登記資料為【${rawClass || '未填'}班 ${rawSeat || '未填'}號】` 
-              : '您目前尚未登記班級與座號';
-            Game.showModal(
-              "⚠️ 對戰資格限制",
-              `<div style="text-align:left; line-height:1.6;">
-                目前雙人線上即時對戰專屬<strong>【201 班】學生（座號 01 ~ 43 號）</strong>！<br><br>
-                ${currentDesc}，不符合本次對戰資格。<br><br>
-                請點擊下方按鈕前往修改您的班級（201）與正確座號（01-43）。
-              </div>`,
-              () => {
-                CharacterSystem.openEditCharacter();
-              },
-              "✏️ 前往修改班級座號"
-            );
-          }
-          return false;
-        }
         return true;
       },
 
@@ -5093,7 +5394,7 @@
         const cleanCode = code.trim();
         if (!cleanCode || cleanCode.length !== 4) {
           SoundEngine.playError();
-          alert("請輸入完整的 4 位數房間代碼（例如：2018）！");
+          alert("請輸入完整的 4 位數房間代碼（例如：8888）！");
           return;
         }
 
@@ -5299,7 +5600,7 @@
         if (p1) {
           document.getElementById('pvp-p1-avatar').innerText = p1.avatar;
           document.getElementById('pvp-p1-name').innerText = p1.name;
-          document.getElementById('pvp-p1-student').innerText = `201班 ${p1.seat}號 · ${p1.realName}`;
+          document.getElementById('pvp-p1-student').innerText = `${p1.class ? `${p1.class}班 ` : ''}${p1.seat ? `${p1.seat}號` : ''} · ${p1.realName || ''}`;
           document.getElementById('pvp-p1-atk').innerText = `⚔️ ATK: ${p1.atk} (${p1.completedStages}/4關)`;
           document.getElementById('pvp-p1-status').innerText = '👑 房主 (已就緒)';
           document.getElementById('pvp-p1-status').className = 'status-badge status-ready';
@@ -5312,7 +5613,7 @@
           if (p2Slot) p2Slot.classList.add('filled');
           document.getElementById('pvp-p2-avatar').innerText = p2.avatar;
           document.getElementById('pvp-p2-name').innerText = p2.name;
-          document.getElementById('pvp-p2-student').innerText = `201班 ${p2.seat}號 · ${p2.realName}`;
+          document.getElementById('pvp-p2-student').innerText = `${p2.class ? `${p2.class}班 ` : ''}${p2.seat ? `${p2.seat}號` : ''} · ${p2.realName || ''}`;
           document.getElementById('pvp-p2-atk').innerText = `⚔️ ATK: ${p2.atk} (${p2.completedStages}/4關)`;
           const p2StatusEl = document.getElementById('pvp-p2-status');
           if (p2StatusEl) {
@@ -5359,7 +5660,7 @@
         const code = this.roomData.code;
         if (navigator.clipboard && navigator.clipboard.writeText) {
           navigator.clipboard.writeText(code).then(() => {
-            alert(`✅ 已複製 4 位數房號【${code}】！\n請直接分享給 201 班同學輸入加入！`);
+            alert(`✅ 已複製 4 位數房號【${code}】！\n請直接分享給同學輸入加入！`);
           });
         } else {
           prompt("請複製此房間代碼：", code);
@@ -5939,9 +6240,25 @@
 
       // 14. 對戰結算
       async handleMatchFinished(room) {
-        if (!this.isInBattle) return;
+        if (!room) return;
+        const roomKey = room.id || room.code || this.currentRoomId;
+        if (!this.handledMatchRooms) this.handledMatchRooms = new Set();
+        if (roomKey && this.handledMatchRooms.has(roomKey)) return;
+        if (roomKey) this.handledMatchRooms.add(roomKey);
+
         this.isInBattle = false;
-        clearInterval(this.roundTimerInterval);
+        if (this.pollInterval) {
+          clearInterval(this.pollInterval);
+          this.pollInterval = null;
+        }
+        if (this.roundTimerInterval) {
+          clearInterval(this.roundTimerInterval);
+          this.roundTimerInterval = null;
+        }
+        if (this.countdownInterval) {
+          clearInterval(this.countdownInterval);
+          this.countdownInterval = null;
+        }
 
         const isWinner = (room.winner === this.myRole);
         const isDraw = (room.winner === 'draw');
@@ -5993,9 +6310,11 @@
 
         const now = new Date();
         const dateStr = `${now.getMonth() + 1}/${now.getDate()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        const myPasscode = SaveSystem.getPasscode();
 
         const matchRecord = {
-          id: 'm_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+          id: `m_${roomKey}_${myPasscode}`,
+          roomId: roomKey,
           time: Date.now(),
           dateStr: dateStr,
           mode: room.mode,
@@ -6005,10 +6324,11 @@
           oppHp: oppPlayer ? Math.max(0, oppPlayer.hp ?? 0) : 0,
           myAvatar: myPlayer?.avatar || '🧙‍♂️',
           myTitle: myPlayer?.title || '冒險勇者',
+          oppPasscode: oppPlayer?.passcode || '',
           oppName: oppPlayer?.name || '神祕對手',
           oppRealName: oppPlayer?.realName || '',
           oppSeat: oppPlayer?.seat || '',
-          oppClass: oppPlayer?.class || '201',
+          oppClass: oppPlayer?.class || '',
           oppAvatar: oppPlayer?.avatar || '🧝‍♀️',
           oppTitle: oppPlayer?.title || '冒險對手'
         };
@@ -6069,7 +6389,7 @@
                   房號: <span style="font-family:monospace; color:#34d399; font-size:1.1rem;">${r.code}</span>
                 </div>
                 <div style="font-size:0.75rem; color:#94a3b8; margin-top:2px;">
-                  房主: ${r.player1?.avatar || '🧙‍♂️'} ${r.player1?.name || '勇者'} (201班 ${r.player1?.seat}號)
+                  房主: ${r.player1?.avatar || '🧙‍♂️'} ${r.player1?.name || '勇者'} (${r.player1?.class ? `${r.player1.class}班 ` : ''}${r.player1?.seat ? `${r.player1.seat}號` : ''})
                 </div>
                 <div style="font-size:0.72rem; color:#a5b4fc;">
                   ${r.mode === 'modeA' ? '⚡ 搶答競速' : '⏱️ 5題回合'} · ⚔️ ATK ${r.player1?.atk}
@@ -6087,7 +6407,7 @@
     };
 
     /* =========================================================
-       10. 全班榮譽排行榜系統 (LeaderboardSystem)
+       10. 全校榮譽排行榜系統 (LeaderboardSystem)
        ========================================================= */
     const LeaderboardSystem = {
       cachedLeaderboard: [],
@@ -6105,36 +6425,36 @@
 
       // 記錄比賽結果至本機與 Firebase
       async recordMatchResult(isWinner, matchRecord = null) {
-        let wins = parseInt(localStorage.getItem('radical_pvp_wins') || '0', 10);
-        let matches = parseInt(localStorage.getItem('radical_pvp_matches') || '0', 10);
-
-        matches += 1;
-        if (isWinner) wins += 1;
-
-        localStorage.setItem('radical_pvp_wins', wins);
-        localStorage.setItem('radical_pvp_matches', matches);
-
-        // 儲存詳細對戰歷史日誌
+        // 讀取並維護詳細對戰歷史日誌
         let history = [];
         try {
           history = JSON.parse(localStorage.getItem('radical_pvp_history') || '[]');
         } catch(e) { history = []; }
 
         if (matchRecord) {
-          history.unshift(matchRecord);
+          // 精確去重：相同 id 或相同 roomId，直接覆蓋更新，杜絕重複計數
+          const existingIdx = history.findIndex(h => (h.id && h.id === matchRecord.id) || (h.roomId && matchRecord.roomId && h.roomId === matchRecord.roomId));
+          if (existingIdx >= 0) {
+            history[existingIdx] = matchRecord;
+          } else {
+            history.unshift(matchRecord);
+          }
           if (history.length > 100) history = history.slice(0, 100);
           localStorage.setItem('radical_pvp_history', JSON.stringify(history));
         }
 
-        const code = SaveSystem.getPasscode();
-        const char = CHARACTERS_DB.find(c => c.id === CharacterSystem.selectedCharId) || CHARACTERS_DB[0];
-        const stats = PvPSystem.getPlayerStats();
-        const winRate = Math.round((wins / matches) * 100);
+        // 勝場與總場次一律由真實歷史日誌統計，徹底杜絕場次暴增或將單場攻擊次數誤算為場次
+        const wins = history.filter(h => h.result === 'win').length;
+        const matches = history.length;
+        const winRate = matches > 0 ? Math.round((wins / matches) * 100) : 0;
+
+        localStorage.setItem('radical_pvp_wins', wins);
+        localStorage.setItem('radical_pvp_matches', matches);
 
         const payload = {
           passcode: code,
-          studentClass: CharacterSystem.studentClass || "201",
-          studentSeat: CharacterSystem.studentSeat || "01",
+          studentClass: CharacterSystem.studentClass || "",
+          studentSeat: CharacterSystem.studentSeat || "",
           studentRealName: CharacterSystem.studentRealName || "勇者",
           charName: CharacterSystem.playerName || "勇者",
           charAvatar: char.avatar,
@@ -6176,7 +6496,7 @@
       async refresh() {
         const tbody = document.getElementById('leaderboard-table-body');
         if (tbody) {
-          tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:#94a3b8;">⏳ 正在連線讀取 201 班排行榜資料...</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:#94a3b8;">⏳ 正在連線讀取全校排行榜資料...</td></tr>`;
         }
 
         try {
@@ -6353,7 +6673,7 @@
         const subEl = document.getElementById('analysis-header-sub');
         if (avatarEl) avatarEl.innerText = char.avatar;
         if (nameEl) nameEl.innerText = `${CharacterSystem.playerName} (${char.title})`;
-        if (subEl) subEl.innerText = `${CharacterSystem.studentClass || '201'}班 ${CharacterSystem.studentSeat || '01'}號 · ${CharacterSystem.studentRealName || '勇者'} ｜ 專屬引繼碼: ${code}`;
+        if (subEl) subEl.innerText = `${CharacterSystem.studentClass ? `${CharacterSystem.studentClass}班 ` : ''}${CharacterSystem.studentSeat ? `${CharacterSystem.studentSeat}號 ` : ''}· ${CharacterSystem.studentRealName || '勇者'} ｜ 專屬引繼碼: ${code}`;
 
         // 讀取本機對戰紀錄
         let history = [];
@@ -6378,13 +6698,32 @@
               }
               if (added) {
                 history.sort((a, b) => (b.time || 0) - (a.time || 0));
-                localStorage.setItem('radical_pvp_history', JSON.stringify(history));
               }
             }
           }
         } catch(e) {
           console.warn('雲端歷史同步稍候:', e);
         }
+
+        // 嚴格過濾與去重：若有多筆紀錄指向同一次對局（相同 id、相同 roomId，或 5 秒內同對手同勝負）
+        const cleanHistory = [];
+        const seenMatchKeys = new Set();
+        for (const item of history) {
+          if (!item) continue;
+          const matchKey = item.roomId ? `${item.roomId}_${item.result}` : (item.id || `${item.oppName}_${Math.floor((item.time || 0) / 10000)}`);
+          if (!seenMatchKeys.has(matchKey)) {
+            seenMatchKeys.add(matchKey);
+            cleanHistory.push(item);
+          }
+        }
+        cleanHistory.sort((a, b) => (b.time || 0) - (a.time || 0));
+        history = cleanHistory;
+        localStorage.setItem('radical_pvp_history', JSON.stringify(history));
+
+        // 同步真實勝負場次至本機，避免場次脫鉤
+        const histWins = history.filter(h => h.result === 'win').length;
+        localStorage.setItem('radical_pvp_wins', histWins);
+        localStorage.setItem('radical_pvp_matches', history.length);
 
         this.currentHistoryData = history;
         const countEl = document.getElementById('analysis-history-count');
@@ -6424,17 +6763,13 @@
       renderMatchupsTab() {
         const history = this.currentHistoryData || [];
 
-        // 1. KPI 綜合統計
-        const localWins = parseInt(localStorage.getItem('radical_pvp_wins') || '0', 10);
-        const localMatches = parseInt(localStorage.getItem('radical_pvp_matches') || '0', 10);
-
+        // 1. KPI 綜合統計：以歷史真實紀錄為準，徹底杜絕場次暴增與攻擊次數誤算
         const histWins = history.filter(h => h.result === 'win').length;
         const histLosses = history.filter(h => h.result === 'lose').length;
         const histDraws = history.filter(h => h.result === 'draw').length;
-
-        const totalWins = Math.max(localWins, histWins);
-        const totalMatches = Math.max(localMatches, history.length);
-        const totalLosses = Math.max(0, totalMatches - totalWins - histDraws);
+        const totalMatches = history.length;
+        const totalWins = histWins;
+        const totalLosses = histLosses;
         const winRate = totalMatches > 0 ? Math.round((totalWins / totalMatches) * 100) : 0;
 
         // 計算模式 A 與模式 B
@@ -6446,9 +6781,8 @@
         const modeBWins = modeBMatches.filter(h => h.result === 'win').length;
         const modeBRate = modeBMatches.length > 0 ? Math.round((modeBWins / modeBMatches.length) * 100) : 0;
 
-        // 計算連勝 (依時間正序：舊 -> 新)
+        // 連勝統計
         const chrono = [...history].sort((a, b) => (a.time || 0) - (b.time || 0));
-        let currStreak = 0;
         let maxStreak = 0;
         let runningStreak = 0;
         for (const m of chrono) {
@@ -6459,7 +6793,7 @@
             runningStreak = 0;
           }
         }
-        currStreak = runningStreak;
+        const currStreak = runningStreak;
 
         // 綁定 KPI 元素
         const elRecord = document.getElementById('kpi-total-record');
@@ -6472,7 +6806,7 @@
         const elMaxStreak = document.getElementById('kpi-max-streak');
 
         if (elRecord) elRecord.innerText = `${totalWins}勝 ${totalLosses}敗${histDraws > 0 ? ` ${histDraws}和` : ''}`;
-        if (elMatches) elMatches.innerText = `累計對戰 ${totalMatches} 場`;
+        if (elMatches) elMatches.innerText = `共 ${totalMatches} 場對決`;
         if (elWinRate) elWinRate.innerText = `${winRate}%`;
         if (elWinBar) elWinBar.innerText = winRate >= 60 ? '🔥 狀態火熱·高勝率' : (winRate >= 40 ? '⚖️ 實力穩健·持續進步' : '🛡️ 逆境試煉·再接再厲');
         if (elMode) elMode.innerText = `A: ${modeARate}% (${modeAWins}/${modeAMatches.length}) ｜ B: ${modeBRate}% (${modeBWins}/${modeBMatches.length})`;
@@ -6480,137 +6814,109 @@
         if (elStreak) elStreak.innerText = `${currStreak} 連勝`;
         if (elMaxStreak) elMaxStreak.innerText = `歷史最高 ${maxStreak} 連勝`;
 
-        // 2. 對同一個角色的勝負次數統計與勝率 (重點需求)
-        const charContainer = document.getElementById('analysis-char-matchups-list');
-        if (charContainer) {
-          const charMap = {};
+        // 2. 對「同一個玩家」的勝負次數統計與勝率清單 (重點核心需求)
+        const playerContainer = document.getElementById('analysis-player-matchups-list');
+        if (playerContainer) {
+          const playerMap = {};
           for (const h of history) {
-            const key = h.oppTitle || h.oppAvatar || '未知勇者';
-            if (!charMap[key]) {
-              charMap[key] = {
-                avatar: h.oppAvatar || '🧙‍♂️',
-                title: h.oppTitle || key,
-                total: 0,
-                wins: 0,
-                losses: 0,
-                draws: 0
-              };
-            }
-            charMap[key].total++;
-            if (h.result === 'win') charMap[key].wins++;
-            else if (h.result === 'lose') charMap[key].losses++;
-            else charMap[key].draws++;
-          }
+            // 建立玩家唯一鍵值：優先使用引繼碼，次為班級座號姓名，再為對手姓名
+            const playerKey = h.oppPasscode || (h.oppClass && h.oppSeat ? `${h.oppClass}_${h.oppSeat}_${h.oppRealName || ''}` : '') || (h.oppRealName ? `${h.oppRealName}_${h.oppName || ''}` : '') || h.oppName || '未知玩家';
 
-          const charList = Object.values(charMap);
-          charList.sort((a, b) => b.total - a.total);
-
-          if (charList.length === 0) {
-            charContainer.innerHTML = `
-              <div style="background:#1e293b; border:1px dashed #475569; border-radius:10px; padding:22px; text-align:center; color:#94a3b8;">
-                <div style="font-size:2rem; margin-bottom:4px;">⚔️</div>
-                <div style="font-size:0.95rem; color:#cbd5e1; font-weight:bold;">尚無對戰角色紀錄</div>
-                <div style="font-size:0.78rem; color:#64748b; margin-top:2px;">進行雙人對戰後，此處將自動分類統計對各職業角色的勝負與勝率！</div>
-              </div>
-            `;
-          } else {
-            charContainer.innerHTML = charList.map(c => {
-              const rate = Math.round((c.wins / c.total) * 100);
-              let barGrad = 'linear-gradient(90deg, #10b981, #34d399)';
-              let tagHtml = '<span style="background:rgba(16,185,129,0.2); color:#34d399; border:1px solid #059669; padding:2px 8px; border-radius:6px; font-size:0.75rem; font-weight:bold;">🏆 擅長對付</span>';
-
-              if (rate <= 35) {
-                barGrad = 'linear-gradient(90deg, #dc2626, #ef4444)';
-                tagHtml = '<span style="background:rgba(239,68,68,0.2); color:#f87171; border:1px solid #dc2626; padding:2px 8px; border-radius:6px; font-size:0.75rem; font-weight:bold;">⚔️ 苦戰剋星</span>';
-              } else if (rate < 60) {
-                barGrad = 'linear-gradient(90deg, #d97706, #fbbf24)';
-                tagHtml = '<span style="background:rgba(56,189,248,0.2); color:#38bdf8; border:1px solid #0284c7; padding:2px 8px; border-radius:6px; font-size:0.75rem; font-weight:bold;">⚖️ 勢均力敵</span>';
-              }
-
-              return `
-                <div class="matchup-card">
-                  <div class="matchup-char-left">
-                    <div class="matchup-char-avatar">${c.avatar}</div>
-                    <div>
-                      <div class="matchup-char-name">${c.title}</div>
-                      <div class="matchup-char-sub">交手 ${c.total} 次 ｜ ${c.wins}勝 ${c.losses}敗${c.draws > 0 ? ` ${c.draws}和` : ''}</div>
-                    </div>
-                  </div>
-                  <div class="matchup-bar-mid">
-                    <div class="matchup-bar-label">
-                      <span>勝率 ${rate}%</span>
-                      <span style="color:#94a3b8;">${c.wins} / ${c.total} 勝場</span>
-                    </div>
-                    <div class="matchup-bar-track">
-                      <div class="matchup-bar-fill" style="width:${rate}%; background:${barGrad};"></div>
-                    </div>
-                  </div>
-                  <div class="matchup-badge-right">
-                    ${tagHtml}
-                  </div>
-                </div>
-              `;
-            }).join('');
-          }
-        }
-
-        // 3. 對戰同學統計列表
-        const classContainer = document.getElementById('analysis-classmate-matchups-list');
-        if (classContainer) {
-          const mateMap = {};
-          for (const h of history) {
-            const key = `${h.oppSeat || ''}_${h.oppRealName || h.oppName || ''}`;
-            if (!mateMap[key]) {
-              mateMap[key] = {
-                seat: h.oppSeat || '-',
-                name: h.oppRealName || h.oppName || '同學',
+            if (!playerMap[playerKey]) {
+              playerMap[playerKey] = {
+                key: playerKey,
+                passcode: h.oppPasscode || '',
+                name: h.oppRealName || h.oppName || '神祕同學',
+                charName: h.oppName || '勇者',
+                class: h.oppClass || '',
+                seat: h.oppSeat || '',
                 avatar: h.oppAvatar || '🧙‍♂️',
                 title: h.oppTitle || '冒險者',
                 total: 0,
                 wins: 0,
                 losses: 0,
-                draws: 0
+                draws: 0,
+                lastTime: h.time || 0
               };
             }
-            mateMap[key].total++;
-            if (h.result === 'win') mateMap[key].wins++;
-            else if (h.result === 'lose') mateMap[key].losses++;
-            else mateMap[key].draws++;
+            const p = playerMap[playerKey];
+            p.total++;
+            if (h.result === 'win') p.wins++;
+            else if (h.result === 'lose') p.losses++;
+            else p.draws++;
+
+            // 更新最新資訊
+            if (h.time && h.time >= p.lastTime) {
+              p.lastTime = h.time;
+              if (h.oppAvatar) p.avatar = h.oppAvatar;
+              if (h.oppTitle) p.title = h.oppTitle;
+              if (h.oppName) p.charName = h.oppName;
+              if (h.oppRealName) p.name = h.oppRealName;
+            }
           }
 
-          const mateList = Object.values(mateMap);
-          mateList.sort((a, b) => b.total - a.total);
+          const playerList = Object.values(playerMap);
+          // 排序：交手次數多者在前，次數相同者以勝率高者在前
+          playerList.sort((a, b) => {
+            if (b.total !== a.total) return b.total - a.total;
+            const rateA = a.wins / a.total;
+            const rateB = b.wins / b.total;
+            return rateB - rateA;
+          });
 
-          if (mateList.length === 0) {
-            classContainer.innerHTML = `
-              <div style="background:#1e293b; border:1px dashed #475569; border-radius:10px; padding:22px; text-align:center; color:#94a3b8;">
-                <div style="font-size:2rem; margin-bottom:4px;">👥</div>
-                <div style="font-size:0.95rem; color:#cbd5e1; font-weight:bold;">尚無同學交手紀錄</div>
-                <div style="font-size:0.78rem; color:#64748b; margin-top:2px;">向 201 班同學發起挑戰後，此處將記錄與每位同學的勝負關係！</div>
+          if (playerList.length === 0) {
+            playerContainer.innerHTML = `
+              <div style="background:#1e293b; border:1px dashed #475569; border-radius:10px; padding:25px; text-align:center; color:#94a3b8;">
+                <div style="font-size:2.2rem; margin-bottom:6px;">👥</div>
+                <div style="font-size:1rem; color:#cbd5e1; font-weight:bold;">尚無對戰玩家紀錄</div>
+                <div style="font-size:0.82rem; color:#64748b; margin-top:4px;">與其他同學進行雙人對戰後，此處將自動分類統計對每位玩家（同學）的交手勝負與勝率！</div>
               </div>
             `;
           } else {
-            classContainer.innerHTML = mateList.map(m => {
-              const rate = Math.round((m.wins / m.total) * 100);
+            playerContainer.innerHTML = playerList.map(p => {
+              const rate = Math.round((p.wins / p.total) * 100);
+              let barGrad = 'linear-gradient(90deg, #10b981, #34d399)';
+              let tagHtml = '<span style="background:rgba(16,185,129,0.2); color:#34d399; border:1px solid #059669; padding:3px 9px; border-radius:6px; font-size:0.75rem; font-weight:bold;">🏆 佔據優勢</span>';
+
+              if (rate <= 35) {
+                barGrad = 'linear-gradient(90deg, #dc2626, #ef4444)';
+                tagHtml = '<span style="background:rgba(239,68,68,0.2); color:#f87171; border:1px solid #dc2626; padding:3px 9px; border-radius:6px; font-size:0.75rem; font-weight:bold;">⚔️ 苦戰對手</span>';
+              } else if (rate < 60) {
+                barGrad = 'linear-gradient(90deg, #d97706, #fbbf24)';
+                tagHtml = '<span style="background:rgba(56,189,248,0.2); color:#38bdf8; border:1px solid #0284c7; padding:3px 9px; border-radius:6px; font-size:0.75rem; font-weight:bold;">⚖️ 勢均力敵</span>';
+              }
+
+              const studentIdentity = (p.class || p.seat) 
+                ? `${p.class ? `${p.class}班 ` : ''}${p.seat ? `${p.seat}號 ` : ''}· ${p.name}`
+                : p.name;
+
               return `
-                <div class="matchup-card" style="padding:10px 14px;">
-                  <div style="display:flex; align-items:center; gap:10px; min-width:180px;">
-                    <span style="font-size:1.8rem;">${m.avatar}</span>
+                <div class="matchup-card" style="padding:12px 16px;">
+                  <div class="matchup-char-left" style="min-width:210px;">
+                    <div class="matchup-char-avatar" style="font-size:2.2rem;">${p.avatar}</div>
                     <div>
-                      <div style="font-weight:bold; color:#f8fafc; font-size:0.95rem;">${m.seat !== '-' ? `${m.seat}號 ` : ''}${m.name}</div>
-                      <div style="font-size:0.75rem; color:#a5b4fc;">${m.title}</div>
+                      <div class="matchup-char-name" style="font-size:1rem; color:#f8fafc; font-weight:bold;">
+                        ${studentIdentity}
+                      </div>
+                      <div style="font-size:0.78rem; color:#a5b4fc; margin-top:2px;">
+                        角色暱稱：<strong>${p.charName}</strong> ｜ ${p.title}
+                      </div>
+                      <div class="matchup-char-sub" style="margin-top:3px; color:#cbd5e1;">
+                        交手 <strong>${p.total}</strong> 次 ｜ <span style="color:#34d399; font-weight:bold;">${p.wins}勝</span> <span style="color:#f87171; font-weight:bold;">${p.losses}敗</span>${p.draws > 0 ? ` <span style="color:#38bdf8; font-weight:bold;">${p.draws}和</span>` : ''}
+                      </div>
                     </div>
                   </div>
-                  <div style="flex:1; text-align:center;">
-                    <span style="font-weight:bold; color:#34d399;">${m.wins} 勝</span>
-                    <span style="color:#64748b; margin:0 4px;">/</span>
-                    <span style="font-weight:bold; color:#f87171;">${m.losses} 敗</span>
-                    ${m.draws > 0 ? `<span style="color:#64748b; margin:0 4px;">/</span><span style="color:#38bdf8;">${m.draws} 和</span>` : ''}
-                    <span style="font-size:0.78rem; color:#94a3b8; margin-left:8px;">(共 ${m.total} 場)</span>
+                  <div class="matchup-bar-mid" style="flex:1; margin:0 18px;">
+                    <div class="matchup-bar-label" style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                      <span style="font-weight:bold; color:#f1f5f9;">對戰勝率 ${rate}%</span>
+                      <span style="color:#94a3b8; font-size:0.8rem;">${p.wins} 勝 / ${p.total} 場</span>
+                    </div>
+                    <div class="matchup-bar-track" style="height:10px; background:#334155; border-radius:5px; overflow:hidden;">
+                      <div class="matchup-bar-fill" style="width:${rate}%; height:100%; background:${barGrad}; transition:width 0.4s ease;"></div>
+                    </div>
                   </div>
-                  <div style="min-width:70px; text-align:right;">
-                    <div style="font-weight:900; color:#38bdf8; font-size:1.05rem;">${rate}%</div>
-                    <div style="font-size:0.72rem; color:#94a3b8;">勝率</div>
+                  <div class="matchup-badge-right" style="min-width:90px; text-align:right;">
+                    ${tagHtml}
                   </div>
                 </div>
               `;
@@ -6675,6 +6981,14 @@
         }).join('');
       }
     };
+
+    // 全域暴露核心系統
+    window.Game = Game;
+    window.CharacterSystem = CharacterSystem;
+    window.SaveSystem = SaveSystem;
+    window.AdminSystem = AdminSystem;
+    window.PvPSystem = PvPSystem;
+    window.LeaderboardSystem = LeaderboardSystem;
 
     window.onload = () => Game.init();
   </script>
