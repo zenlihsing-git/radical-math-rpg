@@ -53,6 +53,105 @@
     }
 
     /* =========================================================
+       畫面 0：遊戲首頁啟動選單 (Start Screen)
+       ========================================================= */
+    .start-menu-container {
+      max-width: 520px;
+      margin: auto;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 16px 8px;
+    }
+
+    .start-choice-box {
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 20px;
+      padding: 22px 18px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .menu-choice-btn {
+      background: #1e293b;
+      border: 2px solid #475569;
+      border-radius: 16px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      text-align: left;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    }
+
+    .menu-choice-btn:active {
+      transform: scale(0.97);
+    }
+
+    .menu-choice-btn.btn-continue {
+      border-color: #f59e0b;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), #1e293b);
+    }
+
+    .menu-choice-btn.btn-new-game {
+      border-color: #6366f1;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.18), #1e293b);
+    }
+
+    .menu-choice-btn.btn-import-code {
+      border-color: #10b981;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), #1e293b);
+    }
+
+    .menu-choice-btn:hover {
+      border-color: #fde047;
+      transform: translateY(-2px);
+    }
+
+    .choice-icon {
+      font-size: 2.3rem;
+      width: 52px;
+      height: 52px;
+      background: #0f172a;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid #334155;
+    }
+
+    .choice-content {
+      flex: 1;
+    }
+
+    .choice-title {
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: #ffffff;
+      margin-bottom: 3px;
+    }
+
+    .choice-sub {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+
+    .choice-arrow {
+      font-size: 1.3rem;
+      color: #64748b;
+      font-weight: bold;
+    }
+
+    /* =========================================================
        畫面 1：角色創建與選擇畫面
        ========================================================= */
     .char-select-container {
@@ -768,31 +867,342 @@
       .key-btn { padding: 16px 0; font-size: 1.65rem; }
       .question-math { font-size: 2.4rem; }
     }
+
+    /* 學生身份輸入與教師後台樣式 */
+    .student-info-box {
+      width: 100%;
+      background: #0f172a;
+      border: 2px solid #38bdf8;
+      color: #ffffff;
+      font-size: 1.05rem;
+      font-weight: bold;
+      text-align: center;
+      padding: 8px 10px;
+      border-radius: 10px;
+      outline: none;
+      box-sizing: border-box;
+      transition: all 0.2s ease;
+    }
+    .student-info-box:focus {
+      border-color: #fde047;
+      box-shadow: 0 0 10px rgba(253, 224, 71, 0.4);
+    }
+
+    .btn-teacher-portal {
+      background: #1e293b;
+      border: 1px solid #475569;
+      color: #94a3b8;
+      font-size: 0.85rem;
+      font-weight: bold;
+      padding: 8px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-teacher-portal:hover {
+      color: #38bdf8;
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
+    }
+    .btn-teacher-sub {
+      background: #334155;
+      border: 1px solid #64748b;
+      color: #cbd5e1;
+      font-size: 0.75rem;
+      font-weight: bold;
+      padding: 4px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    .btn-teacher-sub:hover {
+      color: #38bdf8;
+      border-color: #38bdf8;
+    }
+
+    /* 教師管理後台面板樣式 */
+    .admin-container {
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 10px 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .admin-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 14px;
+      padding: 12px 16px;
+    }
+    .admin-title {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .admin-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .admin-btn {
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+    .admin-btn:hover { filter: brightness(1.15); }
+    .btn-refresh { background: #3b82f6; color: white; }
+    .btn-export-csv { background: #059669; color: white; }
+    .btn-copy-txt { background: #6366f1; color: white; }
+    .btn-print { background: #d97706; color: white; }
+    .btn-exit { background: #475569; color: white; }
+
+    .admin-stats-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .stat-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 10px 14px;
+      flex: 1;
+      min-width: 120px;
+    }
+    .stat-label { font-size: 0.75rem; color: #94a3b8; font-weight: bold; }
+    .stat-val { font-size: 1.4rem; font-weight: 900; color: #fde047; margin-top: 2px; }
+
+    .admin-filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      background: #1e293b;
+      padding: 10px 14px;
+      border-radius: 12px;
+    }
+    .admin-select, .admin-search-box {
+      background: #0f172a;
+      border: 1px solid #475569;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    .admin-search-box { width: 100%; }
+
+    .admin-table-container {
+      background: #0f172a;
+      border: 2px solid #334155;
+      border-radius: 14px;
+      overflow-x: auto;
+      max-height: 65vh;
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      text-align: center;
+      min-width: 820px;
+    }
+    .admin-table th {
+      background: #1e293b;
+      color: #cbd5e1;
+      padding: 10px 8px;
+      border-bottom: 2px solid #475569;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    .admin-table td {
+      padding: 10px 8px;
+      border-bottom: 1px solid #334155;
+      vertical-align: middle;
+    }
+    .admin-table tr:hover { background: rgba(51, 65, 85, 0.4); }
+
+    .passcode-pill {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px dashed #10b981;
+      color: #34d399;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-weight: 900;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-block;
+      transition: all 0.15s ease;
+    }
+    .passcode-pill:hover { background: #10b981; color: #000; }
+    .badge-stage-lv {
+      background: #334155;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #fbbf24;
+    }
+    .btn-table-action {
+      background: #475569;
+      color: #fca5a5;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+    .btn-table-action:hover { background: #ef4444; color: white; }
+
+    @media print {
+      body * { visibility: hidden !important; }
+      #screen-teacher-admin, #screen-teacher-admin * { visibility: visible !important; }
+      #screen-teacher-admin {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+      .admin-table-container { border: 1px solid #333 !important; max-height: none !important; overflow: visible !important; }
+      .admin-table { color: #000000 !important; font-size: 10pt !important; min-width: 100% !important; }
+      .admin-table th, .admin-table td { border: 1px solid #666 !important; color: #000000 !important; padding: 4px !important; }
+      .passcode-pill { background: none !important; border: none !important; color: #000000 !important; font-weight: bold !important; }
+      .badge-stage-lv { background: none !important; color: #000000 !important; }
+    }
   </style>
 </head>
 <body>
 
   <!-- =========================================================
-       畫面 1：角色創建 / 選擇畫面
+       畫面 0：遊戲首頁啟動選單 (全新開始 / 登入引繼碼)
        ========================================================= -->
-  <section class="screen active" id="screen-character-select">
+  <section class="screen active" id="screen-start">
+    <div class="start-menu-container">
+      <div class="game-logo" style="font-size:2.4rem;">
+        <span>⚔️</span> 根號冒險譚 <span>🛡️</span>
+      </div>
+      <p style="color:#a5b4fc; font-size:1rem; margin-top:-6px;">國中二年級數學：根號四則運算試煉</p>
+
+      <div class="start-choice-box">
+        <div style="font-size:1.15rem; font-weight:bold; color:#fde047;">
+          🎮 請選擇冒險開始方式
+        </div>
+        <div style="font-size:0.85rem; color:#94a3b8; margin-top:-6px; margin-bottom:4px;">
+          初次遊玩請建立新角色，若在其他裝置有進度可登入引繼碼
+        </div>
+
+        <!-- 選項 1：繼續目前本機進度 (若有存檔則顯示) -->
+        <div id="start-continue-wrapper" style="display:none;">
+          <div class="menu-choice-btn btn-continue" onclick="Game.continueSavedGame()">
+            <div class="choice-icon" id="start-saved-avatar">🧙‍♂️</div>
+            <div class="choice-content">
+              <div class="choice-title" id="start-saved-name" style="color:#fbbf24;">繼續目前的冒險</div>
+              <div class="choice-sub" id="start-saved-progress">偵測到本機已有的角色與等級進度</div>
+            </div>
+            <div class="choice-arrow">➔</div>
+          </div>
+        </div>
+
+        <!-- 選項 2：直接新的開始 -->
+        <div class="menu-choice-btn btn-new-game" onclick="Game.startFreshGame()">
+          <div class="choice-icon">🌟</div>
+          <div class="choice-content">
+            <div class="choice-title" style="color:#818cf8;">直接新的開始</div>
+            <div class="choice-sub">初次遊玩，自訂 10 位角色風格並輸入暱稱</div>
+          </div>
+          <div class="choice-arrow">➔</div>
+        </div>
+
+        <!-- 選項 3：登入引繼碼 -->
+        <div class="menu-choice-btn btn-import-code" onclick="SaveSystem.openModal('import')">
+          <div class="choice-icon">📥</div>
+          <div class="choice-content">
+            <div class="choice-title" style="color:#34d399;">登入引繼碼</div>
+            <div class="choice-sub">輸入其他裝置備份的代碼，立即還原等級進度</div>
+          </div>
+          <div class="choice-arrow">➔</div>
+        </div>
+
+        <!-- 選項 4：教師最高權限後台 -->
+        <div style="margin-top:10px; border-top:1px dashed #475569; padding-top:12px; text-align:center;">
+          <button class="btn-teacher-portal" onclick="AdminSystem.openLogin()">
+            👨‍🏫 教師管理後台（查詢全班引繼碼與離線成績備份）
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       畫面 1：角色創建 / 選擇畫面 (班級+座號+姓名+角色名≤6字+職業)
+       ========================================================= -->
+  <section class="screen" id="screen-character-select">
     <div class="char-select-container">
       <div class="game-logo">
         <span>⚔️</span> 根號冒險譚 <span>🛡️</span>
       </div>
-      <p style="color:#94a3b8; font-size:0.95rem;">國中二年級數學：根號試煉之路</p>
+      <p style="color:#94a3b8; font-size:0.95rem; margin-top:-6px;">國中二年級數學：根號試煉之路</p>
 
-      <!-- 角色暱稱輸入 -->
-      <div class="char-input-group">
-        <label for="player-name-input" style="font-weight:bold; color:#fde047; font-size:1.05rem;">請輸入你的勇者名稱：</label>
-        <div>
-          <input type="text" id="player-name-input" class="name-input-box" maxlength="8" placeholder="輸入暱稱 (如: 算術小神童)">
+      <!-- 步驟 1：學生身份登記 (班級+座號+姓名) -->
+      <div class="char-input-group" style="text-align: left;">
+        <div style="font-weight:bold; color:#38bdf8; font-size:1.05rem; display:flex; align-items:center; gap:6px; margin-bottom:10px;">
+          <span>📝</span> 第一步：登記學生身份（供老師登記名冊與找回引繼碼）
+        </div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr 1.5fr; gap:10px;">
+          <div>
+            <label style="font-size:0.85rem; color:#cbd5e1; font-weight:bold; display:block; margin-bottom:4px;">班級：</label>
+            <input type="text" id="student-class-input" class="student-info-box" maxlength="6" placeholder="如 801">
+          </div>
+          <div>
+            <label style="font-size:0.85rem; color:#cbd5e1; font-weight:bold; display:block; margin-bottom:4px;">座號：</label>
+            <input type="number" id="student-seat-input" class="student-info-box" min="1" max="99" placeholder="如 05">
+          </div>
+          <div>
+            <label style="font-size:0.85rem; color:#cbd5e1; font-weight:bold; display:block; margin-bottom:4px;">真實姓名：</label>
+            <input type="text" id="student-realname-input" class="student-info-box" maxlength="8" placeholder="如 王小明">
+          </div>
+        </div>
+
+        <!-- 步驟 2：角色名稱輸入 (最多6字) -->
+        <div style="border-top:1px dashed #475569; margin-top:14px; padding-top:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <label for="player-name-input" style="font-weight:bold; color:#fde047; font-size:1.05rem;">
+              <span>⚔️</span> 第二步：自訂勇者角色暱稱：
+            </label>
+            <span style="font-size:0.8rem; color:#fbbf24; font-weight:bold;">★ 限制最多 6 個字</span>
+          </div>
+          <div>
+            <input type="text" id="player-name-input" class="name-input-box" maxlength="6" placeholder="輸入暱稱 (最多6字，如: 算術小神童)">
+          </div>
         </div>
       </div>
 
-      <!-- 性別分類標籤 -->
+      <!-- 步驟 3：選擇冒險角色風格與職業 -->
       <div>
-        <div style="font-size:0.95rem; color:#cbd5e1; margin-bottom:6px; font-weight:bold;">選擇你的冒險角色（10位風格角色）：</div>
+        <div style="font-size:1rem; color:#cbd5e1; margin-bottom:6px; font-weight:bold;">
+          <span>🎭</span> 第三步：選擇職業風格（10 位風格角色）：
+        </div>
         <div class="gender-tabs">
           <button class="gender-tab-btn active" onclick="CharacterSystem.filterGender('all')">全部角色</button>
           <button class="gender-tab-btn" onclick="CharacterSystem.filterGender('male')">👦 男生角色 (5位)</button>
@@ -805,8 +1215,9 @@
         <!-- JS 動態生成 10 個角色 -->
       </div>
 
-      <div>
-        <button class="start-adventure-btn" onclick="CharacterSystem.confirmCharacter()">踏上冒險！進入關卡 ➔</button>
+      <div style="display:flex; gap:10px; justify-content:center; align-items:center;">
+        <button class="modal-btn modal-btn-alt" style="max-width:140px; padding:12px 16px; font-size:1rem;" onclick="Game.showScreen('start')">🔙 返回首頁</button>
+        <button class="start-adventure-btn" style="flex:1; max-width:280px;" onclick="CharacterSystem.confirmCharacter()">踏上冒險！進入關卡 ➔</button>
       </div>
     </div>
   </section>
@@ -820,8 +1231,14 @@
       <div class="player-profile">
         <div class="player-avatar-badge" id="lobby-avatar">🧙‍♂️</div>
         <div>
+          <div id="lobby-student-badge" style="font-size:0.8rem; color:#38bdf8; font-weight:bold;"></div>
           <div class="player-name-text" id="lobby-player-name">勇者小算</div>
-          <button class="btn-edit-char" onclick="CharacterSystem.openEditCharacter()">✏️ 更換角色名稱</button>
+          <div style="font-size:0.75rem; color:#34d399; font-weight:bold; margin-top:2px;" id="lobby-passcode-badge">🔑 專屬引繼碼: RAD-000000</div>
+          <div style="display:flex; gap:6px; margin-top:4px;">
+            <button class="btn-edit-char" onclick="CharacterSystem.openEditCharacter()">✏️ 更換角色</button>
+            <button class="btn-edit-char" onclick="Game.showScreen('start')">🏠 回首頁</button>
+            <button class="btn-teacher-sub" onclick="AdminSystem.openLogin()">👨‍🏫 教師後台</button>
+          </div>
         </div>
       </div>
       <div style="text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
@@ -829,7 +1246,7 @@
           <span style="font-size:0.8rem; color:#94a3b8;">總進度:</span>
           <span style="font-size:1.05rem; font-weight:bold; color:#34d399;" id="lobby-total-progress">0% 完成</span>
         </div>
-        <button class="btn-save-transfer" onclick="SaveSystem.openModal()">💾 存檔備份 / 引繼碼</button>
+        <button class="btn-save-transfer" onclick="SaveSystem.openModal()">☁️ 雲端存檔 / 引繼碼</button>
       </div>
     </div>
 
@@ -898,17 +1315,24 @@
         </div>
       </div>
 
-      <!-- 第4關：根號除法 (敬請期待) -->
-      <div class="stage-item-card" style="opacity: 0.6; cursor: not-allowed;" onclick="alert('第 4 關【根號除法】即將推出！請先鍛鍊前三關的能力！')">
+      <!-- 第4關：根號除法 -->
+      <div class="stage-item-card" onclick="Game.startStage(4)">
         <div class="stage-info-left">
           <div class="stage-icon-big">❄️</div>
           <div class="stage-details">
-            <div class="stage-title-text" style="color:#94a3b8;">第 4 關：根號除法 (鎖定中)</div>
-            <div class="stage-desc-text">即將登場，敬請期待！</div>
+            <div class="stage-title-text">第 4 關：根號除法</div>
+            <div class="stage-desc-text">利用 √a ÷ √b = √(a ÷ b) 進行整除計算與化簡 (如 √72 ÷ √2 = 6)</div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <div class="stage-progress-bar-bg">
+                <div class="stage-progress-fill" id="stage4-progress-fill" style="width: 20%;"></div>
+              </div>
+              <span style="font-size:0.8rem; color:#fbbf24;" id="stage4-level-text">Lv.1 / 5</span>
+            </div>
           </div>
         </div>
         <div class="stage-action-right">
-          <span style="font-size:0.85rem; color:#64748b;">🔒 尚未開放</span>
+          <span class="badge-cleared" id="stage4-cleared-badge" style="display:none;">★ 通關</span>
+          <button class="btn-enter-stage">進入挑戰 ➔</button>
         </div>
       </div>
 
@@ -1035,41 +1459,166 @@
     </div>
   </div>
 
-  <!-- 存檔備份 / 引繼碼專屬彈出視窗 -->
+  <!-- 存檔備份 / 永久引繼碼專屬彈出視窗 -->
   <div class="modal-overlay" id="save-modal">
-    <div class="modal-card" style="max-width: 520px;">
-      <div class="modal-title">💾 存檔備份與跨裝置引繼</div>
+    <div class="modal-card" style="max-width: 500px;">
+      <div class="modal-title">☁️ 雲端存檔與專屬引繼碼</div>
       
       <!-- 分頁標籤 -->
       <div class="gender-tabs" style="margin-bottom: 12px;">
-        <button class="gender-tab-btn active" id="tab-btn-export" onclick="SaveSystem.switchTab('export')">📤 產生引繼碼 (備份存檔)</button>
-        <button class="gender-tab-btn" id="tab-btn-import" onclick="SaveSystem.switchTab('import')">📥 輸入引繼碼 (還原存檔)</button>
+        <button class="gender-tab-btn active" id="tab-btn-export" onclick="SaveSystem.switchTab('export')">🔑 我的專屬引繼碼</button>
+        <button class="gender-tab-btn" id="tab-btn-import" onclick="SaveSystem.switchTab('import')">📥 登入其他引繼碼</button>
       </div>
 
-      <!-- 匯出面板 -->
+      <!-- 面板 1：我的永久引繼碼 -->
       <div id="save-panel-export">
-        <div style="font-size:0.85rem; color:#94a3b8; text-align:left; margin-bottom:8px; line-height:1.5;">
-          這是您目前的等級與冒險進度代碼。複製後可傳至 LINE 備忘或抄下，在其他平板或家裡電腦貼上即可繼承！
+        <div style="font-size:0.85rem; color:#94a3b8; text-align:left; margin-bottom:10px; line-height:1.5;">
+          這是您目前角色的<strong>永久專屬引繼碼</strong>。無論您練到幾等，代碼都<strong>永遠固定不變</strong>！每次冒險進度皆會自動同步至雲端。
         </div>
-        <textarea id="export-code-display" readonly onclick="this.select()" style="width:100%; height:75px; background:#0f172a; color:#38bdf8; border:1px solid #475569; border-radius:10px; padding:10px; font-size:0.85rem; font-family:monospace; resize:none;"></textarea>
-        <div style="margin-top:10px;">
+
+        <div style="background:#0f172a; border:2px dashed #10b981; border-radius:14px; padding:16px; margin-bottom:12px;">
+          <div style="font-size:0.8rem; color:#a5b4fc; margin-bottom:4px;">您的永久專屬引繼碼：</div>
+          <div id="permanent-code-badge" style="font-size:2rem; font-weight:900; letter-spacing:2px; color:#34d399; font-family:monospace;">RAD-000000</div>
+          <div id="cloud-sync-status-text" style="font-size:0.75rem; color:#94a3b8; margin-top:6px;">☁️ 雲端狀態：已即時同步</div>
+        </div>
+
+        <div style="display:flex; gap:8px;">
           <button class="modal-btn" id="btn-copy-code" onclick="SaveSystem.copyCode()" style="background:linear-gradient(180deg,#059669,#047857);">📋 一鍵複製引繼碼</button>
+          <button class="modal-btn modal-btn-alt" onclick="SaveSystem.manualSync()" style="max-width:120px;">🔄 立即同步</button>
         </div>
       </div>
 
-      <!-- 匯入面板 -->
+      <!-- 面板 2：輸入其他引繼碼 -->
       <div id="save-panel-import" style="display:none;">
-        <div style="font-size:0.85rem; color:#94a3b8; text-align:left; margin-bottom:8px; line-height:1.5;">
-          若您在學校平板或其他裝置有練過等級，請在此貼上引繼碼以還原您的角色與關卡進度：
+        <div style="font-size:0.85rem; color:#94a3b8; text-align:left; margin-bottom:10px; line-height:1.5;">
+          若您在學校平板或其他裝置有專屬引繼碼，請在下方輸入（例如：RAD-123456 或純數字 123456）：
         </div>
-        <textarea id="import-code-input" placeholder="請在此長按貼上以 RADICAL- 開頭的引繼碼..." style="width:100%; height:75px; background:#0f172a; color:#fde047; border:1px solid #6366f1; border-radius:10px; padding:10px; font-size:0.85rem; font-family:monospace; resize:none;"></textarea>
-        <div style="margin-top:10px;">
-          <button class="modal-btn" onclick="SaveSystem.applyImport()" style="background:linear-gradient(180deg,#4f46e5,#4338ca);">🚀 立即讀取並載入進度</button>
+        <input type="text" id="import-code-input" maxlength="12" placeholder="請輸入引繼碼 (如 RAD-123456)" style="width:100%; height:48px; background:#0f172a; color:#fde047; border:2px solid #6366f1; border-radius:10px; padding:8px 14px; font-size:1.2rem; font-weight:bold; text-align:center; letter-spacing:1px; outline:none;" />
+        <div style="margin-top:12px;">
+          <button class="modal-btn" id="btn-submit-import" onclick="SaveSystem.applyImport()" style="background:linear-gradient(180deg,#4f46e5,#4338ca);">🚀 立即從雲端載入進度</button>
         </div>
       </div>
 
       <div style="margin-top:14px;">
         <button class="modal-btn modal-btn-alt" onclick="SaveSystem.closeModal()" style="width:100%;">關閉</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       畫面 4：教師管理後台 (Teacher Admin Dashboard)
+       ========================================================= -->
+  <section class="screen" id="screen-teacher-admin">
+    <div class="admin-container">
+      <!-- 頂部操作欄 -->
+      <div class="admin-header-bar no-print">
+        <div class="admin-title">
+          <span>👨‍🏫</span> 根號冒險譚 · 教師最高權限管理後台
+        </div>
+        <div class="admin-actions">
+          <button class="admin-btn btn-refresh" onclick="AdminSystem.refresh()">🔄 重新整理</button>
+          <button class="admin-btn btn-export-csv" onclick="AdminSystem.exportCSV()">📥 匯出 Excel (CSV離線備份)</button>
+          <button class="admin-btn btn-copy-txt" onclick="AdminSystem.copyRoster()">📋 複製名冊清單</button>
+          <button class="admin-btn btn-print" onclick="window.print()">🖨️ 列印名冊 / 另存PDF</button>
+          <button class="admin-btn btn-exit" onclick="AdminSystem.exit()">🚪 返回遊戲</button>
+        </div>
+      </div>
+
+      <!-- 統計摘要卡片 -->
+      <div class="admin-stats-bar no-print">
+        <div class="stat-card">
+          <div class="stat-label">登記學生總數</div>
+          <div class="stat-val" id="admin-stat-total">0 人</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">班級數量</div>
+          <div class="stat-val" id="admin-stat-classes">0 班</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">全體平均完成度</div>
+          <div class="stat-val" id="admin-stat-progress" style="color:#10b981;">0%</div>
+        </div>
+        <div class="stat-card" style="flex:1.5;">
+          <div class="stat-label">離線備份說明</div>
+          <div style="font-size:0.8rem; color:#cbd5e1; margin-top:3px;">
+            點擊【匯出 Excel】可將全班學生的座號、姓名與專屬引繼碼下載為 CSV 檔。離線時隨時可查，不用擔心學生忘記代碼！
+          </div>
+        </div>
+      </div>
+
+      <!-- 篩選與搜尋列 -->
+      <div class="admin-filter-bar no-print">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <label style="font-size:0.9rem; font-weight:bold; color:#fde047;">班級篩選：</label>
+          <select id="admin-class-filter" class="admin-select" onchange="AdminSystem.applyFilter()">
+            <option value="ALL">全部班級</option>
+          </select>
+        </div>
+        <div style="flex:1; max-width:400px;">
+          <input type="text" id="admin-search-input" class="admin-search-box" placeholder="🔍 搜尋學生姓名、座號、角色或引繼碼..." oninput="AdminSystem.applyFilter()">
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <label style="font-size:0.9rem; font-weight:bold; color:#cbd5e1;">排序：</label>
+          <select id="admin-sort-select" class="admin-select" onchange="AdminSystem.applyFilter()">
+            <option value="class-seat">依 班級 + 座號</option>
+            <option value="updated">依 最後遊玩時間</option>
+            <option value="progress">依 關卡完成度</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 列印專用紙本標題 -->
+      <div class="print-only" style="display:none; text-align:center; margin-bottom:14px;">
+        <h2 style="margin:0; font-size:1.5rem; color:#000;">根號冒險譚 - 全班學生帳號與引繼碼備份名冊</h2>
+        <p style="margin:4px 0; font-size:0.9rem; color:#444;" id="print-subtitle"></p>
+      </div>
+
+      <!-- 學生名冊表格 -->
+      <div class="admin-table-container">
+        <table class="admin-table" id="admin-students-table">
+          <thead>
+            <tr>
+              <th style="width:70px;">班級</th>
+              <th style="width:60px;">座號</th>
+              <th>學生姓名</th>
+              <th>角色暱稱 (≤6字)</th>
+              <th>職業造型</th>
+              <th style="color:#34d399; font-weight:bold;">專屬永久引繼碼</th>
+              <th>第1關 化簡</th>
+              <th>第2關 加減</th>
+              <th>第3關 乘法</th>
+              <th>第4關 除法</th>
+              <th>總進度</th>
+              <th>最後更新</th>
+              <th class="no-print" style="width:80px;">操作</th>
+            </tr>
+          </thead>
+          <tbody id="admin-table-body">
+            <tr>
+              <td colspan="13" style="text-align:center; padding:30px; color:#94a3b8;">
+                ⏳ 正在載入雲端學生資料...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 教師後台登入彈窗 -->
+  <div class="modal-overlay" id="teacher-login-modal">
+    <div class="modal-card" style="max-width: 440px; text-align: center;">
+      <div class="modal-title" style="color:#38bdf8;">👨‍🏫 教師最高權限管理登入</div>
+      <p style="font-size:0.85rem; color:#94a3b8; margin: 8px 0 16px 0; line-height: 1.5;">
+        此後台供任課教師檢視全體學生之<strong>班級、座號、姓名與專屬引繼碼</strong>，並提供匯出 Excel 離線名冊功能。
+      </p>
+      <div style="margin-bottom:14px; text-align:left;">
+        <label style="font-size:0.85rem; font-weight:bold; color:#fde047; display:block; margin-bottom:4px;">請輸入教師管理密碼：</label>
+        <input type="password" id="admin-pass-input" placeholder="請輸入教師管理密碼" style="width:100%; height:46px; background:#0f172a; color:#fde047; border:2px solid #38bdf8; border-radius:10px; padding:8px 14px; font-size:1.1rem; text-align:center; outline:none;" onkeydown="if(event.key==='Enter') AdminSystem.verifyLogin()" />
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="modal-btn modal-btn-alt" onclick="AdminSystem.closeLogin()">取消</button>
+        <button class="modal-btn" onclick="AdminSystem.verifyLogin()" style="background:linear-gradient(180deg, #0284c7, #0369a1);">登入後台</button>
       </div>
     </div>
   </div>
@@ -1148,10 +1697,39 @@
     const CharacterSystem = {
       selectedCharId: "m2",
       playerName: "勇者小算",
+      studentClass: "",
+      studentSeat: "",
+      studentRealName: "",
       currentFilter: "all",
+      isCreatingNew: false,
 
       init() {
+        this.loadStudent();
         this.renderCharacterGrid();
+      },
+
+      loadStudent() {
+        try {
+          const s = JSON.parse(localStorage.getItem('radical_rpg_student'));
+          if (s) {
+            this.studentClass = s.class || "";
+            this.studentSeat = s.seat || "";
+            this.studentRealName = s.realName || "";
+          }
+        } catch(e) {}
+      },
+
+      saveStudent(cls, seat, realName) {
+        this.studentClass = cls;
+        this.studentSeat = seat;
+        this.studentRealName = realName;
+        try {
+          localStorage.setItem('radical_rpg_student', JSON.stringify({
+            class: cls,
+            seat: seat,
+            realName: realName
+          }));
+        } catch(e) {}
       },
 
       filterGender(gender) {
@@ -1193,21 +1771,59 @@
 
       confirmCharacter() {
         SoundEngine.playClick();
-        const inputName = document.getElementById('player-name-input').value.trim();
-        if (inputName) {
-          this.playerName = inputName;
-        } else {
+        const inputClass = (document.getElementById('student-class-input')?.value || '').trim();
+        const inputSeat = (document.getElementById('student-seat-input')?.value || '').trim();
+        const inputRealName = (document.getElementById('student-realname-input')?.value || '').trim();
+        let inputCharName = (document.getElementById('player-name-input')?.value || '').trim();
+
+        if (!inputClass || !inputSeat || !inputRealName) {
+          SoundEngine.playError();
+          alert("請完整填寫【班級】、【座號】與【真實姓名】！\n以便老師登記名冊與在您忘記引繼碼時協助查詢！");
+          return;
+        }
+
+        if (!inputCharName) {
           const char = CHARACTERS_DB.find(c => c.id === this.selectedCharId);
-          this.playerName = char.name;
+          inputCharName = char.name;
+        }
+
+        if (inputCharName.length > 6) {
+          SoundEngine.playError();
+          alert("勇者角色暱稱長度最多只能 6 個字喔！請重新輸入。");
+          return;
+        }
+
+        this.playerName = inputCharName;
+        this.saveStudent(inputClass, inputSeat, inputRealName);
+
+        if (this.isCreatingNew) {
+          // 全新角色：配發新永久引繼碼並重置各關卡等級
+          SaveSystem.createNewPasscode();
+          Game.stagesData = {
+            1: { level: 1, exp: 0, monsterIndex: 0, cleared: false },
+            2: { level: 1, exp: 0, monsterIndex: 0, cleared: false },
+            3: { level: 1, exp: 0, monsterIndex: 0, cleared: false },
+            4: { level: 1, exp: 0, monsterIndex: 0, cleared: false }
+          };
+          this.isCreatingNew = false;
         }
 
         Game.saveCharacter(this.selectedCharId, this.playerName);
+        Game.saveData();
         Game.showScreen('stage-select');
       },
 
       openEditCharacter() {
         SoundEngine.playClick();
-        document.getElementById('player-name-input').value = this.playerName;
+        this.isCreatingNew = false;
+        const classEl = document.getElementById('student-class-input');
+        const seatEl = document.getElementById('student-seat-input');
+        const realNameEl = document.getElementById('student-realname-input');
+        const charNameEl = document.getElementById('player-name-input');
+        if (classEl) classEl.value = this.studentClass;
+        if (seatEl) seatEl.value = this.studentSeat;
+        if (realNameEl) realNameEl.value = this.studentRealName;
+        if (charNameEl) charNameEl.value = this.playerName;
         Game.showScreen('character-select');
       }
     };
@@ -1257,11 +1873,25 @@
           { name: "雷霆巨魔像", avatar: "🦾", hp: 130, exp: 80, tier: 4 },
           { name: "滅世雷神龍 (BOSS)", avatar: "🐲", hp: 180, exp: 120, tier: 5 }
         ]
+      },
+      4: {
+        id: 4,
+        title: "第 4 關：根號除法",
+        icon: "❄️",
+        prompt: "⚡ 請計算下列根號除法的最簡結果：",
+        maxLevel: 5,
+        monsters: [
+          { name: "冰霜雪人", avatar: "⛄", hp: 55, exp: 40, tier: 1 },
+          { name: "極地冰晶傀儡", avatar: "💎", hp: 75, exp: 50, tier: 2 },
+          { name: "狂風雪狼", avatar: "🐺", hp: 100, exp: 65, tier: 3 },
+          { name: "極寒冰霜魔女", avatar: "🧙‍♀️", hp: 135, exp: 80, tier: 4 },
+          { name: "滅世冰獄巨龍 (BOSS)", avatar: "🐲", hp: 190, exp: 120, tier: 5 }
+        ]
       }
     };
 
     /* =========================================================
-       5. 數學核心引擎 (化簡、加減、乘法題庫生成)
+       5. 數學核心引擎 (化簡、加減、乘法題庫大幅擴充與防重複機制)
        ========================================================= */
     const MathEngine = {
       simplifyRadical(n) {
@@ -1287,19 +1917,28 @@
         `;
       },
 
-      /* --------- 第 1 關：根號化簡 --------- */
+      /* --------- 第 1 關：根號化簡 (題庫大幅擴充) --------- */
       generateStage1(tier) {
         let a, b;
-        const isPerfectSquare = Math.random() < 0.2;
+        const isPerfectSquare = Math.random() < 0.22;
 
         if (isPerfectSquare) {
-          const squareBases = tier <= 2 ? [4, 5, 6] : [7, 8, 9, 10];
-          a = squareBases[Math.floor(Math.random() * squareBases.length)];
+          const squarePool = tier === 1 ? [4, 5, 6, 7]
+                           : tier === 2 ? [6, 7, 8, 9, 10]
+                           : tier === 3 ? [9, 10, 11, 12, 13]
+                           : tier === 4 ? [12, 13, 14, 15, 16]
+                           : [14, 15, 16, 17, 18, 19, 20];
+          a = squarePool[Math.floor(Math.random() * squarePool.length)];
           b = 1;
         } else {
-          const bPool = (tier <= 2) ? [2, 3] : (tier <= 4) ? [2, 3, 5, 6] : [2, 3, 5, 6, 7];
-          const aMin = tier === 1 ? 2 : tier === 2 ? 2 : 3;
-          const aMax = tier === 1 ? 3 : tier === 2 ? 4 : tier === 3 ? 5 : 7;
+          // 質數與無平方因數池
+          const bPool = tier <= 2 ? [2, 3, 5, 6, 7]
+                      : tier <= 4 ? [2, 3, 5, 6, 7, 10, 11]
+                      : [2, 3, 5, 6, 7, 10, 11, 13, 14];
+
+          const aMin = tier === 1 ? 2 : tier === 2 ? 2 : tier === 3 ? 3 : tier === 4 ? 4 : 5;
+          const aMax = tier === 1 ? 4 : tier === 2 ? 6 : tier === 3 ? 8 : tier === 4 ? 10 : 13;
+
           b = bPool[Math.floor(Math.random() * bPool.length)];
           a = Math.floor(Math.random() * (aMax - aMin + 1)) + aMin;
         }
@@ -1308,6 +1947,7 @@
         const standardStr = b === 1 ? `${a}` : (a === 1 ? `√${b}` : `${a}√${b}`);
 
         return {
+          key: `s1_${originalN}`,
           originalN,
           correctA: a,
           correctB: b,
@@ -1328,47 +1968,72 @@
         };
       },
 
-      /* --------- 第 2 關：根號加減 --------- */
+      /* --------- 第 2 關：根號加減 (題庫大幅擴充) --------- */
       generateStage2(tier) {
-        const bPool = [2, 3, 5];
+        const bPool = [2, 3, 5, 6, 7, 10];
         const b = bPool[Math.floor(Math.random() * bPool.length)];
-        let c1, c2, op, htmlText, explanation, finalCoef;
+        let c1, c2, htmlText, explanation, finalCoef;
+        let opKey = "+";
 
         if (tier === 1) {
-          c1 = Math.floor(Math.random() * 4) + 1;
-          c2 = Math.floor(Math.random() * 4) + 2;
+          // Tier 1: 同類方根相加
+          c1 = Math.floor(Math.random() * 6) + 1;
+          c2 = Math.floor(Math.random() * 6) + 1;
           finalCoef = c1 + c2;
           htmlText = `${this.renderRadicalHTML(c1, b)} <span style="color:#fbbf24; margin:0 6px;">+</span> ${this.renderRadicalHTML(c2, b)}`;
           explanation = `同類方根合併：(${c1} + ${c2})√${b} = <strong>${finalCoef}√${b}</strong>`;
         } else if (tier === 2) {
-          c1 = Math.floor(Math.random() * 4) + 3;
+          // Tier 2: 同類方根相減
+          c1 = Math.floor(Math.random() * 7) + 3;
           c2 = Math.floor(Math.random() * (c1 - 1)) + 1;
           finalCoef = c1 - c2;
+          opKey = "-";
           htmlText = `${this.renderRadicalHTML(c1, b)} <span style="color:#fbbf24; margin:0 6px;">-</span> ${this.renderRadicalHTML(c2, b)}`;
           explanation = `同類方根相減：(${c1} - ${c2})√${b} = <strong>${finalCoef === 1 ? `√${b}` : `${finalCoef}√${b}`}</strong>`;
         } else if (tier === 3) {
-          const a1 = Math.floor(Math.random() * 3) + 2;
+          // Tier 3: 單項先化簡再加減
+          const a1 = Math.floor(Math.random() * 4) + 2;
           const n1 = a1 * a1 * b;
-          const a2 = Math.floor(Math.random() * 3) + 1;
-          finalCoef = a1 + a2;
-          const t1 = `<span class="radical-block"><span class="radical-symbol">√</span><span class="radicand-val">${n1}</span></span>`;
-          htmlText = `${t1} <span style="color:#fbbf24; margin:0 6px;">+</span> ${this.renderRadicalHTML(a2, b)}`;
-          explanation = `先化簡 √${n1} = ${a1}√${b}，再合併：${a1}√${b} + ${a2}√${b} = <strong>${finalCoef}√${b}</strong>`;
+          const isMinus = Math.random() < 0.4 && a1 > 2;
+          if (isMinus) {
+            const a2 = Math.floor(Math.random() * (a1 - 1)) + 1;
+            finalCoef = a1 - a2;
+            opKey = "-";
+            const t1 = `<span class="radical-block"><span class="radical-symbol">√</span><span class="radicand-val">${n1}</span></span>`;
+            htmlText = `${t1} <span style="color:#fbbf24; margin:0 6px;">-</span> ${this.renderRadicalHTML(a2, b)}`;
+            explanation = `先化簡 √${n1} = ${a1}√${b}，再相減：${a1}√${b} - ${a2}√${b} = <strong>${finalCoef === 1 ? `√${b}` : `${finalCoef}√${b}`}</strong>`;
+          } else {
+            const a2 = Math.floor(Math.random() * 5) + 1;
+            finalCoef = a1 + a2;
+            const t1 = `<span class="radical-block"><span class="radical-symbol">√</span><span class="radicand-val">${n1}</span></span>`;
+            htmlText = `${t1} <span style="color:#fbbf24; margin:0 6px;">+</span> ${this.renderRadicalHTML(a2, b)}`;
+            explanation = `先化簡 √${n1} = ${a1}√${b}，再合併：${a1}√${b} + ${a2}√${b} = <strong>${finalCoef}√${b}</strong>`;
+          }
         } else if (tier === 4) {
-          const a1 = Math.floor(Math.random() * 2) + 2;
-          const a2 = Math.floor(Math.random() * 2) + 2;
+          // Tier 4: 雙項化簡加減 (√n1 ± √n2)
+          let a1 = Math.floor(Math.random() * 3) + 2;
+          let a2 = Math.floor(Math.random() * 3) + 2;
+          const isMinus = Math.random() < 0.35;
+          if (isMinus) {
+            if (a1 <= a2) { const tmp = a1; a1 = a2 + 1; a2 = tmp; }
+            finalCoef = a1 - a2;
+            opKey = "-";
+          } else {
+            finalCoef = a1 + a2;
+          }
           const n1 = a1 * a1 * b;
           const n2 = a2 * a2 * b;
-          finalCoef = a1 + a2;
           htmlText = `
             <span class="radical-block"><span class="radical-symbol">√</span><span class="radicand-val">${n1}</span></span>
-            <span style="color:#fbbf24; margin:0 6px;">+</span>
+            <span style="color:#fbbf24; margin:0 6px;">${isMinus ? '-' : '+'}</span>
             <span class="radical-block"><span class="radical-symbol">√</span><span class="radicand-val">${n2}</span></span>
           `;
-          explanation = `分別化簡：√${n1} = ${a1}√${b}，√${n2} = ${a2}√${b}<br>相加得：<strong>${finalCoef}√${b}</strong>`;
+          explanation = `分別化簡：√${n1} = ${a1}√${b}，√${n2} = ${a2}√${b}<br>${isMinus ? '相減' : '相加'}得：<strong>${finalCoef === 1 ? `√${b}` : `${finalCoef}√${b}`}</strong>`;
         } else {
-          // tier 5 BOSS
-          const k1 = 2, a1 = 2, a2 = 3;
+          // Tier 5: 魔王題 (帶係數雙項化簡)
+          const k1 = Math.floor(Math.random() * 2) + 2; // 2 or 3
+          const a1 = Math.floor(Math.random() * 2) + 2; // 2 or 3
+          const a2 = Math.floor(Math.random() * 3) + 2; // 2, 3, 4
           finalCoef = (k1 * a1) + a2;
           const n1 = a1 * a1 * b, n2 = a2 * a2 * b;
           htmlText = `
@@ -1381,6 +2046,7 @@
 
         const standardStr = finalCoef === 1 ? `√${b}` : (finalCoef === 0 ? "0" : `${finalCoef}√${b}`);
         return {
+          key: `s2_${b}_${opKey}_${finalCoef}_${htmlText.slice(0, 30)}`,
           correctA: finalCoef,
           correctB: finalCoef === 0 ? 1 : b,
           standardStr,
@@ -1389,24 +2055,24 @@
         };
       },
 
-      /* --------- 第 3 關：根號乘法 --------- */
+      /* --------- 第 3 關：根號乘法 (題庫大幅擴充) --------- */
       generateStage3(tier) {
-        // tier 1: 直接相乘無平方因數 (√2 × √3 = √6, √3 × √5 = √15)
-        // tier 2: 相乘後為完全平方數整數 (√3 × √3 = 3, √2 × √8 = 4)
-        // tier 3: 相乘後需提出平方因數化簡 (√2 × √6 = 2√3, √6 × √10 = 2√15)
-        // tier 4: 係數與根號相乘 (2√3 × 3√2 = 6√6)
-        // tier 5: 係數乘法且需化簡 (2√6 × 3√10 = 12√15, 3√8 × 2√3 = 12√6)
-
         let k1 = 1, k2 = 1, r1 = 2, r2 = 3;
         let finalCoef = 1, finalRadicand = 1;
         let explanation = "";
 
         if (tier === 1) {
-          // Tier 1: 基礎乘法 (√a × √b = √ab)
-          const pairs = [[2, 3], [3, 5], [2, 5], [2, 7], [3, 7]];
+          // Tier 1: 基礎相乘無平方因數 (19組題庫並支援交換律)
+          const pairs = [
+            [2, 3], [2, 5], [2, 7], [2, 11], [2, 13],
+            [3, 5], [3, 7], [3, 10], [3, 11], [3, 13],
+            [5, 6], [5, 7], [5, 11], [6, 7], [2, 15],
+            [3, 14], [7, 10], [5, 13], [6, 11]
+          ];
           const pick = pairs[Math.floor(Math.random() * pairs.length)];
-          r1 = pick[0];
-          r2 = pick[1];
+          const swap = Math.random() < 0.5;
+          r1 = swap ? pick[1] : pick[0];
+          r2 = swap ? pick[0] : pick[1];
           finalCoef = 1;
           finalRadicand = r1 * r2;
           explanation = `
@@ -1415,10 +2081,10 @@
             √${r1} × √${r2} = √(${r1} × ${r2}) = <strong>√${finalRadicand}</strong>
           `;
         } else if (tier === 2) {
-          // Tier 2: 相乘後為完全平方數
-          const isSame = Math.random() < 0.5;
+          // Tier 2: 相乘後為完全平方數整數 (多達18種組合)
+          const isSame = Math.random() < 0.45;
           if (isSame) {
-            const primes = [2, 3, 5, 7];
+            const primes = [2, 3, 5, 6, 7, 10, 11, 13];
             r1 = primes[Math.floor(Math.random() * primes.length)];
             r2 = r1;
             finalCoef = r1;
@@ -1428,10 +2094,16 @@
               √${r1} × √${r1} = (√${r1})² = <strong>${r1}</strong>
             `;
           } else {
-            const pairs = [[2, 8, 4], [3, 12, 6], [5, 20, 10]];
+            const pairs = [
+              [2, 8, 4], [3, 12, 6], [5, 20, 10], [2, 18, 6],
+              [2, 32, 8], [3, 27, 9], [2, 50, 10], [3, 48, 12],
+              [5, 45, 15], [6, 24, 12], [7, 28, 14], [8, 18, 12],
+              [12, 27, 18]
+            ];
             const pick = pairs[Math.floor(Math.random() * pairs.length)];
-            r1 = pick[0];
-            r2 = pick[1];
+            const swap = Math.random() < 0.5;
+            r1 = swap ? pick[1] : pick[0];
+            r2 = swap ? pick[0] : pick[1];
             finalCoef = pick[2];
             finalRadicand = 1;
             explanation = `
@@ -1440,17 +2112,29 @@
             `;
           }
         } else if (tier === 3) {
-          // Tier 3: 相乘後化簡
+          // Tier 3: 相乘後需提出平方因數化簡 (16組組合)
           const pairs = [
             [2, 6, 2, 3],   // √2 × √6 = √12 = 2√3
             [3, 6, 3, 2],   // √3 × √6 = √18 = 3√2
             [6, 10, 2, 15], // √6 × √10 = √60 = 2√15
             [3, 15, 3, 5],  // √3 × √15 = √45 = 3√5
-            [2, 10, 2, 5]   // √2 × √10 = √20 = 2√5
+            [2, 10, 2, 5],  // √2 × √10 = √20 = 2√5
+            [2, 14, 2, 7],  // √2 × √14 = 2√7
+            [6, 15, 3, 10], // √6 × √15 = 3√10
+            [10, 15, 5, 6], // √10 × √15 = 5√6
+            [6, 21, 3, 14], // √6 × √21 = 3√14
+            [14, 21, 7, 6], // √14 × √21 = 7√6
+            [10, 35, 5, 14],// √10 × √35 = 5√14
+            [2, 22, 2, 11], // √2 × √22 = 2√11
+            [3, 21, 3, 7],  // √3 × √21 = 3√7
+            [5, 35, 5, 7],  // √5 × √35 = 5√7
+            [6, 33, 3, 22], // √6 × √33 = 3√22
+            [15, 21, 3, 35] // √15 × √21 = 3√35
           ];
           const pick = pairs[Math.floor(Math.random() * pairs.length)];
-          r1 = pick[0];
-          r2 = pick[1];
+          const swap = Math.random() < 0.5;
+          r1 = swap ? pick[1] : pick[0];
+          r2 = swap ? pick[0] : pick[1];
           finalCoef = pick[2];
           finalRadicand = pick[3];
           explanation = `
@@ -1459,13 +2143,14 @@
             2. 將 ${r1 * r2} 化為最簡根式：√${r1 * r2} = <strong>${finalCoef}√${finalRadicand}</strong>
           `;
         } else if (tier === 4) {
-          // Tier 4: 含係數相乘
-          k1 = Math.floor(Math.random() * 2) + 2; // 2, 3
-          k2 = Math.floor(Math.random() * 2) + 2; // 2, 3
-          const pairs = [[2, 3], [3, 5], [2, 5]];
+          // Tier 4: 係數與根號同時相乘
+          k1 = Math.floor(Math.random() * 3) + 2; // 2, 3, 4
+          k2 = Math.floor(Math.random() * 3) + 2; // 2, 3, 4
+          const pairs = [[2, 3], [3, 5], [2, 5], [2, 7], [3, 7], [5, 6], [2, 11], [3, 10]];
           const pick = pairs[Math.floor(Math.random() * pairs.length)];
-          r1 = pick[0];
-          r2 = pick[1];
+          const swap = Math.random() < 0.5;
+          r1 = swap ? pick[1] : pick[0];
+          r2 = swap ? pick[0] : pick[1];
           finalCoef = k1 * k2;
           finalRadicand = r1 * r2;
           explanation = `
@@ -1474,11 +2159,17 @@
           `;
         } else {
           // Tier 5: 魔王題 (含係數且需進一步化簡)
-          k1 = 2;
-          k2 = 3;
-          const pick = [[6, 10, 2, 15], [8, 3, 2, 6], [15, 6, 3, 10]][Math.floor(Math.random() * 3)];
-          r1 = pick[0];
-          r2 = pick[1];
+          k1 = Math.floor(Math.random() * 2) + 2; // 2 or 3
+          k2 = Math.floor(Math.random() * 2) + 2; // 2 or 3
+          const pickList = [
+            [6, 10, 2, 15], [8, 3, 2, 6], [15, 6, 3, 10],
+            [12, 10, 2, 30], [18, 15, 3, 30], [14, 21, 7, 6],
+            [20, 15, 5, 12], [24, 15, 6, 10]
+          ];
+          const pick = pickList[Math.floor(Math.random() * pickList.length)];
+          const swap = Math.random() < 0.5;
+          r1 = swap ? pick[1] : pick[0];
+          r2 = swap ? pick[0] : pick[1];
           const extraCoef = pick[2];
           finalRadicand = pick[3];
           finalCoef = (k1 * k2) * extraCoef;
@@ -1496,6 +2187,184 @@
         const standardStr = finalRadicand === 1 ? `${finalCoef}` : (finalCoef === 1 ? `√${finalRadicand}` : `${finalCoef}√${finalRadicand}`);
 
         return {
+          key: `s3_${k1}_${r1}_${k2}_${r2}`,
+          correctA: finalCoef,
+          correctB: finalRadicand,
+          standardStr,
+          htmlText,
+          explanation
+        };
+      },
+
+      /* --------- 第 4 關：根號除法 (精心控制數值，整除且無分母根號) --------- */
+      generateStage4(tier) {
+        // tier 1: 基礎除法，整除後為最簡根式 (如 √6 ÷ √2 = √3, √15 ÷ √3 = √5)
+        // tier 2: 除法後為完全平方數整數 (如 √12 ÷ √3 = 2, √18 ÷ √2 = 3, √32 ÷ √2 = 4)
+        // tier 3: 除法後為合數需化簡 (如 √24 ÷ √2 = √12 = 2√3, √54 ÷ √3 = √18 = 3√2)
+        // tier 4: 含整數係數相除 (如 6√10 ÷ 2√2 = 3√5, 8√15 ÷ 2√3 = 4√5)
+        // tier 5: BOSS魔王題 (係數相除且二次化簡，如 6√54 ÷ 2√3 = 9√2, 8√72 ÷ 2√3 = 8√6)
+
+        let k1 = 1, k2 = 1, r1 = 6, r2 = 2;
+        let finalCoef = 1, finalRadicand = 1;
+        let explanation = "";
+
+        if (tier === 1) {
+          // Tier 1: 基礎除法，整除後無平方因數 (√A ÷ √B = √Q)
+          const pairs = [
+            [6, 2, 3],   // √6 ÷ √2 = √3
+            [6, 3, 2],   // √6 ÷ √3 = √2
+            [10, 2, 5],  // √10 ÷ √2 = √5
+            [10, 5, 2],  // √10 ÷ √5 = √2
+            [14, 2, 7],  // √14 ÷ √2 = √7
+            [14, 7, 2],  // √14 ÷ √7 = √2
+            [15, 3, 5],  // √15 ÷ √3 = √5
+            [15, 5, 3],  // √15 ÷ √5 = √3
+            [21, 3, 7],  // √21 ÷ √3 = √7
+            [21, 7, 3],  // √21 ÷ √7 = √3
+            [22, 2, 11], // √22 ÷ √2 = √11
+            [26, 2, 13], // √26 ÷ √2 = √13
+            [30, 3, 10], // √30 ÷ √3 = √10
+            [30, 5, 6],  // √30 ÷ √5 = √6
+            [30, 6, 5],  // √30 ÷ √6 = √5
+            [33, 3, 11], // √33 ÷ √3 = √11
+            [35, 5, 7],  // √35 ÷ √5 = √7
+            [35, 7, 5],  // √35 ÷ √7 = √5
+            [42, 6, 7],  // √42 ÷ √6 = √7
+            [42, 7, 6],  // √42 ÷ √7 = √6
+            [55, 5, 11], // √55 ÷ √5 = √11
+            [77, 7, 11]  // √77 ÷ √7 = √11
+          ];
+          const pick = pairs[Math.floor(Math.random() * pairs.length)];
+          r1 = pick[0];
+          r2 = pick[1];
+          finalRadicand = pick[2];
+          finalCoef = 1;
+          explanation = `
+            <strong>根號除法基本法則：</strong><br>
+            √a ÷ √b = √(a ÷ b)<br>
+            √${r1} ÷ √${r2} = √(${r1} ÷ ${r2}) = <strong>√${finalRadicand}</strong>
+          `;
+        } else if (tier === 2) {
+          // Tier 2: 相除後為完全平方數整數 (√A ÷ √B = k)
+          const pairs = [
+            [12, 3, 4, 2],   // √12 ÷ √3 = √4 = 2
+            [18, 2, 9, 3],   // √18 ÷ √2 = √9 = 3
+            [20, 5, 4, 2],   // √20 ÷ √5 = √4 = 2
+            [27, 3, 9, 3],   // √27 ÷ √3 = √9 = 3
+            [28, 7, 4, 2],   // √28 ÷ √7 = √4 = 2
+            [32, 2, 16, 4],  // √32 ÷ √2 = √16 = 4
+            [45, 5, 9, 3],   // √45 ÷ √5 = √9 = 3
+            [48, 3, 16, 4],  // √48 ÷ √3 = √16 = 4
+            [50, 2, 25, 5],  // √50 ÷ √2 = √25 = 5
+            [63, 7, 9, 3],   // √63 ÷ √7 = √9 = 3
+            [72, 2, 36, 6],  // √72 ÷ √2 = √36 = 6
+            [75, 3, 25, 5],  // √75 ÷ √3 = √25 = 5
+            [80, 5, 16, 4],  // √80 ÷ √5 = √16 = 4
+            [98, 2, 49, 7],  // √98 ÷ √2 = √49 = 7
+            [108, 3, 36, 6], // √108 ÷ √3 = √36 = 6
+            [112, 7, 16, 4], // √112 ÷ √7 = √16 = 4
+            [125, 5, 25, 5]  // √125 ÷ √5 = √25 = 5
+          ];
+          const pick = pairs[Math.floor(Math.random() * pairs.length)];
+          r1 = pick[0];
+          r2 = pick[1];
+          const q = pick[2];
+          finalCoef = pick[3];
+          finalRadicand = 1;
+          explanation = `
+            <strong>整除開平方步驟：</strong><br>
+            √${r1} ÷ √${r2} = √(${r1} ÷ ${r2}) = √${q} = <strong>${finalCoef}</strong>
+          `;
+        } else if (tier === 3) {
+          // Tier 3: 相除後需進一步化簡根式 (√A ÷ √B = √Q = k√m)
+          const pairs = [
+            [24, 2, 12, 2, 3],   // √24 ÷ √2 = √12 = 2√3
+            [36, 2, 18, 3, 2],   // √36 ÷ √2 = √18 = 3√2
+            [40, 2, 20, 2, 5],   // √40 ÷ √2 = √20 = 2√5
+            [48, 2, 24, 2, 6],   // √48 ÷ √2 = √24 = 2√6
+            [54, 3, 18, 3, 2],   // √54 ÷ √3 = √18 = 3√2
+            [56, 2, 28, 2, 7],   // √56 ÷ √2 = √28 = 2√7
+            [60, 5, 12, 2, 3],   // √60 ÷ √5 = √12 = 2√3
+            [72, 3, 24, 2, 6],   // √72 ÷ √3 = √24 = 2√6
+            [84, 3, 28, 2, 7],   // √84 ÷ √3 = √28 = 2√7
+            [90, 5, 18, 3, 2],   // √90 ÷ √5 = √18 = 3√2
+            [100, 5, 20, 2, 5],  // √100 ÷ √5 = √20 = 2√5
+            [120, 2, 60, 2, 15], // √120 ÷ √2 = √60 = 2√15
+            [120, 3, 40, 2, 10], // √120 ÷ √3 = √40 = 2√10
+            [135, 3, 45, 3, 5],  // √135 ÷ √3 = √45 = 3√5
+            [140, 5, 28, 2, 7],  // √140 ÷ √5 = √28 = 2√7
+            [150, 2, 75, 5, 3],  // √150 ÷ √2 = √75 = 5√3
+            [162, 2, 81, 9, 1]   // √162 ÷ √2 = √81 = 9
+          ];
+          const pick = pairs[Math.floor(Math.random() * pairs.length)];
+          r1 = pick[0];
+          r2 = pick[1];
+          const q = pick[2];
+          finalCoef = pick[3];
+          finalRadicand = pick[4];
+          explanation = `
+            <strong>除法與化簡步驟：</strong><br>
+            1. 根號內先相除：√${r1} ÷ √${r2} = √(${r1} ÷ ${r2}) = √${q}<br>
+            2. 化為最簡根式：√${q} = <strong>${finalRadicand === 1 ? finalCoef : `${finalCoef}√${finalRadicand}`}</strong>
+          `;
+        } else if (tier === 4) {
+          // Tier 4: 含係數除法 (k1√A ÷ k2√B，係數與根號皆整除)
+          k2 = Math.floor(Math.random() * 2) + 2; // 2 or 3
+          const c = Math.floor(Math.random() * 3) + 2; // 2, 3, 4
+          k1 = k2 * c;
+          const pairs = [
+            [6, 2, 3], [6, 3, 2], [10, 2, 5], [10, 5, 2],
+            [14, 2, 7], [15, 3, 5], [21, 3, 7], [30, 3, 10],
+            [30, 5, 6], [35, 5, 7], [42, 6, 7], [15, 5, 3]
+          ];
+          const pick = pairs[Math.floor(Math.random() * pairs.length)];
+          r1 = pick[0];
+          r2 = pick[1];
+          finalRadicand = pick[2];
+          finalCoef = c;
+          explanation = `
+            <strong>係數與根號分別相除：</strong><br>
+            (${k1} ÷ ${k2}) × √(${r1} ÷ ${r2}) = <strong>${finalCoef}√${finalRadicand}</strong>
+          `;
+        } else {
+          // Tier 5: BOSS魔王題 (係數相除 + 根號二次化簡)
+          k2 = Math.floor(Math.random() * 2) + 2; // 2 or 3
+          const c = Math.floor(Math.random() * 3) + 2; // 2, 3, 4
+          k1 = k2 * c;
+          const pairs = [
+            [24, 2, 12, 2, 3],  // √12 = 2√3
+            [40, 2, 20, 2, 5],  // √20 = 2√5
+            [48, 2, 24, 2, 6],  // √24 = 2√6
+            [54, 3, 18, 3, 2],  // √18 = 3√2
+            [56, 2, 28, 2, 7],  // √28 = 2√7
+            [60, 5, 12, 2, 3],  // √12 = 2√3
+            [72, 3, 24, 2, 6],  // √24 = 2√6
+            [84, 3, 28, 2, 7],  // √28 = 2√7
+            [90, 5, 18, 3, 2],  // √18 = 3√2
+            [135, 3, 45, 3, 5]  // √45 = 3√5
+          ];
+          const pick = pairs[Math.floor(Math.random() * pairs.length)];
+          r1 = pick[0];
+          r2 = pick[1];
+          const q = pick[2];
+          const innerA = pick[3];
+          finalRadicand = pick[4];
+          finalCoef = c * innerA;
+          explanation = `
+            <strong>魔王挑戰步驟：</strong><br>
+            1. 係數相除：${k1} ÷ ${k2} = ${c}<br>
+            2. 根號相除：√${r1} ÷ √${r2} = √${q} = ${innerA}√${finalRadicand}<br>
+            3. 結合結果：${c} × (${innerA}√${finalRadicand}) = <strong>${finalCoef}√${finalRadicand}</strong>
+          `;
+        }
+
+        const t1 = this.renderRadicalHTML(k1, r1);
+        const t2 = this.renderRadicalHTML(k2, r2);
+        const htmlText = `${t1} <span style="color:#fbbf24; margin:0 6px;">÷</span> ${t2}`;
+        const standardStr = finalRadicand === 1 ? `${finalCoef}` : (finalCoef === 1 ? `√${finalRadicand}` : `${finalCoef}√${finalRadicand}`);
+
+        return {
+          key: `s4_${k1}_${r1}_${k2}_${r2}`,
           correctA: finalCoef,
           correctB: finalRadicand,
           standardStr,
@@ -1514,7 +2383,8 @@
       stagesData: {
         1: { level: 1, exp: 0, monsterIndex: 0, cleared: false },
         2: { level: 1, exp: 0, monsterIndex: 0, cleared: false },
-        3: { level: 1, exp: 0, monsterIndex: 0, cleared: false }
+        3: { level: 1, exp: 0, monsterIndex: 0, cleared: false },
+        4: { level: 1, exp: 0, monsterIndex: 0, cleared: false }
       },
 
       playerHp: 100,
@@ -1524,6 +2394,7 @@
       currentMonster: null,
       currentProblem: null,
       userInput: "",
+      recentProblemKeys: [],
 
       questionStartTime: 0,
       timerInterval: null,
@@ -1532,21 +2403,8 @@
       init() {
         this.loadSave();
         CharacterSystem.init();
-
-        // 檢查是否已有建立角色，若有則直接進入關卡大廳
-        const savedChar = localStorage.getItem('radical_rpg_character');
-        if (savedChar) {
-          try {
-            const cObj = JSON.parse(savedChar);
-            CharacterSystem.selectedCharId = cObj.id || "m2";
-            CharacterSystem.playerName = cObj.name || "勇者小算";
-            this.showScreen('stage-select');
-          } catch(e) {
-            this.showScreen('character-select');
-          }
-        } else {
-          this.showScreen('character-select');
-        }
+        this.renderStartScreen();
+        this.showScreen('start');
 
         // 鍵盤監聽
         window.addEventListener('keydown', (e) => {
@@ -1558,15 +2416,77 @@
         });
       },
 
+      renderStartScreen() {
+        const savedChar = localStorage.getItem('radical_rpg_character');
+        const wrapper = document.getElementById('start-continue-wrapper');
+        if (savedChar && wrapper) {
+          try {
+            const cObj = JSON.parse(savedChar);
+            CharacterSystem.selectedCharId = cObj.id || "m2";
+            CharacterSystem.playerName = cObj.name || "勇者小算";
+            const char = CHARACTERS_DB.find(c => c.id === CharacterSystem.selectedCharId) || CHARACTERS_DB[0];
+
+            wrapper.style.display = 'block';
+            document.getElementById('start-saved-avatar').innerText = char.avatar;
+
+            const studentBadge = (CharacterSystem.studentClass && CharacterSystem.studentRealName)
+              ? `【${CharacterSystem.studentClass}班 ${CharacterSystem.studentRealName}】`
+              : `【${CharacterSystem.playerName}】`;
+            document.getElementById('start-saved-name').innerText = `繼續冒險：${studentBadge} · ${CharacterSystem.playerName}`;
+
+            let totalLvs = 0;
+            for (let sId = 1; sId <= 4; sId++) {
+              totalLvs += (this.stagesData[sId].level || 1);
+            }
+            const percent = Math.round((totalLvs / 20) * 100);
+            const passcode = SaveSystem.getPasscode();
+            document.getElementById('start-saved-progress').innerText = `${char.title} · 進度 ${percent}% (專屬引繼碼: ${passcode})`;
+          } catch(e) {
+            wrapper.style.display = 'none';
+          }
+        } else if (wrapper) {
+          wrapper.style.display = 'none';
+        }
+      },
+
+      continueSavedGame() {
+        SoundEngine.playClick();
+        this.showScreen('stage-select');
+      },
+
+      startFreshGame() {
+        SoundEngine.playClick();
+        const hasExisting = localStorage.getItem('radical_rpg_character');
+        if (hasExisting) {
+          const ok = confirm("建立新角色將會重置本機上的進度！\n\n📌 提示：您目前的進度已備份在雲端，日後隨時可輸入專屬引繼碼找回。\n\n確定要重新開始冒險嗎？");
+          if (!ok) return;
+        }
+        CharacterSystem.isCreatingNew = true;
+        const cEl = document.getElementById('student-class-input');
+        const sEl = document.getElementById('student-seat-input');
+        const rEl = document.getElementById('student-realname-input');
+        const pEl = document.getElementById('player-name-input');
+        if (cEl) cEl.value = '';
+        if (sEl) sEl.value = '';
+        if (rEl) rEl.value = '';
+        if (pEl) pEl.value = '';
+        this.showScreen('character-select');
+      },
+
       showScreen(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        if (screenId === 'character-select') {
+        if (screenId === 'start') {
+          this.renderStartScreen();
+          document.getElementById('screen-start').classList.add('active');
+        } else if (screenId === 'character-select') {
           document.getElementById('screen-character-select').classList.add('active');
         } else if (screenId === 'stage-select') {
           this.updateLobbyUI();
           document.getElementById('screen-stage-select').classList.add('active');
         } else if (screenId === 'battle') {
           document.getElementById('screen-battle').classList.add('active');
+        } else if (screenId === 'teacher-admin') {
+          document.getElementById('screen-teacher-admin').classList.add('active');
         }
       },
 
@@ -1581,9 +2501,23 @@
         document.getElementById('lobby-avatar').innerText = char.avatar;
         document.getElementById('lobby-player-name').innerText = `${CharacterSystem.playerName} (${char.title})`;
 
+        const studentBadge = (CharacterSystem.studentClass && CharacterSystem.studentSeat && CharacterSystem.studentRealName)
+          ? `🏫 ${CharacterSystem.studentClass}班 ${CharacterSystem.studentSeat}號 · ${CharacterSystem.studentRealName}`
+          : '';
+        const studentEl = document.getElementById('lobby-student-badge');
+        if (studentEl) {
+          studentEl.innerText = studentBadge;
+          studentEl.style.display = studentBadge ? 'block' : 'none';
+        }
+
+        const badgeEl = document.getElementById('lobby-passcode-badge');
+        if (badgeEl) {
+          badgeEl.innerText = `🔑 專屬引繼碼: ${SaveSystem.getPasscode()}`;
+        }
+
         // 各關進度
         let totalLevels = 0;
-        for (let sId = 1; sId <= 3; sId++) {
+        for (let sId = 1; sId <= 4; sId++) {
           const sData = this.stagesData[sId];
           totalLevels += sData.level;
 
@@ -1597,13 +2531,14 @@
           if (badgeEl) badgeEl.style.display = (sData.level >= 5 || sData.cleared) ? 'inline-block' : 'none';
         }
 
-        const totalPercent = Math.round((totalLevels / 15) * 100);
+        const totalPercent = Math.round((totalLevels / 20) * 100);
         document.getElementById('lobby-total-progress').innerText = `${totalPercent}% 完成`;
       },
 
       startStage(stageId) {
         SoundEngine.playClick();
         this.currentStageId = stageId;
+        this.recentProblemKeys = [];
         const cfg = STAGES_CONFIG[stageId];
         const pData = this.stagesData[stageId];
 
@@ -1657,14 +2592,27 @@
         this.renderInput();
 
         const tier = this.currentMonster.tier;
-        if (this.currentStageId === 1) {
-          this.currentProblem = MathEngine.generateStage1(tier);
-        } else if (this.currentStageId === 2) {
-          this.currentProblem = MathEngine.generateStage2(tier);
-        } else {
-          this.currentProblem = MathEngine.generateStage3(tier);
+        let problem = null;
+        let attempts = 0;
+        do {
+          if (this.currentStageId === 1) {
+            problem = MathEngine.generateStage1(tier);
+          } else if (this.currentStageId === 2) {
+            problem = MathEngine.generateStage2(tier);
+          } else if (this.currentStageId === 3) {
+            problem = MathEngine.generateStage3(tier);
+          } else {
+            problem = MathEngine.generateStage4(tier);
+          }
+          attempts++;
+        } while (this.recentProblemKeys.includes(problem.key) && attempts < 25);
+
+        this.recentProblemKeys.push(problem.key);
+        if (this.recentProblemKeys.length > 8) {
+          this.recentProblemKeys.shift();
         }
 
+        this.currentProblem = problem;
         document.getElementById('question-text').innerHTML = this.currentProblem.htmlText;
         this.startTimer();
       },
@@ -1924,8 +2872,10 @@
           this.showModal("💡 化簡小提示", "找出數字的平方因數（如 4, 9, 16, 25, 36...）提出根號外！");
         } else if (this.currentStageId === 2) {
           this.showModal("💡 加減小提示", "先分別化簡，再將根號內相同的同類方根進行係數相加減！");
-        } else {
+        } else if (this.currentStageId === 3) {
           this.showModal("💡 乘法小提示", "利用 √a × √b = √(a × b) 相乘，若有係數則係數相乘，最後記得化為最簡根式！");
+        } else {
+          this.showModal("💡 除法小提示", "利用 √a ÷ √b = √(a ÷ b) 進行除法，根號內數字整除後再化簡！若外層有係數，則係數除以係數。");
         }
       },
 
@@ -1981,13 +2931,16 @@
             stagesData: this.stagesData
           }));
         } catch(e) {}
+        if (typeof SaveSystem !== 'undefined') {
+          SaveSystem.syncToCloud(true);
+        }
       },
 
       loadSave() {
         try {
           const data = JSON.parse(localStorage.getItem('radical_rpg_multi_save_v2'));
           if (data && data.stagesData) {
-            for (let sId = 1; sId <= 3; sId++) {
+            for (let sId = 1; sId <= 4; sId++) {
               if (data.stagesData[sId]) {
                 this.stagesData[sId] = {
                   level: Math.min(5, data.stagesData[sId].level || 1),
@@ -2003,13 +2956,38 @@
     };
 
     /* =========================================================
-       7. 存檔備份與引繼碼系統 (跨裝置繼承)
+       7. 雲端存檔與永久固定引繼碼系統 (Firebase Realtime Database)
        ========================================================= */
+    const FIREBASE_DB_URL = "https://math-game-grade8-default-rtdb.firebaseio.com";
+
     const SaveSystem = {
-      openModal() {
+      // 取得或產生角色的永久專屬引繼碼 (格式: RAD-6位數字)
+      getPasscode() {
+        let code = localStorage.getItem('radical_rpg_passcode');
+        if (!code) {
+          code = this.createNewPasscode();
+        }
+        return code;
+      },
+
+      // 為新角色產生新的永久引繼碼
+      createNewPasscode() {
+        const randNum = Math.floor(100000 + Math.random() * 900000);
+        const code = `RAD-${randNum}`;
+        localStorage.setItem('radical_rpg_passcode', code);
+        return code;
+      },
+
+      setPasscode(code) {
+        localStorage.setItem('radical_rpg_passcode', code);
+      },
+
+      openModal(defaultTab = 'export') {
         SoundEngine.playClick();
-        this.switchTab('export');
-        this.refreshExportCode();
+        this.switchTab(defaultTab);
+        if (defaultTab === 'export') {
+          this.refreshCodeBadge();
+        }
         document.getElementById('save-modal').classList.add('active');
       },
 
@@ -2030,99 +3008,150 @@
           importTabBtn.classList.remove('active');
           exportPanel.style.display = 'block';
           importPanel.style.display = 'none';
-          this.refreshExportCode();
+          this.refreshCodeBadge();
         } else {
           importTabBtn.classList.add('active');
           exportTabBtn.classList.remove('active');
           importPanel.style.display = 'block';
           exportPanel.style.display = 'none';
-          document.getElementById('import-code-input').value = '';
+          const input = document.getElementById('import-code-input');
+          if (input) input.value = '';
         }
       },
 
-      generateSaveCode() {
-        const payload = {
-          v: 1,
-          t: Date.now(),
-          c: CharacterSystem.selectedCharId,
-          n: CharacterSystem.playerName,
-          s: Game.stagesData
-        };
-        const jsonStr = JSON.stringify(payload);
-        const b64 = btoa(encodeURIComponent(jsonStr).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode('0x' + p1)));
-        return `RADICAL-${b64}`;
-      },
-
-      refreshExportCode() {
-        const code = this.generateSaveCode();
-        const display = document.getElementById('export-code-display');
-        if (display) display.value = code;
+      refreshCodeBadge() {
+        const code = this.getPasscode();
+        const badge = document.getElementById('permanent-code-badge');
+        if (badge) badge.innerText = code;
         const copyBtn = document.getElementById('btn-copy-code');
         if (copyBtn) copyBtn.innerText = '📋 一鍵複製引繼碼';
       },
 
       copyCode() {
         SoundEngine.playClick();
-        const display = document.getElementById('export-code-display');
-        if (!display) return;
-        display.select();
-        display.setSelectionRange(0, 99999);
+        const code = this.getPasscode();
 
         const onSuccess = () => {
           const btn = document.getElementById('btn-copy-code');
-          if (btn) btn.innerText = '✅ 已成功複製代碼！可貼到 LINE 或記事本';
+          if (btn) btn.innerText = '✅ 已成功複製引繼碼！';
           setTimeout(() => {
             if (btn) btn.innerText = '📋 一鍵複製引繼碼';
           }, 3000);
         };
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(display.value).then(onSuccess).catch(() => {
-            document.execCommand('copy');
+          navigator.clipboard.writeText(code).then(onSuccess).catch(() => {
+            this.fallbackCopy(code);
             onSuccess();
           });
         } else {
-          document.execCommand('copy');
+          this.fallbackCopy(code);
           onSuccess();
         }
       },
 
-      applyImport() {
+      fallbackCopy(text) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      },
+
+      // 背景自動同步至 Firebase 雲端 (進度更新時自動觸發)
+      async syncToCloud(isSilent = false) {
+        const code = this.getPasscode();
+        const payload = {
+          passcode: code,
+          studentClass: CharacterSystem.studentClass || "",
+          studentSeat: CharacterSystem.studentSeat || "",
+          studentRealName: CharacterSystem.studentRealName || "",
+          charId: CharacterSystem.selectedCharId,
+          charName: CharacterSystem.playerName,
+          name: CharacterSystem.playerName,
+          stages: Game.stagesData,
+          updatedAt: new Date().toISOString()
+        };
+
+        try {
+          const response = await fetch(`${FIREBASE_DB_URL}/saves/${code}.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (response.ok) {
+            const statusEl = document.getElementById('cloud-sync-status-text');
+            if (statusEl) statusEl.innerText = `☁️ 雲端狀態：已即時同步 (${new Date().toLocaleTimeString()})`;
+          }
+        } catch(e) {
+          console.warn('雲端背景同步延遲:', e);
+        }
+      },
+
+      async manualSync() {
+        SoundEngine.playClick();
+        const btn = event.target;
+        btn.innerText = '⏳ 同步中...';
+        await this.syncToCloud(false);
+        btn.innerText = '✅ 同步完成！';
+        setTimeout(() => { btn.innerText = '🔄 立即同步'; }, 2000);
+      },
+
+      // 從 Firebase 雲端載入引繼碼進度
+      async applyImport() {
         SoundEngine.playClick();
         const input = document.getElementById('import-code-input');
         if (!input) return;
-        const rawCode = input.value.trim();
+        let rawCode = input.value.trim().toUpperCase();
 
         if (!rawCode) {
-          alert("請先貼上引繼碼！");
+          alert("請先輸入引繼碼！");
           return;
         }
 
+        // 自動容錯：若學生只輸入 6 位數字 (如 123456)，自動補上 RAD-
+        if (/^\d{6}$/.test(rawCode)) {
+          rawCode = `RAD-${rawCode}`;
+        }
+
+        const submitBtn = document.getElementById('btn-submit-import');
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.innerText = '⏳ 正在連線雲端尋找角色...';
+        }
+
         try {
-          if (!rawCode.startsWith('RADICAL-')) {
-            throw new Error("無效的代碼格式！引繼碼開頭應為 RADICAL-");
+          const response = await fetch(`${FIREBASE_DB_URL}/saves/${rawCode}.json`);
+          if (!response.ok) {
+            throw new Error(`雲端回應錯誤 (${response.status})`);
           }
-          const b64 = rawCode.substring(8);
-          const jsonStr = decodeURIComponent(Array.prototype.map.call(atob(b64), (c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-          const payload = JSON.parse(jsonStr);
+          const data = await response.json();
 
-          if (!payload.n || !payload.s) {
-            throw new Error("存檔內容損毀或不完整！");
+          if (!data || !data.stages || (!data.name && !data.charName)) {
+            throw new Error("找不到此引繼碼！請檢查代碼是否正確（格式如：RAD-123456）");
           }
 
-          // 還原角色
-          CharacterSystem.selectedCharId = payload.c || 'm2';
-          CharacterSystem.playerName = payload.n;
+          // 綁定此永久代碼至本機
+          this.setPasscode(rawCode);
+
+          // 還原學生身份與角色
+          CharacterSystem.selectedCharId = data.charId || 'm2';
+          CharacterSystem.playerName = data.charName || data.name || '勇者小算';
+          CharacterSystem.studentClass = data.studentClass || '';
+          CharacterSystem.studentSeat = data.studentSeat || '';
+          CharacterSystem.studentRealName = data.studentRealName || '';
+          CharacterSystem.saveStudent(CharacterSystem.studentClass, CharacterSystem.studentSeat, CharacterSystem.studentRealName);
           Game.saveCharacter(CharacterSystem.selectedCharId, CharacterSystem.playerName);
 
           // 還原各關卡進度
-          for (let sId = 1; sId <= 3; sId++) {
-            if (payload.s[sId]) {
+          for (let sId = 1; sId <= 4; sId++) {
+            if (data.stages[sId]) {
               Game.stagesData[sId] = {
-                level: Math.min(5, Math.max(1, payload.s[sId].level || 1)),
-                exp: payload.s[sId].exp || 0,
-                monsterIndex: payload.s[sId].monsterIndex || 0,
-                cleared: !!payload.s[sId].cleared
+                level: Math.min(5, Math.max(1, data.stages[sId].level || 1)),
+                exp: data.stages[sId].exp || 0,
+                monsterIndex: data.stages[sId].monsterIndex || 0,
+                cleared: !!data.stages[sId].cleared
               };
             }
           }
@@ -2130,11 +3159,358 @@
           Game.saveData();
           Game.updateLobbyUI();
           SoundEngine.playVictoryFanfare();
-          alert(`🎉 存檔繼承成功！\n歡迎回來，【${payload.n}】！\n所有關卡等級與經驗已完全還原！`);
+
+          const displayName = CharacterSystem.studentRealName 
+            ? `${CharacterSystem.studentRealName} (${CharacterSystem.playerName})` 
+            : CharacterSystem.playerName;
+          alert(`🎉 雲端登入成功！\n歡迎回來，【${displayName}】！\n專屬引繼碼【${rawCode}】已綁定，所有關卡進度已完全同步！`);
+
           this.closeModal();
+          Game.showScreen('stage-select');
         } catch(err) {
           SoundEngine.playError();
-          alert(`❌ 還原失敗：${err.message}\n請確認是否完整複製了代碼！`);
+          alert(`❌ 登入失敗：${err.message}`);
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = '🚀 立即從雲端載入進度';
+          }
+        }
+      }
+    };
+
+    /* =========================================================
+       8. 教師管理後台系統 (AdminSystem)
+       ========================================================= */
+    const AdminSystem = {
+      adminPassword: "rett0127", // 教師最高權限管理密碼
+      cachedStudents: [],
+      filteredStudents: [],
+
+      openLogin() {
+        SoundEngine.playClick();
+        const passInput = document.getElementById('admin-pass-input');
+        if (passInput) passInput.value = '';
+        document.getElementById('teacher-login-modal').classList.add('active');
+        setTimeout(() => { if (passInput) passInput.focus(); }, 100);
+      },
+
+      closeLogin() {
+        SoundEngine.playClick();
+        document.getElementById('teacher-login-modal').classList.remove('active');
+      },
+
+      verifyLogin() {
+        SoundEngine.playClick();
+        const input = document.getElementById('admin-pass-input')?.value.trim();
+        if (input === this.adminPassword) {
+          document.getElementById('teacher-login-modal').classList.remove('active');
+          this.enterDashboard();
+        } else {
+          SoundEngine.playError();
+          alert("❌ 密碼錯誤！請輸入正確的教師最高權限管理密碼。");
+        }
+      },
+
+      async enterDashboard() {
+        Game.showScreen('teacher-admin');
+        await this.refresh();
+      },
+
+      exit() {
+        SoundEngine.playClick();
+        Game.showScreen('start');
+      },
+
+      async refresh() {
+        const tbody = document.getElementById('admin-table-body');
+        if (tbody) {
+          tbody.innerHTML = `<tr><td colspan="13" style="text-align:center; padding:30px; color:#94a3b8;">⏳ 正在連線 Firebase 雲端讀取學生資料...</td></tr>`;
+        }
+        this.cachedStudents = await this.fetchStudents();
+        this.populateClassFilter();
+        this.applyFilter();
+      },
+
+      async fetchStudents() {
+        try {
+          const res = await fetch(`${FIREBASE_DB_URL}/saves.json`);
+          if (!res.ok) throw new Error(`HTTP 錯誤 ${res.status}`);
+          const data = await res.json();
+          if (!data) return [];
+
+          const list = [];
+          for (const [code, item] of Object.entries(data)) {
+            if (!item) continue;
+            let totalLvs = 0;
+            if (item.stages) {
+              for (let sId = 1; sId <= 4; sId++) {
+                totalLvs += (item.stages[sId]?.level || 1);
+              }
+            }
+            const progressPercent = Math.round((totalLvs / 20) * 100);
+            const charObj = CHARACTERS_DB.find(c => c.id === item.charId) || CHARACTERS_DB[0];
+
+            list.push({
+              passcode: code,
+              studentClass: item.studentClass || '',
+              studentSeat: item.studentSeat || '',
+              studentRealName: item.studentRealName || item.name || '未填姓名',
+              charName: item.charName || item.name || '勇者',
+              charId: item.charId || 'm2',
+              charTitle: charObj.title,
+              charAvatar: charObj.avatar,
+              stages: item.stages || {},
+              progressPercent: progressPercent,
+              updatedAt: item.updatedAt || ''
+            });
+          }
+
+          return list;
+        } catch(e) {
+          console.error(e);
+          alert("讀取學生名冊失敗：" + e.message);
+          return [];
+        }
+      },
+
+      populateClassFilter() {
+        const select = document.getElementById('admin-class-filter');
+        if (!select) return;
+        const currentVal = select.value;
+        const classes = new Set();
+        this.cachedStudents.forEach(s => {
+          if (s.studentClass) classes.add(s.studentClass);
+        });
+
+        const sortedClasses = Array.from(classes).sort();
+        select.innerHTML = '<option value="ALL">全部班級</option>';
+        sortedClasses.forEach(cls => {
+          const opt = document.createElement('option');
+          opt.value = cls;
+          opt.innerText = `${cls} 班`;
+          select.appendChild(opt);
+        });
+
+        if (classes.has(currentVal)) {
+          select.value = currentVal;
+        } else {
+          select.value = "ALL";
+        }
+      },
+
+      applyFilter() {
+        const classFilter = document.getElementById('admin-class-filter')?.value || 'ALL';
+        const searchKeyword = (document.getElementById('admin-search-input')?.value || '').trim().toLowerCase();
+        const sortBy = document.getElementById('admin-sort-select')?.value || 'class-seat';
+
+        let list = [...this.cachedStudents];
+
+        // 班級過濾
+        if (classFilter !== 'ALL') {
+          list = list.filter(s => s.studentClass === classFilter);
+        }
+
+        // 關鍵字搜尋
+        if (searchKeyword) {
+          list = list.filter(s => 
+            (s.studentClass && s.studentClass.toLowerCase().includes(searchKeyword)) ||
+            (s.studentSeat && s.studentSeat.toString().includes(searchKeyword)) ||
+            (s.studentRealName && s.studentRealName.toLowerCase().includes(searchKeyword)) ||
+            (s.charName && s.charName.toLowerCase().includes(searchKeyword)) ||
+            (s.passcode && s.passcode.toLowerCase().includes(searchKeyword))
+          );
+        }
+
+        // 排序
+        list.sort((a, b) => {
+          if (sortBy === 'class-seat') {
+            const clsA = (a.studentClass || '').localeCompare(b.studentClass || '');
+            if (clsA !== 0) return clsA;
+            const seatA = parseInt(a.studentSeat, 10) || 999;
+            const seatB = parseInt(b.studentSeat, 10) || 999;
+            return seatA - seatB;
+          } else if (sortBy === 'updated') {
+            return (b.updatedAt || '').localeCompare(a.updatedAt || '');
+          } else if (sortBy === 'progress') {
+            return b.progressPercent - a.progressPercent;
+          }
+          return 0;
+        });
+
+        this.filteredStudents = list;
+        this.renderTable();
+        this.updateStats();
+      },
+
+      updateStats() {
+        const totalEl = document.getElementById('admin-stat-total');
+        const classesEl = document.getElementById('admin-stat-classes');
+        const progEl = document.getElementById('admin-stat-progress');
+
+        const classesSet = new Set(this.cachedStudents.map(s => s.studentClass).filter(Boolean));
+        if (totalEl) totalEl.innerText = `${this.cachedStudents.length} 人`;
+        if (classesEl) classesEl.innerText = `${classesSet.size} 班`;
+
+        if (this.cachedStudents.length > 0) {
+          const avg = Math.round(this.cachedStudents.reduce((sum, s) => sum + s.progressPercent, 0) / this.cachedStudents.length);
+          if (progEl) progEl.innerText = `${avg}%`;
+        } else {
+          if (progEl) progEl.innerText = `0%`;
+        }
+      },
+
+      renderTable() {
+        const tbody = document.getElementById('admin-table-body');
+        if (!tbody) return;
+
+        if (this.filteredStudents.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="13" style="text-align:center; padding:30px; color:#94a3b8;">查無符合條件的學生資料。</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = this.filteredStudents.map((s) => {
+          const s1 = s.stages?.[1]?.level || 1;
+          const s2 = s.stages?.[2]?.level || 1;
+          const s3 = s.stages?.[3]?.level || 1;
+          const s4 = s.stages?.[4]?.level || 1;
+          const updatedDate = s.updatedAt ? new Date(s.updatedAt).toLocaleString('zh-TW', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit' }) : '無';
+
+          return `
+            <tr>
+              <td><strong>${s.studentClass ? `${s.studentClass}班` : '-'}</strong></td>
+              <td>${s.studentSeat ? `${s.studentSeat}號` : '-'}</td>
+              <td style="font-weight:bold; color:#fde047;">${s.studentRealName}</td>
+              <td style="color:#a5b4fc;">${s.charName}</td>
+              <td><span>${s.charAvatar}</span> <span style="font-size:0.8rem; color:#94a3b8;">${s.charTitle}</span></td>
+              <td>
+                <span class="passcode-pill" onclick="AdminSystem.copyCode('${s.passcode}')" title="點擊直接複製引繼碼">
+                  ${s.passcode} 📋
+                </span>
+              </td>
+              <td><span class="badge-stage-lv">Lv.${s1}</span></td>
+              <td><span class="badge-stage-lv">Lv.${s2}</span></td>
+              <td><span class="badge-stage-lv">Lv.${s3}</span></td>
+              <td><span class="badge-stage-lv">Lv.${s4}</span></td>
+              <td>
+                <div style="font-weight:bold; color:#34d399;">${s.progressPercent}%</div>
+                <div style="background:#334155; height:6px; border-radius:3px; overflow:hidden; width:60px; margin:2px auto;">
+                  <div style="background:#10b981; height:100%; width:${s.progressPercent}%;"></div>
+                </div>
+              </td>
+              <td style="font-size:0.75rem; color:#94a3b8;">${updatedDate}</td>
+              <td class="no-print">
+                <button class="btn-table-action" onclick="AdminSystem.deleteStudent('${s.passcode}', '${s.studentRealName}')" title="刪除此筆存檔">🗑️ 刪除</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      },
+
+      copyCode(code) {
+        SoundEngine.playClick();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(code).then(() => {
+            alert(`✅ 已複製引繼碼【${code}】！\n可直接貼給忘記引繼碼的學生登入。`);
+          });
+        } else {
+          prompt("請手動複製此引繼碼：", code);
+        }
+      },
+
+      // 匯出 CSV 檔 (Excel 相容 UTF-8 BOM，雙擊直接開啟不亂碼)
+      exportCSV() {
+        SoundEngine.playClick();
+        if (!this.cachedStudents || this.cachedStudents.length === 0) {
+          alert("目前尚無學生資料可匯出！");
+          return;
+        }
+
+        const headers = [
+          "班級", "座號", "學生真實姓名", "角色暱稱(≤6字)", "職業風格",
+          "專屬永久引繼碼", "第1關(根號化簡)", "第2關(根號加減)", "第3關(根號乘法)", "第4關(根號除法)",
+          "總完成度", "最後同步時間"
+        ];
+
+        const rows = this.filteredStudents.map(s => [
+          `"${s.studentClass || ''}"`,
+          `"${s.studentSeat || ''}"`,
+          `"${s.studentRealName || ''}"`,
+          `"${s.charName || ''}"`,
+          `"${s.charTitle || ''}"`,
+          `"${s.passcode}"`,
+          `"Lv.${s.stages?.[1]?.level || 1}/5"`,
+          `"Lv.${s.stages?.[2]?.level || 1}/5"`,
+          `"Lv.${s.stages?.[3]?.level || 1}/5"`,
+          `"Lv.${s.stages?.[4]?.level || 1}/5"`,
+          `"${s.progressPercent}%"`,
+          `"${s.updatedAt ? new Date(s.updatedAt).toLocaleString() : ''}"`
+        ]);
+
+        const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(r => r.join(","))].join("\r\n");
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        const now = new Date();
+        const dateStr = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
+        a.href = url;
+        a.download = `數學冒險譚_全班學生引繼碼與成績備份_${dateStr}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      },
+
+      // 一鍵複製純文字名冊 (方便貼到 LINE / 記事本)
+      copyRoster() {
+        SoundEngine.playClick();
+        if (!this.filteredStudents || this.filteredStudents.length === 0) {
+          alert("目前無學生資料可複製！");
+          return;
+        }
+
+        const now = new Date().toLocaleString();
+        const lines = [
+          `【根號冒險譚 - 學生引繼碼與進度名冊】`,
+          `備份時間: ${now}`,
+          `名冊人數: ${this.filteredStudents.length} 人`,
+          `============================================================`,
+          `班級\t座號\t姓名\t角色暱稱\t專屬永久引繼碼\t\t進度`
+        ];
+
+        this.filteredStudents.forEach(s => {
+          lines.push(`${s.studentClass || '-'}\t${s.studentSeat || '-'}\t${s.studentRealName}\t${s.charName}\t${s.passcode}\t${s.progressPercent}%`);
+        });
+
+        lines.push(`============================================================`);
+        lines.push(`提示：學生換平板或忘記代碼時，請於首頁點擊【登入引繼碼】輸入代碼即可還原進度。`);
+
+        const text = lines.join('\n');
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(() => {
+            alert("📋 已成功複製全班引繼碼清單！\n您可直接貼在 LINE、Word 或記事本做離線備份！");
+          });
+        } else {
+          prompt("請複製下方文字：", text);
+        }
+      },
+
+      async deleteStudent(passcode, name) {
+        SoundEngine.playClick();
+        if (!confirm(`確定要刪除學生【${name}】的存檔 (引繼碼: ${passcode}) 嗎？\n此動作將從雲端資料庫永久移除！`)) {
+          return;
+        }
+
+        try {
+          const res = await fetch(`${FIREBASE_DB_URL}/saves/${passcode}.json`, { method: 'DELETE' });
+          if (res.ok) {
+            alert(`已成功刪除【${name}】的存檔！`);
+            await this.refresh();
+          } else {
+            throw new Error(`刪除失敗 (${res.status})`);
+          }
+        } catch(e) {
+          alert("刪除失敗：" + e.message);
         }
       }
     };

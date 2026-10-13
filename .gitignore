@@ -1,0 +1,5 @@
+# Local auth & temp scripts
+GitHub登入授權.bat
+*.log
+.DS_Store
+Thumbs.db
