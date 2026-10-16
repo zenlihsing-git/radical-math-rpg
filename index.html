@@ -5495,19 +5495,30 @@
         if (room) room.style.display = 'block';
       },
 
-      // 5. 題庫隨機產生 (支援全範圍或單關)
-      generateProblem(scope) {
-        let sId = 1;
-        if (scope === 'all') {
-          sId = Math.floor(Math.random() * 4) + 1;
-        } else {
-          sId = parseInt(scope, 10) || 1;
+      // 5. 題庫隨機產生 (支援全範圍或單關，並防止連續同題卡住刷新)
+      generateProblem(scope, excludeKey = null) {
+        let prob = null;
+        let attempts = 0;
+        const baseExclude = excludeKey ? String(excludeKey).split('__')[0] : null;
+        do {
+          let sId = 1;
+          if (scope === 'all') {
+            sId = Math.floor(Math.random() * 4) + 1;
+          } else {
+            sId = parseInt(scope, 10) || 1;
+          }
+          const tier = Math.floor(Math.random() * 2) + 2; // tier 2 or 3
+          if (sId === 1) prob = MathEngine.generateStage1(tier);
+          else if (sId === 2) prob = MathEngine.generateStage2(tier);
+          else if (sId === 3) prob = MathEngine.generateStage3(tier);
+          else prob = MathEngine.generateStage4(tier);
+          attempts++;
+        } while (baseExclude && prob && prob.key === baseExclude && attempts < 20);
+
+        if (prob) {
+          prob.key = `${prob.key}__${Date.now()}_${Math.floor(Math.random() * 1000)}`;
         }
-        const tier = Math.floor(Math.random() * 2) + 2; // tier 2 or 3
-        if (sId === 1) return MathEngine.generateStage1(tier);
-        if (sId === 2) return MathEngine.generateStage2(tier);
-        if (sId === 3) return MathEngine.generateStage3(tier);
-        return MathEngine.generateStage4(tier);
+        return prob;
       },
 
       // 6. 建立對戰房間 (我是房主)
@@ -5719,7 +5730,20 @@
       },
 
       async updateRoom(patch) {
-        if (!this.currentRoomId) return;
+        if (!this.currentRoomId || !patch) return;
+        // 同步更新本地 roomData，確保零延遲反應
+        if (this.roomData) {
+          for (const [k, v] of Object.entries(patch)) {
+            if (k.includes('/')) {
+              const parts = k.split('/');
+              if (parts.length === 2 && this.roomData[parts[0]] && typeof this.roomData[parts[0]] === 'object') {
+                this.roomData[parts[0]][parts[1]] = v;
+              }
+            } else {
+              this.roomData[k] = v;
+            }
+          }
+        }
         const db = this.getDb();
         if (db) {
           try {
@@ -5780,6 +5804,8 @@
             this.countdownInterval = null;
             this.isCountingDown = false;
           }
+          // 先刷新最後一擊的血條 (0 HP) 與戰鬥動畫，再進入結算視窗
+          this.updateBattleUI(room);
           this.handleMatchFinished(room);
         }
       },
@@ -6232,6 +6258,15 @@
 
       // 12. 送出作答 (攻擊)
       async submitAttack() {
+        const room = this.roomData;
+        if (!room) return;
+        if (room.status === 'finished') {
+          this.updateBattleUI(room);
+          this.handleMatchFinished(room);
+          return;
+        }
+        if (room.status !== 'playing') return;
+
         if (!this.userInput) {
           alert("請先輸入您的計算結果再發動攻擊！");
           return;
@@ -6243,96 +6278,112 @@
           return;
         }
 
-        const room = this.roomData;
-        if (!room || room.status !== 'playing') return;
+        if (!room.currentProblem) return;
+        if (this.isSubmittingAttack) return;
+        this.isSubmittingAttack = true;
 
-        const isCorrect = (parsed.a === room.currentProblem.correctA && parsed.b === room.currentProblem.correctB);
-        const myPlayer = (this.myRole === 'player1') ? room.player1 : room.player2;
-        const oppRole = (this.myRole === 'player1') ? 'player2' : 'player1';
-        const oppPlayer = (this.myRole === 'player1') ? room.player2 : room.player1;
+        try {
+          const isCorrect = (parsed.a === room.currentProblem.correctA && parsed.b === room.currentProblem.correctB);
+          const myPlayer = (this.myRole === 'player1') ? room.player1 : room.player2;
+          const oppRole = (this.myRole === 'player1') ? 'player2' : 'player1';
+          const oppPlayer = (this.myRole === 'player1') ? room.player2 : room.player1;
+          if (!myPlayer || !oppPlayer) return;
 
-        if (room.mode === 'modeA') {
-          // ==================== 模式 A：搶答扣血競速戰 ====================
-          if (isCorrect) {
-            SoundEngine.playSlash();
-            const dmg = myPlayer.atk;
-            const newOppHp = Math.max(0, (oppPlayer.hp ?? 100) - dmg);
+          if (room.mode === 'modeA') {
+            // ==================== 模式 A：搶答扣血競速戰 ====================
+            if (isCorrect) {
+              SoundEngine.playSlash();
+              const dmg = myPlayer.atk || 10;
+              const newOppHp = Math.max(0, (oppPlayer.hp ?? 100) - dmg);
 
-            const patch = {};
-            patch[`${oppRole}/hp`] = newOppHp;
-            patch['lastAction'] = {
-              by: this.myRole,
-              target: oppRole,
-              damage: dmg,
-              isCrit: false,
-              text: `⚡【${myPlayer.name}】搶先算對！對對手造成 ${dmg} 點傷害！`,
-              color: '#34d399',
-              time: Date.now()
-            };
+              const patch = {};
+              patch[`${oppRole}/hp`] = newOppHp;
+              patch['lastAction'] = {
+                by: this.myRole,
+                target: oppRole,
+                damage: dmg,
+                isCrit: false,
+                text: `⚡【${myPlayer.name}】搶先算對！對對手造成 ${dmg} 點傷害！`,
+                color: '#34d399',
+                time: Date.now()
+              };
 
-            // 本地立即播放攻擊突進與受傷後仰動作
-            this.triggerCombatAnimation(this.myRole, oppRole, dmg, false);
+              // 本地立即播放攻擊突進與受傷後仰動作
+              this.triggerCombatAnimation(this.myRole, oppRole, dmg, false);
 
-            if (newOppHp <= 0) {
-              patch['status'] = 'finished';
-              patch['winner'] = this.myRole;
+              if (newOppHp <= 0) {
+                patch['status'] = 'finished';
+                patch['winner'] = this.myRole;
+              } else {
+                // 換下一題 (排除當前題目，確保一定刷新)
+                patch['currentProblem'] = this.generateProblem(room.scope, room.currentProblem?.key);
+              }
+
+              this.clearInput();
+              await this.updateRoom(patch);
+              if (this.roomData) {
+                this.onRoomUpdated(this.roomData);
+              }
             } else {
-              // 換下一題
-              patch['currentProblem'] = this.generateProblem(room.scope);
+              // 答錯反噬自損 10 HP
+              SoundEngine.playError();
+              const newMyHp = Math.max(0, (myPlayer.hp ?? 100) - 10);
+
+              const patch = {};
+              patch[`${this.myRole}/hp`] = newMyHp;
+              patch['lastAction'] = {
+                by: null,
+                target: this.myRole,
+                damage: 10,
+                isCrit: false,
+                text: `❌【${myPlayer.name}】算錯了！受到反噬扣血 10 HP！`,
+                color: '#ef4444',
+                time: Date.now()
+              };
+
+              // 本地立即播放受創反噬動作
+              this.triggerCombatAnimation(null, this.myRole, 10, false);
+
+              if (newMyHp <= 0) {
+                patch['status'] = 'finished';
+                patch['winner'] = oppRole;
+              }
+
+              this.clearInput();
+              await this.updateRoom(patch);
+              if (this.roomData) {
+                this.onRoomUpdated(this.roomData);
+              }
+            }
+          } else {
+            // ==================== 模式 B：5 題回合制 ====================
+            if (myPlayer.submitted) {
+              alert("本回合您已經提交答案，請等待對手提交！");
+              return;
             }
 
-            await this.updateRoom(patch);
-            this.clearInput();
-          } else {
-            // 答錯反噬自損 10 HP
-            SoundEngine.playError();
-            const newMyHp = Math.max(0, (myPlayer.hp ?? 100) - 10);
-
+            SoundEngine.playClick();
+            const elapsed = (Date.now() - this.roundStartTime) / 1000;
             const patch = {};
-            patch[`${this.myRole}/hp`] = newMyHp;
-            patch['lastAction'] = {
-              by: null,
-              target: this.myRole,
-              damage: 10,
-              isCrit: false,
-              text: `❌【${myPlayer.name}】算錯了！受到反噬扣血 10 HP！`,
-              color: '#ef4444',
-              time: Date.now()
+            patch[`${this.myRole}/submitted`] = true;
+            patch[`${this.myRole}/currentAnswer`] = {
+              isCorrect: isCorrect,
+              timeUsed: elapsed,
+              val: this.userInput
             };
 
-            // 本地立即播放受創反噬動作
-            this.triggerCombatAnimation(null, this.myRole, 10, false);
-
-            if (newMyHp <= 0) {
-              patch['status'] = 'finished';
-              patch['winner'] = oppRole;
-            }
-
             await this.updateRoom(patch);
+            const statusText = document.getElementById(this.myRole === 'player1' ? 'pvp-arena-p1-status-text' : 'pvp-arena-p2-status-text');
+            if (statusText) {
+              statusText.innerText = '✅ 已提交';
+              statusText.style.color = '#34d399';
+            }
+            if (this.roomData) {
+              this.onRoomUpdated(this.roomData);
+            }
           }
-        } else {
-          // ==================== 模式 B：5 題回合制 ====================
-          if (myPlayer.submitted) {
-            alert("本回合您已經提交答案，請等待對手提交！");
-            return;
-          }
-
-          SoundEngine.playClick();
-          const elapsed = (Date.now() - this.roundStartTime) / 1000;
-          const patch = {};
-          patch[`${this.myRole}/submitted`] = true;
-          patch[`${this.myRole}/currentAnswer`] = {
-            isCorrect: isCorrect,
-            timeUsed: elapsed,
-            val: this.userInput
-          };
-
-          await this.updateRoom(patch);
-          const statusText = document.getElementById(this.myRole === 'player1' ? 'pvp-arena-p1-status-text' : 'pvp-arena-p2-status-text');
-          if (statusText) {
-            statusText.innerText = '✅ 已提交';
-            statusText.style.color = '#34d399';
-          }
+        } finally {
+          this.isSubmittingAttack = false;
         }
       },
 
@@ -6400,10 +6451,13 @@
           else patch['winner'] = 'draw';
         } else {
           patch['currentRound'] = (room.currentRound || 1) + 1;
-          patch['currentProblem'] = this.generateProblem(room.scope);
+          patch['currentProblem'] = this.generateProblem(room.scope, room.currentProblem?.key);
         }
 
         await this.updateRoom(patch);
+        if (this.roomData) {
+          this.onRoomUpdated(this.roomData);
+        }
         setTimeout(() => {
           this.isResolvingRound = false;
         }, 1200);
@@ -6436,14 +6490,25 @@
           winner: oppRole,
           lastAction: { text: `對手已退出對戰！`, time: Date.now() }
         });
+        if (this.roomData) {
+          this.onRoomUpdated(this.roomData);
+        }
       },
 
       // 14. 對戰結算
       async handleMatchFinished(room) {
         if (!room) return;
-        const roomKey = room.id || room.code || this.currentRoomId;
+        const baseRoomId = room.id || room.code || this.currentRoomId || 'room';
+        const roomKey = room.createdAt ? `${baseRoomId}_${room.createdAt}` : baseRoomId;
         if (!this.handledMatchRooms) this.handledMatchRooms = new Set();
-        if (roomKey && this.handledMatchRooms.has(roomKey)) return;
+
+        const modal = document.getElementById('pvp-result-modal');
+        if (roomKey && this.handledMatchRooms.has(roomKey)) {
+          if (modal && !modal.classList.contains('active')) {
+            modal.classList.add('active');
+          }
+          return;
+        }
         if (roomKey) this.handledMatchRooms.add(roomKey);
 
         this.isInBattle = false;
@@ -6502,11 +6567,14 @@
             ${winnerObj ? `<div style="font-size:1.1rem; color:#fde047; font-weight:bold; margin-bottom:8px;">獲勝者：${winnerObj.avatar} ${winnerObj.name} (${winnerObj.realName})</div>` : ''}
             <div style="background:#0f172a; border:1px solid #334155; border-radius:10px; padding:12px; text-align:left; font-size:0.88rem; line-height:1.6;">
               • <strong>對戰模式</strong>：${room.mode === 'modeA' ? '模式 A 搶答競速戰' : '模式 B 5題回合制'}<br>
-              • <strong>雙方剩餘 HP</strong>：【${p1?.name}】${p1?.hp} HP vs 【${p2?.name}】${p2?.hp} HP<br>
+              • <strong>雙方剩餘 HP</strong>：【${p1?.name}】${Math.max(0, p1?.hp ?? 0)} HP vs 【${p2?.name}】${Math.max(0, p2?.hp ?? 0)} HP<br>
               • <strong>勝場統計</strong>：成績已自動登錄至【全班榮譽排行榜】！
             </div>
           `;
         }
+
+        // 優先彈出對戰結算視窗，確保最後一擊絕不因網路或雲端同步而卡死畫面
+        if (modal) modal.classList.add('active');
 
         const now = new Date();
         const dateStr = `${now.getMonth() + 1}/${now.getDate()} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
@@ -6534,10 +6602,11 @@
         };
 
         // 記錄個人成績並更新 Firebase
-        await LeaderboardSystem.recordMatchResult(isWinner, matchRecord);
-
-        const modal = document.getElementById('pvp-result-modal');
-        if (modal) modal.classList.add('active');
+        try {
+          await LeaderboardSystem.recordMatchResult(isWinner, matchRecord);
+        } catch (err) {
+          console.warn("記錄對戰成績異常:", err);
+        }
       },
 
       closeResultModal() {
@@ -6625,6 +6694,10 @@
 
       // 記錄比賽結果至本機與 Firebase
       async recordMatchResult(isWinner, matchRecord = null) {
+        const code = SaveSystem.getPasscode();
+        const char = CHARACTERS_DB.find(c => c.id === CharacterSystem.selectedCharId) || CHARACTERS_DB[0];
+        const stats = PvPSystem.getPlayerStats();
+
         // 讀取並維護詳細對戰歷史日誌
         let history = [];
         try {
