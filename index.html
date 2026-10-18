@@ -2339,6 +2339,7 @@
           <button class="admin-btn btn-export-csv" onclick="AdminSystem.exportCSV()">📥 匯出 Excel (CSV離線備份)</button>
           <button class="admin-btn btn-copy-txt" onclick="AdminSystem.copyRoster()">📋 複製名冊清單</button>
           <button class="admin-btn btn-print" onclick="window.print()">🖨️ 列印名冊 / 另存PDF</button>
+          <button class="admin-btn" onclick="AdminSystem.copySecurityRules()" style="background:#0d9488; color:white;" title="一鍵複製安全規則並開啟 Firebase 規則設定頁面">🛡️ 安全規則設定</button>
           <button class="admin-btn btn-danger" onclick="AdminSystem.clearAllLeaderboardAndHistory()" style="background:#dc2626; color:white; border-color:#ef4444;" title="新學年重置排行榜與所有對戰紀錄">🧹 清除所有排行榜對戰紀錄</button>
           <button class="admin-btn btn-exit" onclick="AdminSystem.exit()">🚪 返回遊戲</button>
         </div>
@@ -4040,6 +4041,7 @@
         CharacterSystem.isAdminUnlocked = false;
 
         // 清除舊有的引繼碼與本機學生資料，防止新帳號繼承舊碼
+        localStorage.removeItem('radical_rpg_passcode');
         localStorage.removeItem('radical_passcode');
         localStorage.removeItem('radical_rpg_student');
         localStorage.removeItem('radical_rpg_character');
@@ -4581,10 +4583,14 @@
     const FIREBASE_DB_URL = "https://math-game-grade8-default-rtdb.firebaseio.com";
 
     const SaveSystem = {
+      isValidPasscode(code) {
+        return typeof code === 'string' && /^RAD-[0-9A-Z]{4,10}$/.test(code);
+      },
+
       // 取得或產生角色的永久專屬引繼碼 (格式: RAD-6位數字)
       getPasscode() {
         let code = localStorage.getItem('radical_rpg_passcode');
-        if (!code) {
+        if (!code || !this.isValidPasscode(code)) {
           code = this.createNewPasscode();
         }
         return code;
@@ -4599,7 +4605,9 @@
       },
 
       setPasscode(code) {
-        localStorage.setItem('radical_rpg_passcode', code);
+        if (this.isValidPasscode(code)) {
+          localStorage.setItem('radical_rpg_passcode', code);
+        }
       },
 
       openModal(defaultTab = 'export') {
@@ -5344,6 +5352,61 @@
           });
         } else {
           prompt("請複製下方文字：", text);
+        }
+      },
+
+      copySecurityRules() {
+        SoundEngine.playClick();
+        const rulesJson = JSON.stringify({
+          rules: {
+            ".read": false,
+            ".write": false,
+            saves: {
+              ".read": true,
+              ".write": true,
+              "$passcode": {
+                ".validate": "$passcode.matches(/^RAD-[0-9A-Z]{4,10}$/)"
+              }
+            },
+            pvp_rooms: {
+              ".read": true,
+              ".write": true,
+              "$roomId": {
+                ".validate": "$roomId.matches(/^ROOM-[0-9]{4}$/)"
+              }
+            },
+            pvp_leaderboard: {
+              ".read": true,
+              ".write": true,
+              "$passcode": {
+                ".validate": "$passcode.matches(/^RAD-[0-9A-Z]{4,10}$/)"
+              }
+            },
+            pvp_history: {
+              ".read": true,
+              ".write": true,
+              "$passcode": {
+                ".validate": "$passcode.matches(/^RAD-[0-9A-Z]{4,10}$/)"
+              }
+            }
+          }
+        }, null, 2);
+
+        const openConsole = () => {
+          const ok = confirm("✅ 已將【方式一：Firebase 安全性規則】複製到您的剪貼簿！\n\n接下來只需 3 步驟：\n1. 點擊「確定」自動開啟 Firebase 規則編輯頁面\n2. 在編輯器內按 Ctrl+A 全選，再按 Ctrl+V 貼上\n3. 點擊右上角「發布 (Publish)」即可完成！\n\n是否立即開啟 Firebase 規則設定頁面？");
+          if (ok) {
+            window.open("https://console.firebase.google.com/project/math-game-grade8/database/math-game-grade8-default-rtdb/rules", "_blank");
+          }
+        };
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(rulesJson).then(openConsole).catch(() => {
+            SaveSystem.fallbackCopy(rulesJson);
+            openConsole();
+          });
+        } else {
+          SaveSystem.fallbackCopy(rulesJson);
+          openConsole();
         }
       },
 

@@ -1,0 +1,38 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+
+    "saves": {
+      ".read": true,
+      ".write": true,
+      "$passcode": {
+        ".validate": "$passcode.matches(/^RAD-[0-9A-Z]{4,10}$/)"
+      }
+    },
+
+    "pvp_rooms": {
+      ".read": true,
+      ".write": true,
+      "$roomId": {
+        ".validate": "$roomId.matches(/^ROOM-[0-9]{4}$/)"
+      }
+    },
+
+    "pvp_leaderboard": {
+      ".read": true,
+      ".write": true,
+      "$passcode": {
+        ".validate": "$passcode.matches(/^RAD-[0-9A-Z]{4,10}$/)"
+      }
+    },
+
+    "pvp_history": {
+      ".read": true,
+      ".write": true,
+      "$passcode": {
+        ".validate": "$passcode.matches(/^RAD-[0-9A-Z]{4,10}$/)"
+      }
+    }
+  }
+}
