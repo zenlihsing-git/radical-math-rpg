@@ -2340,7 +2340,8 @@
           <button class="admin-btn btn-copy-txt" onclick="AdminSystem.copyRoster()">📋 複製名冊清單</button>
           <button class="admin-btn btn-print" onclick="window.print()">🖨️ 列印名冊 / 另存PDF</button>
           <button class="admin-btn" onclick="AdminSystem.copySecurityRules()" style="background:#0d9488; color:white;" title="一鍵複製安全規則並開啟 Firebase 規則設定頁面">🛡️ 安全規則設定</button>
-          <button class="admin-btn btn-danger" onclick="AdminSystem.clearAllLeaderboardAndHistory()" style="background:#dc2626; color:white; border-color:#ef4444;" title="新學年重置排行榜與所有對戰紀錄">🧹 清除所有排行榜對戰紀錄</button>
+          <button class="admin-btn" id="btn-admin-batch-delete" onclick="AdminSystem.deleteSelectedStudents()" style="background:#b91c1c; color:white; border:1px solid #f87171;" title="一次性刪除所有勾選的學生帳號">🗑️ 刪除勾選帳號 (<span id="admin-selected-count">0</span>)</button>
+          <button class="admin-btn btn-danger" id="btn-admin-clear-lb" onclick="AdminSystem.clearAllLeaderboardAndHistory()" style="background:#dc2626; color:white; border-color:#ef4444;" title="新學年重置排行榜與所有對戰紀錄">🧹 清除所有排行榜對戰紀錄</button>
           <button class="admin-btn btn-exit" onclick="AdminSystem.exit()">🚪 返回遊戲</button>
         </div>
       </div>
@@ -2360,9 +2361,9 @@
           <div class="stat-val" id="admin-stat-progress" style="color:#10b981;">0%</div>
         </div>
         <div class="stat-card" style="flex:1.5;">
-          <div class="stat-label">離線備份說明</div>
+          <div class="stat-label">離線備份與批次管理說明</div>
           <div style="font-size:0.8rem; color:#cbd5e1; margin-top:3px;">
-            點擊【匯出 Excel】可將全班學生的座號、姓名與專屬引繼碼下載為 CSV 檔。離線時隨時可查，不用擔心學生忘記代碼！
+            可勾選表格左側核取方塊，點擊上方【🗑️ 刪除勾選帳號】一次刪除多位學生；點擊【匯出 Excel】可下載全班名冊備份。
           </div>
         </div>
       </div>
@@ -2399,6 +2400,9 @@
         <table class="admin-table" id="admin-students-table">
           <thead>
             <tr>
+              <th class="no-print" style="width:44px;">
+                <input type="checkbox" id="admin-select-all-checkbox" onchange="AdminSystem.toggleSelectAll(this.checked)" title="全選 / 取消全選目前列表學生" style="width:18px; height:18px; cursor:pointer; accent-color:#ef4444; vertical-align:middle;">
+              </th>
               <th style="width:70px;">班級</th>
               <th style="width:60px;">座號</th>
               <th>學生姓名</th>
@@ -2416,7 +2420,7 @@
           </thead>
           <tbody id="admin-table-body">
             <tr>
-              <td colspan="13" style="text-align:center; padding:30px; color:#94a3b8;">
+              <td colspan="14" style="text-align:center; padding:30px; color:#94a3b8;">
                 ⏳ 正在載入雲端學生資料...
               </td>
             </tr>
@@ -3000,6 +3004,9 @@
       playVictoryFanfare() {
         const notes = [523, 659, 784, 1046];
         notes.forEach((freq, idx) => setTimeout(() => this.playTone(freq, 'triangle', 0.3, 0.35), idx * 120));
+      },
+      playSuccess() {
+        this.playLevelUp();
       },
       playError() { this.playTone(180, 'sawtooth', 0.25, 0.3); }
     };
@@ -4687,7 +4694,7 @@
         document.body.removeChild(ta);
       },
 
-      // 檢查雲端是否有管理者修改後的新暱稱或真實姓名，若有則即時同步至本機
+      // 檢查雲端是否有管理者修改後的新暱稱、真實姓名或對戰紀錄重置指令，若有則即時同步至本機
       async checkCloudProfileSync() {
         const code = this.getPasscode();
         if (!code || code === 'RAD-000000') return;
@@ -4713,6 +4720,15 @@
                 CharacterSystem.saveStudent(CharacterSystem.studentClass, CharacterSystem.studentSeat, cloudReal);
                 changed = true;
               }
+              // 若管理者已執行「清除所有排行榜對戰紀錄」，自動清除本機舊對戰快取，防止舊紀錄回寫雲端
+              const cloudResetAt = parseInt(data.pvpResetAt || '0', 10);
+              const localResetAt = parseInt(localStorage.getItem('radical_pvp_reset_at') || '0', 10);
+              if (cloudResetAt > 0 && cloudResetAt > localResetAt) {
+                localStorage.setItem('radical_pvp_reset_at', String(cloudResetAt));
+                localStorage.setItem('radical_pvp_wins', '0');
+                localStorage.setItem('radical_pvp_matches', '0');
+                localStorage.setItem('radical_pvp_history', '[]');
+              }
               if (changed) {
                 Game.updateLobbyUI();
               }
@@ -4726,9 +4742,10 @@
         const code = this.getPasscode();
         if (!code || code === 'RAD-000000') return;
 
-        // 同步前先確保角色暱稱不會逆向覆蓋管理者的修改
+        // 同步前先確保角色暱稱與重置狀態不會逆向覆蓋管理者的修改
         await this.checkCloudProfileSync();
 
+        const resetAtVal = parseInt(localStorage.getItem('radical_pvp_reset_at') || '0', 10);
         const payload = {
           passcode: code,
           studentClass: CharacterSystem.studentClass || "",
@@ -4740,6 +4757,7 @@
           stages: Game.stagesData,
           pvpWins: parseInt(localStorage.getItem('radical_pvp_wins') || '0', 10),
           pvpMatches: parseInt(localStorage.getItem('radical_pvp_matches') || '0', 10),
+          ...(resetAtVal > 0 ? { pvpResetAt: resetAtVal } : {}),
           updatedAt: new Date().toISOString()
         };
 
@@ -4859,6 +4877,7 @@
       adminPassword: "rett0127", // 教師最高權限管理密碼
       cachedStudents: [],
       filteredStudents: [],
+      selectedPasscodes: new Set(),
 
       openLogin() {
         SoundEngine.playClick();
@@ -4898,9 +4917,16 @@
       async refresh() {
         const tbody = document.getElementById('admin-table-body');
         if (tbody) {
-          tbody.innerHTML = `<tr><td colspan="13" style="text-align:center; padding:30px; color:#94a3b8;">⏳ 正在連線 Firebase 雲端讀取學生資料...</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="14" style="text-align:center; padding:30px; color:#94a3b8;">⏳ 正在連線 Firebase 雲端讀取學生資料...</td></tr>`;
         }
         this.cachedStudents = await this.fetchStudents();
+        // 移除已不存在於雲端的勾選項目
+        const validCodes = new Set(this.cachedStudents.map(s => s.passcode));
+        for (const code of Array.from(this.selectedPasscodes)) {
+          if (!validCodes.has(code)) {
+            this.selectedPasscodes.delete(code);
+          }
+        }
         this.populateClassFilter();
         this.applyFilter();
       },
@@ -5014,6 +5040,51 @@
         this.filteredStudents = list;
         this.renderTable();
         this.updateStats();
+        this.updateSelectionUI();
+      },
+
+      toggleSelectStudent(passcode, checked) {
+        if (!passcode) return;
+        if (checked) {
+          this.selectedPasscodes.add(passcode);
+        } else {
+          this.selectedPasscodes.delete(passcode);
+        }
+        this.renderTable();
+        this.updateSelectionUI();
+      },
+
+      toggleSelectAll(checked) {
+        SoundEngine.playClick();
+        if (checked) {
+          this.filteredStudents.forEach(s => {
+            if (s.passcode) this.selectedPasscodes.add(s.passcode);
+          });
+        } else {
+          this.filteredStudents.forEach(s => {
+            if (s.passcode) this.selectedPasscodes.delete(s.passcode);
+          });
+        }
+        this.renderTable();
+        this.updateSelectionUI();
+      },
+
+      updateSelectionUI() {
+        const countEl = document.getElementById('admin-selected-count');
+        if (countEl) {
+          countEl.innerText = this.selectedPasscodes.size;
+        }
+        const selectAllEl = document.getElementById('admin-select-all-checkbox');
+        if (selectAllEl) {
+          if (this.filteredStudents.length === 0) {
+            selectAllEl.checked = false;
+            selectAllEl.indeterminate = false;
+          } else {
+            const selectedInFiltered = this.filteredStudents.filter(s => this.selectedPasscodes.has(s.passcode)).length;
+            selectAllEl.checked = (selectedInFiltered === this.filteredStudents.length);
+            selectAllEl.indeterminate = (selectedInFiltered > 0 && selectedInFiltered < this.filteredStudents.length);
+          }
+        }
       },
 
       updateStats() {
@@ -5038,7 +5109,7 @@
         if (!tbody) return;
 
         if (this.filteredStudents.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="13" style="text-align:center; padding:30px; color:#94a3b8;">查無符合條件的學生資料。</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="14" style="text-align:center; padding:30px; color:#94a3b8;">查無符合條件的學生資料。</td></tr>`;
           return;
         }
 
@@ -5048,9 +5119,14 @@
           const s3 = s.stages?.[3]?.level || 1;
           const s4 = s.stages?.[4]?.level || 1;
           const updatedDate = s.updatedAt ? new Date(s.updatedAt).toLocaleString('zh-TW', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit' }) : '無';
+          const isChecked = this.selectedPasscodes.has(s.passcode);
+          const rowStyle = isChecked ? 'background: rgba(239, 68, 68, 0.16);' : '';
 
           return `
-            <tr>
+            <tr style="${rowStyle}">
+              <td class="no-print">
+                <input type="checkbox" class="admin-student-checkbox" value="${s.passcode}" ${isChecked ? 'checked' : ''} onchange="AdminSystem.toggleSelectStudent('${s.passcode}', this.checked)" style="width:18px; height:18px; cursor:pointer; accent-color:#ef4444; vertical-align:middle;" title="勾選此學生">
+              </td>
               <td><strong>${s.studentClass ? `${s.studentClass}班` : '-'}</strong></td>
               <td>${s.studentSeat ? `${s.studentSeat}號` : '-'}</td>
               <td style="font-weight:bold; color:#fde047;">${s.studentRealName}</td>
@@ -5076,7 +5152,7 @@
               </td>
               <td style="font-size:0.75rem; color:#94a3b8;">${updatedDate}</td>
               <td class="no-print">
-                <button class="btn-table-action" onclick="AdminSystem.deleteStudent('${s.passcode}', '${s.studentRealName}')" title="刪除此筆存檔">🗑️ 刪除</button>
+                <button class="btn-table-action" onclick="AdminSystem.deleteStudent('${s.passcode}', '${s.studentRealName}')" title="刪除此筆學生帳號">🗑️ 刪除</button>
               </td>
             </tr>
           `;
@@ -5215,55 +5291,96 @@
       // 清除所有排行榜與對戰紀錄 (新學年重置系統)
       async clearAllLeaderboardAndHistory() {
         SoundEngine.playClick();
-        const confirm1 = confirm("⚠️【重大操作警告】\n\n您即將執行【清除所有排行榜與對戰紀錄】！\n此操作通常用於新學年或新學期重置遊戲系統。\n\n執行後將會：\n1. 永久清空所有學生的雲端對戰勝場數與總場次（重設為 0）\n2. 清空雲端榮譽排行榜 (pvp_leaderboard)\n3. 清空所有對戰歷史明細 (pvp_history)\n4. 清除現存的對戰房間資料 (pvp_rooms)\n5. 清除本機排行榜與戰績快取\n\n📌 註：學生的單人闖關進度與引繼碼將「完全保留」，不受影響。\n\n確定要繼續嗎？");
+        const confirm1 = confirm("⚠️【重大操作確認】\n\n您確定要執行【清除所有排行榜與對戰紀錄】嗎？\n\n執行後將會立即：\n1. 清空雲端全校榮譽排行榜 (pvp_leaderboard)\n2. 清空所有學生的對戰歷史明細與個人勝負統計 (pvp_history)\n3. 將所有學生的對戰勝場數與總場次重設為 0\n4. 清除現存的對戰房間與本機快取\n\n📌 註：學生的單人闖關進度與專屬引繼碼將「完全保留」，不受影響。");
         if (!confirm1) return;
 
-        const confirm2 = prompt("請輸入「確認清除」以確認執行重置操作：");
-        if (confirm2 !== "確認清除") {
-          alert("輸入不相符，已取消清除操作。");
-          return;
+        const btn = document.getElementById('btn-admin-clear-lb');
+        const origText = btn ? btn.innerText : '';
+        if (btn) {
+          btn.disabled = true;
+          btn.innerText = '⏳ 正在清除排行榜與對戰紀錄...';
         }
 
+        const nowTs = Date.now();
+
         try {
-          // 1. 清空雲端排行榜
-          await fetch(`${FIREBASE_DB_URL}/pvp_leaderboard.json`, { method: 'DELETE' });
+          // 先讀取現有節點以便雙重清除（節點根刪除 + 逐筆刪除雙保險）
+          const [lbSnap, histSnap, roomSnap, savesSnap] = await Promise.all([
+            fetch(`${FIREBASE_DB_URL}/pvp_leaderboard.json`).then(r => r.ok ? r.json() : null).catch(() => null),
+            fetch(`${FIREBASE_DB_URL}/pvp_history.json`).then(r => r.ok ? r.json() : null).catch(() => null),
+            fetch(`${FIREBASE_DB_URL}/pvp_rooms.json`).then(r => r.ok ? r.json() : null).catch(() => null),
+            fetch(`${FIREBASE_DB_URL}/saves.json`).then(r => r.ok ? r.json() : null).catch(() => null)
+          ]);
 
-          // 2. 清空所有對戰歷史
-          await fetch(`${FIREBASE_DB_URL}/pvp_history.json`, { method: 'DELETE' });
+          // 1. 直接刪除雲端排行榜、歷史與房間根節點
+          await Promise.all([
+            fetch(`${FIREBASE_DB_URL}/pvp_leaderboard.json`, { method: 'DELETE' }).catch(() => {}),
+            fetch(`${FIREBASE_DB_URL}/pvp_history.json`, { method: 'DELETE' }).catch(() => {}),
+            fetch(`${FIREBASE_DB_URL}/pvp_rooms.json`, { method: 'DELETE' }).catch(() => {})
+          ]);
 
-          // 3. 清空所有房間
-          await fetch(`${FIREBASE_DB_URL}/pvp_rooms.json`, { method: 'DELETE' });
+          // 2. 逐筆確保所有子節點皆被徹底清除，並逐筆將學生存檔中的 pvpWins / pvpMatches 重設為 0 且寫入 pvpResetAt
+          const tasks = [];
 
-          // 4. 重置所有學生存檔中的 pvpWins 與 pvpMatches
-          const res = await fetch(`${FIREBASE_DB_URL}/saves.json`);
-          if (res.ok) {
-            const data = await res.json();
-            if (data && typeof data === 'object') {
-              const updates = {};
-              for (const code of Object.keys(data)) {
-                updates[`${code}/pvpWins`] = 0;
-                updates[`${code}/pvpMatches`] = 0;
-                updates[`${code}/pvpHistory`] = null;
-              }
-              await fetch(`${FIREBASE_DB_URL}/saves.json`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(updates)
-              });
+          if (lbSnap && typeof lbSnap === 'object') {
+            for (const k of Object.keys(lbSnap)) {
+              tasks.push(fetch(`${FIREBASE_DB_URL}/pvp_leaderboard/${encodeURIComponent(k)}.json`, { method: 'DELETE' }).catch(() => {}));
+            }
+          }
+          if (histSnap && typeof histSnap === 'object') {
+            for (const k of Object.keys(histSnap)) {
+              tasks.push(fetch(`${FIREBASE_DB_URL}/pvp_history/${encodeURIComponent(k)}.json`, { method: 'DELETE' }).catch(() => {}));
+            }
+          }
+          if (roomSnap && typeof roomSnap === 'object') {
+            for (const k of Object.keys(roomSnap)) {
+              tasks.push(fetch(`${FIREBASE_DB_URL}/pvp_rooms/${encodeURIComponent(k)}.json`, { method: 'DELETE' }).catch(() => {}));
+            }
+          }
+          if (savesSnap && typeof savesSnap === 'object') {
+            for (const [code, item] of Object.entries(savesSnap)) {
+              if (!item || typeof item !== 'object') continue;
+              tasks.push(
+                fetch(`${FIREBASE_DB_URL}/saves/${encodeURIComponent(code)}.json`, {
+                  method: 'PATCH',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    pvpWins: 0,
+                    pvpMatches: 0,
+                    pvpHistory: null,
+                    pvpResetAt: nowTs
+                  })
+                }).catch(() => {})
+              );
             }
           }
 
-          // 5. 清除本機 localStorage
-          localStorage.removeItem('radical_pvp_wins');
-          localStorage.removeItem('radical_pvp_matches');
-          localStorage.removeItem('radical_pvp_history');
+          await Promise.all(tasks);
 
-          SoundEngine.playSuccess();
-          alert("🎉 已成功清空所有排行榜、對戰歷史與房間！\n所有學生對戰勝場數已重設為 0，新學年重置完成！");
+          // 3. 清除本機 localStorage 與排行榜快取
+          localStorage.setItem('radical_pvp_wins', '0');
+          localStorage.setItem('radical_pvp_matches', '0');
+          localStorage.setItem('radical_pvp_history', '[]');
+          localStorage.setItem('radical_pvp_reset_at', String(nowTs));
+
+          if (typeof LeaderboardSystem !== 'undefined') {
+            LeaderboardSystem.cachedLeaderboard = [];
+            LeaderboardSystem.currentHistoryData = [];
+            LeaderboardSystem.render();
+            LeaderboardSystem.updateMyRankInfo();
+          }
+
+          SoundEngine.playVictoryFanfare();
+          alert("🎉 已成功清空所有排行榜、對戰歷史與房間！\n所有學生的對戰勝場數與對戰紀錄皆已重設為 0！");
           await this.refresh();
         } catch(e) {
           SoundEngine.playError();
           alert("清除過程發生錯誤：" + e.message);
+        } finally {
+          if (btn) {
+            btn.disabled = false;
+            btn.innerText = origText || '🧹 清除所有排行榜對戰紀錄';
+          }
         }
       },
 
@@ -5412,20 +5529,104 @@
 
       async deleteStudent(passcode, name) {
         SoundEngine.playClick();
-        if (!confirm(`確定要刪除學生【${name}】的存檔 (引繼碼: ${passcode}) 嗎？\n此動作將從雲端資料庫永久移除！`)) {
+        if (!confirm(`確定要刪除學生【${name}】的帳號存檔 (引繼碼: ${passcode}) 嗎？\n\n⚠️ 此動作將從雲端資料庫永久移除該學生的存檔、排行榜與對戰紀錄！`)) {
           return;
         }
 
         try {
-          const res = await fetch(`${FIREBASE_DB_URL}/saves/${passcode}.json`, { method: 'DELETE' });
-          if (res.ok) {
-            alert(`已成功刪除【${name}】的存檔！`);
-            await this.refresh();
-          } else {
-            throw new Error(`刪除失敗 (${res.status})`);
+          await Promise.all([
+            fetch(`${FIREBASE_DB_URL}/saves/${encodeURIComponent(passcode)}.json`, { method: 'DELETE' }),
+            fetch(`${FIREBASE_DB_URL}/pvp_leaderboard/${encodeURIComponent(passcode)}.json`, { method: 'DELETE' }).catch(() => {}),
+            fetch(`${FIREBASE_DB_URL}/pvp_history/${encodeURIComponent(passcode)}.json`, { method: 'DELETE' }).catch(() => {})
+          ]);
+
+          this.selectedPasscodes.delete(passcode);
+
+          // 若本機正好登入此被刪除的帳號，一併清空本機綁定
+          if (localStorage.getItem('radical_rpg_passcode') === passcode) {
+            localStorage.removeItem('radical_rpg_passcode');
+            localStorage.removeItem('radical_passcode');
+            localStorage.removeItem('radical_rpg_student');
+            localStorage.removeItem('radical_rpg_character');
+            localStorage.setItem('radical_pvp_wins', '0');
+            localStorage.setItem('radical_pvp_matches', '0');
+            localStorage.setItem('radical_pvp_history', '[]');
+            CharacterSystem.studentClass = '';
+            CharacterSystem.studentSeat = '';
+            CharacterSystem.studentRealName = '';
+            CharacterSystem.playerName = '';
           }
+
+          SoundEngine.playSuccess();
+          alert(`✅ 已成功刪除學生【${name}】的帳號與所有紀錄！`);
+          await this.refresh();
         } catch(e) {
+          SoundEngine.playError();
           alert("刪除失敗：" + e.message);
+        }
+      },
+
+      async deleteSelectedStudents() {
+        SoundEngine.playClick();
+        const codes = Array.from(this.selectedPasscodes);
+        if (codes.length === 0) {
+          SoundEngine.playError();
+          alert("請先在下方學生列表最左側勾選要刪除的學生帳號！\n（可一次勾選多位同學，或點擊左上角全選核取方塊）");
+          return;
+        }
+
+        const selectedList = codes.map(code => {
+          const s = this.cachedStudents.find(item => item.passcode === code);
+          if (s) {
+            return `• ${s.studentClass ? `${s.studentClass}班 ` : ''}${s.studentSeat ? `${s.studentSeat}號 ` : ''}${s.studentRealName} (${s.charName} / ${code})`;
+          }
+          return `• ${code}`;
+        });
+
+        const previewStr = selectedList.slice(0, 12).join('\n') + (selectedList.length > 12 ? `\n...等共 ${selectedList.length} 位學生` : '');
+
+        if (!confirm(`⚠️【批次刪除學生帳號確認】\n\n確定要一次性永久刪除所勾選的 ${codes.length} 位學生帳號嗎？\n\n將刪除名單：\n${previewStr}\n\n此動作將從雲端資料庫永久移除這些學生的帳號存檔、專屬引繼碼、排行榜與對戰紀錄！`)) {
+          return;
+        }
+
+        const btn = document.getElementById('btn-admin-batch-delete');
+        if (btn) btn.disabled = true;
+
+        try {
+          const deleteTasks = [];
+          for (const code of codes) {
+            deleteTasks.push(fetch(`${FIREBASE_DB_URL}/saves/${encodeURIComponent(code)}.json`, { method: 'DELETE' }));
+            deleteTasks.push(fetch(`${FIREBASE_DB_URL}/pvp_leaderboard/${encodeURIComponent(code)}.json`, { method: 'DELETE' }).catch(() => {}));
+            deleteTasks.push(fetch(`${FIREBASE_DB_URL}/pvp_history/${encodeURIComponent(code)}.json`, { method: 'DELETE' }).catch(() => {}));
+          }
+          await Promise.all(deleteTasks);
+
+          // 若本機正好登入被刪除的帳號之一，一併清除本機綁定
+          const currentLocalCode = localStorage.getItem('radical_rpg_passcode');
+          if (currentLocalCode && this.selectedPasscodes.has(currentLocalCode)) {
+            localStorage.removeItem('radical_rpg_passcode');
+            localStorage.removeItem('radical_passcode');
+            localStorage.removeItem('radical_rpg_student');
+            localStorage.removeItem('radical_rpg_character');
+            localStorage.setItem('radical_pvp_wins', '0');
+            localStorage.setItem('radical_pvp_matches', '0');
+            localStorage.setItem('radical_pvp_history', '[]');
+            CharacterSystem.studentClass = '';
+            CharacterSystem.studentSeat = '';
+            CharacterSystem.studentRealName = '';
+            CharacterSystem.playerName = '';
+          }
+
+          this.selectedPasscodes.clear();
+          this.updateSelectionUI();
+          SoundEngine.playSuccess();
+          alert(`🎉 已成功一次性刪除所勾選的 ${codes.length} 位學生帳號與所有雲端紀錄！`);
+          await this.refresh();
+        } catch(e) {
+          SoundEngine.playError();
+          alert("批次刪除過程發生錯誤：" + e.message);
+        } finally {
+          if (btn) btn.disabled = false;
         }
       }
     };
@@ -6761,10 +6962,17 @@
         const char = CHARACTERS_DB.find(c => c.id === CharacterSystem.selectedCharId) || CHARACTERS_DB[0];
         const stats = PvPSystem.getPlayerStats();
 
+        // 先同步檢查管理者是否已執行過重置，避免舊快取復活
+        await SaveSystem.checkCloudProfileSync();
+        const localResetAt = parseInt(localStorage.getItem('radical_pvp_reset_at') || '0', 10);
+
         // 讀取並維護詳細對戰歷史日誌
         let history = [];
         try {
           history = JSON.parse(localStorage.getItem('radical_pvp_history') || '[]');
+          if (localResetAt > 0) {
+            history = history.filter(h => (h.time || 0) > localResetAt);
+          }
         } catch(e) { history = []; }
 
         if (matchRecord) {
@@ -6841,53 +7049,64 @@
             fetch(`${FIREBASE_DB_URL}/saves.json`).catch(() => null)
           ]);
 
-          const lbData = lbRes && lbRes.ok ? await lbRes.json() : {};
-          const savesData = savesRes && savesRes.ok ? await savesRes.json() : {};
+          const lbData = lbRes && lbRes.ok ? await lbRes.json() : null;
+          const savesData = savesRes && savesRes.ok ? await savesRes.json() : null;
+
+          // 同步檢查本機帳號是否已被管理者清除對戰紀錄
+          const myPasscode = SaveSystem.getPasscode();
+          const myCloudSave = (savesData && myPasscode) ? savesData[myPasscode] : null;
+          const myCloudLb = (lbData && myPasscode) ? lbData[myPasscode] : null;
+          const cloudResetAt = parseInt(myCloudSave?.pvpResetAt || '0', 10);
+          const localResetAt = parseInt(localStorage.getItem('radical_pvp_reset_at') || '0', 10);
+          if ((cloudResetAt > 0 && cloudResetAt > localResetAt) || (!myCloudLb && myCloudSave && (myCloudSave.pvpMatches || 0) === 0)) {
+            if (cloudResetAt > 0) localStorage.setItem('radical_pvp_reset_at', String(cloudResetAt));
+            localStorage.setItem('radical_pvp_wins', '0');
+            localStorage.setItem('radical_pvp_matches', '0');
+            localStorage.setItem('radical_pvp_history', '[]');
+            this.currentHistoryData = [];
+          }
 
           const combined = {};
 
-          if (savesData) {
-            for (const [code, item] of Object.entries(savesData)) {
-              if (!item) continue;
-              const charObj = CHARACTERS_DB.find(c => c.id === item.charId) || CHARACTERS_DB[0];
-              let completed = 0;
-              if (item.stages) {
+          // 僅將實際有對戰紀錄 (pvp_leaderboard 存在且場次 > 0) 的有效學生帳號列入排行榜
+          // 當管理者執行「清除所有排行榜對戰紀錄」後，lbData 為空，排行榜即完全清空歸零！
+          if (lbData && typeof lbData === 'object') {
+            for (const [code, lbItem] of Object.entries(lbData)) {
+              if (!lbItem || typeof lbItem !== 'object') continue;
+              // 若 savesData 有成功載入且該學生帳號已被管理者刪除，則不顯示於排行榜
+              if (savesData && typeof savesData === 'object' && !savesData[code]) continue;
+
+              const saveItem = (savesData && savesData[code]) ? savesData[code] : null;
+              const charObj = CHARACTERS_DB.find(c => c.id === (saveItem?.charId || lbItem.charId)) || CHARACTERS_DB[0];
+
+              let completed = lbItem.completedStages || 0;
+              if (saveItem && saveItem.stages) {
+                completed = 0;
                 for (let sId = 1; sId <= 4; sId++) {
-                  if (item.stages[sId]?.cleared || (item.stages[sId]?.level >= 5)) completed++;
+                  if (saveItem.stages[sId]?.cleared || (saveItem.stages[sId]?.level >= 5)) completed++;
                 }
               }
               const atk = Math.round(10 + (completed / 4) * 20);
-              const wins = item.pvpWins || 0;
-              const matches = item.pvpMatches || 0;
+              const wins = lbItem.pvpWins || 0;
+              const matches = lbItem.pvpMatches || 0;
+              if (matches <= 0 && wins <= 0) continue;
+
               const winRate = matches > 0 ? Math.round((wins / matches) * 100) : 0;
 
               combined[code] = {
                 passcode: code,
-                studentClass: item.studentClass || '',
-                studentSeat: item.studentSeat || '',
-                studentRealName: item.studentRealName || item.name || '未填姓名',
-                charName: item.charName || item.name || '勇者',
-                charAvatar: charObj.avatar,
-                charTitle: charObj.title,
+                studentClass: saveItem?.studentClass || lbItem.studentClass || '',
+                studentSeat: saveItem?.studentSeat || lbItem.studentSeat || '',
+                studentRealName: saveItem?.studentRealName || lbItem.studentRealName || saveItem?.name || '未填姓名',
+                charName: saveItem?.charName || lbItem.charName || saveItem?.name || '勇者',
+                charAvatar: saveItem ? charObj.avatar : (lbItem.charAvatar || charObj.avatar),
+                charTitle: saveItem ? charObj.title : (lbItem.charTitle || charObj.title),
                 pvpWins: wins,
                 pvpMatches: matches,
                 winRate: winRate,
                 completedStages: completed,
                 atk: atk
               };
-            }
-          }
-
-          if (lbData) {
-            for (const [code, item] of Object.entries(lbData)) {
-              if (!item) continue;
-              if (combined[code]) {
-                combined[code].pvpWins = Math.max(combined[code].pvpWins, item.pvpWins || 0);
-                combined[code].pvpMatches = Math.max(combined[code].pvpMatches, item.pvpMatches || 0);
-                combined[code].winRate = combined[code].pvpMatches > 0 ? Math.round((combined[code].pvpWins / combined[code].pvpMatches) * 100) : 0;
-              } else {
-                combined[code] = item;
-              }
             }
           }
 
@@ -6944,7 +7163,7 @@
         }
 
         if (list.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:#94a3b8;">目前尚無符合條件的排行榜資料。</td></tr>`;
+          tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:#94a3b8;">目前尚無對戰排行榜紀錄（完成雙人對戰後將自動登錄排名！）</td></tr>`;
           return;
         }
 
@@ -7011,30 +7230,36 @@
         if (nameEl) nameEl.innerText = `${CharacterSystem.playerName} (${char.title})`;
         if (subEl) subEl.innerText = `${CharacterSystem.studentClass ? `${CharacterSystem.studentClass}班 ` : ''}${CharacterSystem.studentSeat ? `${CharacterSystem.studentSeat}號 ` : ''}· ${CharacterSystem.studentRealName || '勇者'} ｜ 專屬引繼碼: ${code}`;
 
+        // 先檢查管理者是否已重置過雲端紀錄
+        await SaveSystem.checkCloudProfileSync();
+        const localResetAt = parseInt(localStorage.getItem('radical_pvp_reset_at') || '0', 10);
+
         // 讀取本機對戰紀錄
         let history = [];
         try {
           history = JSON.parse(localStorage.getItem('radical_pvp_history') || '[]');
+          if (localResetAt > 0) {
+            history = history.filter(h => (h.time || 0) > localResetAt);
+          }
         } catch(e) { history = []; }
 
-        // 背景非同步嘗試從 Firebase 同步最新歷史
+        // 從 Firebase 同步最新對戰歷史 (若雲端已被管理者清空，同步清空本機歷史)
         try {
           const res = await fetch(`${FIREBASE_DB_URL}/pvp_history/${code}.json`).catch(() => null);
           if (res && res.ok) {
             const cloudHistoryObj = await res.json();
-            if (cloudHistoryObj) {
-              const cloudList = Object.values(cloudHistoryObj);
+            if (cloudHistoryObj && typeof cloudHistoryObj === 'object') {
+              const cloudList = Object.values(cloudHistoryObj).filter(item => item && (!localResetAt || (item.time || 0) > localResetAt));
               const existingIds = new Set(history.map(h => h.id));
-              let added = false;
               for (const item of cloudList) {
                 if (item && item.id && !existingIds.has(item.id)) {
                   history.push(item);
-                  added = true;
                 }
               }
-              if (added) {
-                history.sort((a, b) => (b.time || 0) - (a.time || 0));
-              }
+              history.sort((a, b) => (b.time || 0) - (a.time || 0));
+            } else {
+              // 雲端 pvp_history 為空（代表已被管理者清除或尚無對戰紀錄），以雲端為準清空本機殘留紀錄
+              history = [];
             }
           }
         } catch(e) {
